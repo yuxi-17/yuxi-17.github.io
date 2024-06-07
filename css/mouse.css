@@ -1,0 +1,70 @@
+/*鼠标样式*/
+body,
+html {
+  cursor: url(/cur/pointer.cur),
+    auto !important;
+}
+
+/* a, */
+img {
+  cursor: url(/cur/link.cur),
+    auto !important;
+}
+
+summary {
+  cursor: url(/cur/link.cur),
+/* !important可能导致bug */
+    auto !important;
+}
+
+p {
+  cursor: url(/cur/text.cur),
+    auto;
+}
+
+details {
+  cursor: url(/cur/text.cur),
+    auto;
+}
+
+/*a标签*/
+a:hover {
+  cursor: url(/cur/link.cur),
+    auto;
+}
+
+input:hover{
+  cursor: url(/cur/text.cur),
+    auto;
+}
+/*按钮*/
+button:hover {
+  cursor: url(/cur/link.cur),
+    auto;
+}
+
+/*i标签*/
+i:hover {
+  cursor: url(/cur/link.cur),
+    auto;
+}
+
+/*页脚a标签*/
+#footer-wrap a:hover {
+  cursor: url(/cur/link.cur),
+    auto;
+}
+
+/*分页器*/
+#pagination .page-number:hover {
+  cursor: url(/cur/link.cur),
+    auto;
+}
+
+/*头部的导航栏*/
+#nav .site-page:hover {
+  cursor: url(/cur/link.cur),
+    auto;
+}
+
+/*鼠标样式END*/

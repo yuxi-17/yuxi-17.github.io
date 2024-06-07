@@ -5882,7 +5882,7 @@ body>.sitebg {
   right: 0;
   bottom: 0;
   background-size: cover;
-  background-image: /pic/bg.jpg;
+  background-image: linear-gradient(to top, #fbc2eb 0%, #a6c1ee 100%);
 }
 body>.sitebg .siteblur {
   width: 100%;
