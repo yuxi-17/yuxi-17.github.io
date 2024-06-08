@@ -33,6 +33,21 @@ a:hover {
     auto;
 }
 
+svg {
+  cursor: url(/cur/link.cur),
+    auto;
+}
+
+a.top:hover {
+  cursor: url(/cur/link.cur),
+    auto;
+}
+
+a.buttom:hover {
+  cursor: url(/cur/link.cur),
+    auto;
+}
+
 input:hover{
   cursor: url(/cur/text.cur),
     auto;
@@ -47,6 +62,12 @@ button:hover {
 i:hover {
   cursor: url(/cur/link.cur),
     auto;
+}
+
+/* copy按钮 */
+div.copy-btn {
+  cursor: url(/cur/link.cur),
+    auto !important;
 }
 
 /*页脚a标签*/
