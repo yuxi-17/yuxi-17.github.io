@@ -66,7 +66,7 @@
   <div class="content">
     <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a>
 <span class="sep"></span><a class="cap breadcrumb" href="/">文章</a><span class="sep"></span><a class="cap breadcrumb-link" href="/categories/PYNQ%E6%95%99%E7%A8%8B/">PYNQ教程</a></div>
-<div class="flex-row" id="post-meta"><span class="text created">发布于：<time datetime="2024-06-09T13:48:52.419Z">2024-06-09</time></span><span class="sep updated"></span><span class="text updated">更新于：<time datetime="2024-06-14T13:09:16.416Z">2024-06-14</time></span></div></div></div>
+<div class="flex-row" id="post-meta"><span class="text created">发布于：<time datetime="2024-06-09T13:48:52.419Z">2024-06-09</time></span><span class="sep updated"></span><span class="text updated">更新于：<time datetime="2024-06-14T13:45:06.650Z">2024-06-14</time></span></div></div></div>
     
     <div class="bottom only-title">
       
@@ -101,9 +101,9 @@
 <p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/pic/post3/slice.png" alt="slice"></p>
 <p>slice1配置类似，取输入2-3位输出。而后将这两个slice的输出连接到与门。</p>
 <p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/pic/post3/and_in.png" alt="and_in"></p>
-<p>与门的输出并不能直接与GPIO_I连接。前面提到，EMIO只有64位，这里GPIO_O和GPIO_I显然是共用的，如果将与门的输出连接到GPIO_I，那么其结果将会发给低位，也就是0-1位，但是前面0-1位已经用于输出了，当然如果0-1位配置为“inout”，那就没问题。但是后续的Python代码中PS GPIO的某一位只能被配置为“in”或“out”，而不是“inout”。因此这里需要加一个偏移项，将与门的输出传给GPIO_I的4-5位，可以通过“Constant”和“concat”IP核实现偏移功能。</p>
+<p>与门的输出并不能直接与GPIO_I连接。前面提到，EMIO只有64位，这里GPIO_O和GPIO_I显然是共用的，如果将与门的输出连接到GPIO_I，那么其结果将会发给低位，也就是0-1位，但是前面0-1位已经被GPIO_O用于输出了，当然如果0-1位配置为“inout”，那就没问题。但是后续的Python代码中PS GPIO的某一位只能被配置为“in”或“out”，而不是“inout”。因此这里需要加一个偏移项，将与门的输出传给GPIO_I的4-5位，从而避免该冲突，这可以通过“Constant”和“Concat”IP核实现偏移功能。</p>
 <p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/pic/post3/and_out.png" alt="and_out"></p>
-<p>如图所示，“Constant”设置了4位，值为0，通过“Concat“将两者拼接起来，组成6位数据。</p>
+<p>如图所示，“Constant”设置了4位，值为0，通过“Concat“将两者拼接起来，组成6位数据，与门的输出在最高两位。</p>
 <p>在Synthesis中，会出现以下警告，但是无关紧要，如果不想出现这样的警告，可以将EMIO的位数设置为6位。</p>
 <p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/pic/post3/warning.png" alt="warning"></p>
 <h3 id="1-2-PS-GPIO-Python代码"><a href="#1-2-PS-GPIO-Python代码" class="headerlink" title="1.2 PS GPIO Python代码"></a>1.2 PS GPIO Python代码</h3><p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/pic/post3/ps_gpio_python.png" alt="ps_gpio_python"></p>
@@ -123,7 +123,7 @@
 
 <p>我通常启用双通道，一个All Outputs，一个All Inputs，这样就不需要管Default Tri State Value这一栏了。</p>
 <p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/pic/post3/axi_gpio.png" alt="axi_gpio"></p>
-<p>连接也很简单，先手动将AXI GPIO的输出与输入和非门连接，接下来使用自动连接就行了。</p>
+<p>连接也很简单，先手动将AXI GPIO的输出与输入和非门连接，接下来使用Vivado的自动连接就行了。</p>
 <p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/pic/post3/axi_gpio_design.png" alt="axi_gpio_design"></p>
 <h3 id="2-2-AXI-GPIO-Python代码"><a href="#2-2-AXI-GPIO-Python代码" class="headerlink" title="2.2 AXI GPIO Python代码"></a>2.2 AXI GPIO Python代码</h3><p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/pic/post3/axi_gpio_python.png" alt="axi_gpio_python"></p>
 <p>首先烧写bit流文件，获取overlay信息：</p>
@@ -134,7 +134,7 @@
 
 
 
-<h2 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h2><p>可以看到，文中引用了很多其它网站，毕竟在最初的学习中，也是广泛搜索了各种网站，然后才慢慢明白。硬件的东西，别人说一下可能几分钟就知道了，如果自己去找资料看文档，可能要花费几个小时甚至于几天的时间。所以这里将我觉得有用的网站整合起来，可以省去广泛查找的过程，同时也更加全面。</p>
+<h2 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h2><p>可以看到，文中引用了很多其它网站，毕竟在最初的学习中，也是广泛搜索了各种网站，然后才慢慢明白。所以我精选出这些我觉得有用的网站，可以省去广泛查找的过程，同时也更加全面。当然，有一定基础的看一下我写的也大概明白了。虽然不是很难，但是硬件的东西，别人说一下可能几分钟就知道了，如果自己去找资料看文档，可能要花费几个小时甚至于几天的时间。</p>
 
 <div class="article-footer fs14">
     <section id="license">
