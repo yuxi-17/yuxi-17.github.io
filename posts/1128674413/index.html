@@ -17,12 +17,13 @@
   <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f9fafb">
   <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
   
-  <title>PYNQ教程一:GPIO的使用 - Yuxi's Blog</title>
+  <title>NEAL(Network-Aware Locality Scheduling)论文简要解读 - Yuxi's Blog</title>
 
   
-  <meta name="description" content="GPIO通常用于读写寄存器，与外部设备的交互等场景。本文从PS GPIO和AXI GPIO两方面分别介绍它们的配置方法，以及如何使用PYNQ编写Python代码实现数据交互。">
+  <meta name="description" content="Network-Aware Locality Scheduling是一种借助元启发式算法的共流（Coflow）调度方法，原文链接：
+论文链接https://ieeexplore.ieee.org/abstract/document/9329172">
   
-  <meta name="keywords" content="PYNQ">
+  <meta name="keywords" content="Network-Aware Locality Scheduling,NEAL,Coflow调度">
 
   <!-- feed -->
   
@@ -65,118 +66,65 @@
 <div class="article banner top">
   <div class="content">
     <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a>
-<span class="sep"></span><a class="cap breadcrumb" href="/">文章</a><span class="sep"></span><a class="cap breadcrumb-link" href="/categories/PYNQ%E6%95%99%E7%A8%8B/">PYNQ教程</a></div>
-<div class="flex-row" id="post-meta"><span class="text created">发布于：<time datetime="2024-06-09T13:48:52.419Z">2024-06-09</time></span><span class="sep updated"></span><span class="text updated">更新于：<time datetime="2024-12-05T02:37:20.244Z">2024-12-05</time></span></div></div></div>
+<span class="sep"></span><a class="cap breadcrumb" href="/">文章</a><span class="sep"></span><a class="cap breadcrumb-link" href="/categories/%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/">论文解读</a></div>
+<div class="flex-row" id="post-meta"><span class="text created">发布于：<time datetime="2024-12-05T02:26:16.040Z">2024-12-05</time></span><span class="sep updated"></span><span class="text updated">更新于：<time datetime="2024-12-07T03:00:27.712Z">2024-12-07</time></span></div></div></div>
     
     <div class="bottom only-title">
       
       <div class="text-area">
-        <h1 class="text title"><span>PYNQ教程一:GPIO的使用</span></h1>
+        <h1 class="text title"><span>NEAL(Network-Aware Locality Scheduling)论文简要解读</span></h1>
         
       </div>
     </div>
     
   </div>
-  </div><article class="md-text content"><p>GPIO通常用于读写寄存器，与外部设备的交互等场景。本文从PS GPIO和AXI GPIO两方面分别介绍它们的配置方法，以及如何使用PYNQ编写Python代码实现数据交互。</p>
+  </div><article class="md-text content"><p>Network-Aware Locality Scheduling是一种借助元启发式算法的共流（Coflow）调度方法，原文链接：</p>
+<div class="tag-plugin link dis-select"><a class="link-card plain" title="论文链接" href="https://ieeexplore.ieee.org/abstract/document/9329172" target="_blank" rel="external nofollow noopener noreferrer" cardlink autofill="icon"><div class="left"><span class="title">论文链接</span><span class="cap link footnote">https://ieeexplore.ieee.org/abstract/document/9329172</span></div><div class="right"><div class="lazy img" data-bg="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/link/8f277b4ee0ecd.svg"></div></div></a></div>
+
 <span id="more"></span>
 
-<h2 id="1-PS-GPIO"><a href="#1-PS-GPIO" class="headerlink" title="1 PS GPIO"></a>1 PS GPIO</h2><h3 id="1-1-PS-GPIO的配置"><a href="#1-1-PS-GPIO的配置" class="headerlink" title="1.1 PS GPIO的配置"></a>1.1 PS GPIO的配置</h3><p>PS GPIO分为MIO和EMIO，其中MIO共54bit，EMIO共64bit。</p>
-<p>其使用方法可以参考以下的网站：</p>
-<div class="tag-plugin link dis-select"><a class="link-card plain" title="pynq官方文档" href="https://pynq.readthedocs.io/en/latest/pynq_package/pynq.gpio.html" target="_blank" rel="external nofollow noopener noreferrer" cardlink autofill="icon"><div class="left"><span class="title">pynq官方文档</span><span class="cap link footnote">https://pynq.readthedocs.io/en/latest/pynq_package/pynq.gpio.html</span></div><div class="right"><div class="lazy img" data-bg="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/link/8f277b4ee0ecd.svg"></div></div></a></div>
+<h2 id="1-共流调度的基本背景"><a href="#1-共流调度的基本背景" class="headerlink" title="1.共流调度的基本背景"></a>1.共流调度的基本背景</h2><p>在大数据处理过程中，通常存在聚合操作，比如MapReduce的Reduce操作，Spark的groupByKey等等。这些操作需要将相同键的值合并在一起，比如单词统计任务，可以将一堆文件分给不同节点单独处理，此时就会出现<strong>“单词-出现次数”</strong>的键值对。在reduce阶段将不同节点处理的结果合并在一起，属于同一个键的值加起来，就可以得到这堆文件中每个单词的出现次数。</p>
+<p>当然，键值对不一定是key和单个值，也可能存在<strong>key-tuple</strong>的情况，设想有这么一个任务，需要统计不同人的消费记录，不同节点可以用来处理不同平台的消费记录，然后生成<strong>“ 用户-消费记录元组”</strong>的键值对，比如节点1统计外卖平台，生成键值对{用户1 : (消费记录1,消费记录2…)}、{用户2 : (消费记录1,消费记录2…)}等等。节点2可以用来统计网购平台数据、节点3统计游戏平台数据，诸如此类。那么在reduce的时候，需要将每个用户在不同平台的消费记录合并在一起，比如属于用户1的所有平台消费记录需要进行合并，那么这时就需要思考一个问题，这些数据如今分布在各个节点，究竟交给哪个节点来完成这个合并操作，这个节点为汇聚节点。</p>
+<p>下面是三种分配策略，在我们这个例子中，节点1、2、3就是不同平台的消费数据，而$a^{b}$代表用户a（Key），b为消费记录的个数（或者说元组大小、数据量），比如$1^{3}$代表用户1，有三条消费记录：</p>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://9258ce6.webp.li/neal/fig1.png" data-fancybox="true"/></div></div>
 
-<div class="tag-plugin colorful note" color="cyan"><div class="body"><p>pynq.io网站上文档非常全面介绍了Pynq的各种函数，后面的AXI_GPIO和Arduino_IO都可以在这里找到相关的函数解析</p></div></div>
+<p>在a中，根据简单的hash函数来决定汇聚节点。而b和c是其它的调度策略，区别在于用户2的汇聚节点不同（b选择汇聚到节点1，c选择汇聚到节点2）。这里的调度策略并不是重点，关键是如何去评价哪个调度策略是好的。</p>
+<p>–假如按照最小传输数据量来看，a、b、c传输的元组大小分别为8、7、6，那么SP2是最优的。</p>
+<p>–从另一个角度来看，SP2中节点1需要发送4个数据给节点2（Key为1的有3个数据，Key为2的有1个数据），节点2和节点3分别需要发送1个数据。这些在节点之间传输的数据流组成了共流（coflow），需要等待共流中的所有数据流都传输完毕后才能开始下一步的shuffle操作。这时节点1发送给节点2的数据太多，成为了瓶颈，相比之下，SP1中每个节点需要发送的数据分别为3、3、1。假如发送一个数据需要的通信时间为1，则SP2的通信时间为4，SP1的为3，从这个角度看SP1又好一点。</p>
+<p>–但是假如节点2的带宽减小为原来的一半，那么此时SP1的通信时间为6，而SP2不变（因为SP2的节点2只需要发送1个数据，带宽减半后需要2个时间，仍然比节点1的4个时间要短）。</p>
+<p>这里可以进一步做一个带宽的调整，如下图所示：</p>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://9258ce6.webp.li/neal/fig2.png" data-fancybox="true"/></div></div>
 
-<div class="tag-plugin link dis-select"><a class="link-card plain" title="MIO和EMIO的使用" href="https://blog.csdn.net/qq_35712169/article/details/106038000" target="_blank" rel="external nofollow noopener noreferrer" cardlink autofill="icon"><div class="left"><span class="title">MIO和EMIO的使用</span><span class="cap link footnote">https://blog.csdn.net/qq_35712169/article/details/106038000</span></div><div class="right"><div class="lazy img" data-bg="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/link/8f277b4ee0ecd.svg"></div></div></a></div>
+<p>对于SP2，由于节点1需要4个时间，其余两个节点只需要1个时间，那么可以将这两个节点的带宽缩小，使得它需要4个时间才能完成传输。这样的好处在于给其它任务腾出了一些带宽，此外数据在同一个时刻到达也更加方便处理。</p>
+<p>从上面几个情况可以得到，在选择汇聚节点时，需要考虑传输的数据量，以及可用的带宽。</p>
+<div class="tag-plugin colorful note" color="cyan"><div class="body"><p>查看节点之间的可用带宽，以及为节点之间的传输分配带宽，可以通过SDN的Openflow控制器来实现。</p></div></div>
 
-<p>总的来说，MIO无需配置，其位置已经固定，可以将其配置为GPIO口，但是需要注意的是其与其它接口复用（比如USB、ETH等），可能存在冲突导致无法使用的情况，而且位置固定后反而不方便使用，所以我个人更推荐使用EMIO的方式。</p>
-<p>EMIO没有固定的引脚，其配置方法较简单，打开ZYNQ7 IP核配置页面，然后按下面的路径打开：</p>
-<!-- ![emio1](/pic/post3/emio1.png) -->
+<h2 id="2-共流调度的一般情况"><a href="#2-共流调度的一般情况" class="headerlink" title="2.共流调度的一般情况"></a>2.共流调度的一般情况</h2><p>现在假设有n个节点，p个Key，如下图左边表格所示，格子里面的数字代表数据量，也就是前面说的元组大小，考虑到不是所有节点都会有某一个Key的数据，因此存在数据量为0的情况。</p>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://9258ce6.webp.li/neal/fig3.png" data-fancybox="true"/></div></div>
 
-<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://9258ce6.webp.li/post3/emio1.png" data-fancybox="true"/></div></div>
+<p>对于每一个Key来说，其都需要选择一个汇聚节点，如右上方表格所示，每一列只有一个1，其余为0，代表每一个Key有且只有一个汇聚节点，其它节点如果拥有该Key的数据，就需要发送给汇聚节点。这可以进一步简化为右下角的表格，对于Key1来说，其选择节点n为汇聚节点，而Key2选择节点1，Key_p选择节点2。</p>
+<p>如此，这个问题就变成了一个NP难题，共有$n^{p}$种情况（每个Key有n种情况，一共p个Key）。当然，如果对于Key_k来说，只有节点j拥有该Key的数据，那就不需要考虑数据的迁移了。但是只要有两个（或两个以上）节点拥有该Key的数据，就是n种情况了，因为它可以选择汇聚在这两个节点中的一个，也可以选择汇聚在其它节点，如同图1a的Key2一样，放在了节点3，即使节点3没有该Key的数据。为什么会出现这种情况呢？因为带宽的限制。对于星型拓扑来说（节点m&lt;-&gt;Openflow交换机&lt;-&gt;节点n），节点的带宽可分为输入带宽和输出带宽。假如节点1和节点2的输入带宽比较小（或者有其它数据也需要用到这部分带宽），而它们的输出带宽充足，同时节点3的输入带宽也充足，那么就可以选择将节点1和节点2的数据发送给节点3，这样也许比节点1发送给节点2或者节点2发送给节点1要快。实际情况中node的数量可能很多，出现两个或者两个以上的节点拥有同一个Key的数据是很常见的，因此这确实是一个NP难题。</p>
+<p>当每一个Key都确定了汇聚节点后，就可以开始计算它的传输时间了。</p>
+<p>节点i的发送时间：<br>$$<br>\sum_{j&#x3D;1,j\neq i}^n\sum_{k&#x3D;1}^p\frac{h_{ik}}{r_i}x_{jk}\quad\forall i\tag{2.1}<br>$$</p>
+<p>$\sum_{k&#x3D;1}^p$指的是每一个Key的数据都需要考虑，$\sum_{j&#x3D;1,j\neq i}^n $指的是传输到除了节点i的所有节点，$h_{ik}$指的是节点i中Key_k的数据，$x_{jk}$指的Key_k的数据是否传输给节点j。$\sum_{j&#x3D;1,j\neq i}^n\sum_{k&#x3D;1}^ph_{ik}x_{jk}$指的是需要发送给其它节点的数据量，而$r_i$指的是节点i的发送带宽。</p>
+<p>同理，节点j的接收时间为：<br>$$<br>\sum_{i&#x3D;1,i\neq j}^n\sum_{k&#x3D;1}^p\frac{h_{ik}}{r_j}x_{jk}\quad\forall j\tag{2.2}<br>$$</p>
+<p>也就是每一个Key的数据都需要考虑是否以j为汇聚节点，如果是，那么其它所有拥有该Key数据的节点都需要发数据发给节点j。</p>
+<p>当然，两个节点之间的传输时间并不是发送时间+接收时间，因为发送和接收可以同时进行。</p>
+<p><strong>现在考虑最慢流传输时间$\tau$，所有节点都在$\tau$时间内完成发送，也在$\tau$时间内完成接收，</strong>即：<br>$$<br>\tau &#x3D; max(\sum_{j&#x3D;1,j\neq i}^n\sum_{k&#x3D;1}^p\frac{h_{ik}}{r_i}x_{jk}\quad\forall i\quad,\quad\sum_{i&#x3D;1,i\neq j}^n\sum_{k&#x3D;1}^p\frac{h_{ik}}{r_j}x_{jk}\quad\forall j)\tag{2.3}<br>$$<br>通过带宽调整，使得所有流的传输时间都等于这个最大时间。</p>
+<h2 id="3-元启发式算法求解调度问题"><a href="#3-元启发式算法求解调度问题" class="headerlink" title="3.元启发式算法求解调度问题"></a>3.元启发式算法求解调度问题</h2><p>现在的问题在于求解每一个Key的汇聚节点的位置，使得最慢流传输时间$\tau$最小。</p>
+<p>这样的问题可以使用元启发式算法求解，其实细心的人早已发现，这和八皇后问题很像，都是每一列只能放一个，只不过八皇后的评估值是位于同一行或同一斜的皇后的对数，而这里是公式2.3，目的都是使得评估值最小。</p>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://9258ce6.webp.li/neal/fig5.png" alt="style=zoom:67%;" data-fancybox="true"/></div><div class="image-meta"><span class="image-caption center">style=zoom:67%;</span></div></div>
 
-<p>打开后拉到最下面就可以看到GPIO的配置，这里可以选择使用的EMIO的位数：</p>
-<!-- ![emio2](/pic/post3/emio2.png) -->
-
-<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://9258ce6.webp.li/post3/emio2.png" data-fancybox="true"/></div></div>
-
-<p>配置完后可以看到IP核多了一个GPIO_0接口，然后可以将这些端口绑定到特定的引脚上。</p>
-<!-- ![zynq7_ip](/pic/post3/zynq7_ip.png) -->
-
-<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://9258ce6.webp.li/post3/zynq7_ip.png" data-fancybox="true"/></div></div>
-
-<p>为了方便测试读写功能，可以将数据传输给其它的IP核，并获取其输出。这里可以使用“Utility Vector Logic”构建一个与门，输入输出大小为2。</p>
-<!-- ![and_gate](/pic/post3/and_gate.png) -->
-
-<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://9258ce6.webp.li/post3/and_gate.png" data-fancybox="true"/></div></div>
-
-<p>GPIO_O只有一个，而与门有两个输入，因此这里需要通过两个“slice”IP核将64位数据分割开来，slice0配置如下，取输入的0-1位输出。</p>
-<!-- ![slice](/pic/post3/slice.png) -->
-
-<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://9258ce6.webp.li/post3/slice.png" data-fancybox="true"/></div></div>
-
-<p>slice1配置类似，取输入2-3位输出。而后将这两个slice的输出连接到与门。</p>
-<!-- ![and_in](/pic/post3/and_in.png) -->
-
-<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://9258ce6.webp.li/post3/and_in.png" data-fancybox="true"/></div></div>
-
-<p>与门的输出并不能直接与GPIO_I连接。前面提到，EMIO只有64位，这里GPIO_O和GPIO_I显然是共用的，如果将与门的输出连接到GPIO_I，那么其结果将会发给低位，也就是0-1位，但是前面0-1位已经被GPIO_O用于输出了，当然如果0-1位配置为“inout”，那就没问题。但是后续的Python代码中PS GPIO的某一位只能被配置为“in”或“out”，而不是“inout”。因此这里需要加一个偏移项，将与门的输出传给GPIO_I的4-5位，从而避免该冲突，这可以通过“Constant”和“Concat”IP核实现偏移功能。</p>
-<!-- ![and_out](/pic/post3/and_out.png) -->
-
-<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://9258ce6.webp.li/post3/and_out.png" data-fancybox="true"/></div></div>
-
-<p>如图所示，“Constant”设置了4位，值为0，通过“Concat“将两者拼接起来，组成6位数据，与门的输出在最高两位。</p>
-<p>在Synthesis中，会出现以下警告，但是无关紧要，如果不想出现这样的警告，可以将EMIO的位数设置为6位。</p>
-<!-- ![warning](/pic/post3/warning.png) -->
-
-<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://9258ce6.webp.li/post3/warning.png" data-fancybox="true"/></div></div>
-
-<h3 id="1-2-PS-GPIO-Python代码"><a href="#1-2-PS-GPIO-Python代码" class="headerlink" title="1.2 PS GPIO Python代码"></a>1.2 PS GPIO Python代码</h3><!-- ![ps_gpio_python](/pic/post3/ps_gpio_python.png) -->
-
-<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://9258ce6.webp.li/post3/ps_gpio_python.png" data-fancybox="true"/></div></div>
-
-<p>首先烧写bit流文件，然后导入GPIO库，配置0-3位为输出，4-5位为输入，通过”read“和”write“函数实现GPIO的读写功能。</p>
-<div class="tag-plugin colorful note" color="cyan"><div class="body"><p>前面的内容参考了下面的视频，所以不太理解的也可以查看下面的视频讲解</p></div></div>
-
-<div class="tag-plugin link dis-select"><a class="link-card plain" title="youtube视频讲解" href="https://youtu.be/a5NnLozPEI0?si=TiMc5d3H6u_wqcK1" target="_blank" rel="external nofollow noopener noreferrer" cardlink autofill="icon"><div class="left"><span class="title">youtube视频讲解</span><span class="cap link footnote">https://youtu.be/a5NnLozPEI0?si=TiMc5d3H6u_wqcK1</span></div><div class="right"><div class="lazy img" data-bg="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/link/8f277b4ee0ecd.svg"></div></div></a></div>
-
-<h3 id="1-3-Arduino的GPIO"><a href="#1-3-Arduino的GPIO" class="headerlink" title="1.3 Arduino的GPIO"></a>1.3 Arduino的GPIO</h3><!-- ![arduino](/pic/post3/arduino.png) -->
-
-<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://9258ce6.webp.li/post3/arduino.png" data-fancybox="true"/></div></div>
-
-<p>使用Arduino的IO时，同样不需要配置，Python代码也比较简单，可以参考以下网站：</p>
-<div class="tag-plugin link dis-select"><a class="link-card plain" title="Arduino IO" href="https://rkblog.dev/posts/python/using-gpio-usb-and-hdmi-pynq-z2-board/" target="_blank" rel="external nofollow noopener noreferrer" cardlink autofill="icon"><div class="left"><span class="title">Arduino IO</span><span class="cap link footnote">https://rkblog.dev/posts/python/using-gpio-usb-and-hdmi-pynq-z2-board/</span></div><div class="right"><div class="lazy img" data-bg="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/link/8f277b4ee0ecd.svg"></div></div></a></div>
-
-
-<h2 id="2-AXI-GPIO"><a href="#2-AXI-GPIO" class="headerlink" title="2 AXI GPIO"></a>2 AXI GPIO</h2><h3 id="2-1-AXI-GPIO配置"><a href="#2-1-AXI-GPIO配置" class="headerlink" title="2.1 AXI GPIO配置"></a>2.1 AXI GPIO配置</h3><p>AXI GPIO的配置相比于EMIO来说要简单一点，且可以同时使用多个AXI GPIO，灵活性很强。</p>
-<p>IP核配置可以参考以下文章：</p>
-<div class="tag-plugin link dis-select"><a class="link-card plain" title="AXI GPIO IP核配置" href="https://blog.csdn.net/u011565038/article/details/138836478" target="_blank" rel="external nofollow noopener noreferrer" cardlink autofill="icon"><div class="left"><span class="title">AXI GPIO IP核配置</span><span class="cap link footnote">https://blog.csdn.net/u011565038/article/details/138836478</span></div><div class="right"><div class="lazy img" data-bg="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/link/8f277b4ee0ecd.svg"></div></div></a></div>
-
-<p>我通常启用双通道，一个All Outputs，一个All Inputs，这样就不需要管Default Tri State Value这一栏了。</p>
-<!-- ![axi_gpio](/pic/post3/axi_gpio.png) -->
-
-<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://9258ce6.webp.li/post3/axi_gpio.png" data-fancybox="true"/></div></div>
-
-<p>连接也很简单，先手动将AXI GPIO的输出与输入和非门连接，接下来使用Vivado的自动连接就行了。</p>
-<!-- ![axi_gpio_design](/pic/post3/axi_gpio_design.png) -->
-
-<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://9258ce6.webp.li/post3/axi_gpio_design.png" data-fancybox="true"/></div></div>
-
-<h3 id="2-2-AXI-GPIO-Python代码"><a href="#2-2-AXI-GPIO-Python代码" class="headerlink" title="2.2 AXI GPIO Python代码"></a>2.2 AXI GPIO Python代码</h3><!-- ![axi_gpio_python](/pic/post3/axi_gpio_python.png) -->
-
-<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://9258ce6.webp.li/post3/axi_gpio_python.png" data-fancybox="true"/></div></div>
-
-<p>首先烧写bit流文件，获取overlay信息：</p>
-<!-- ![ol](/pic/post3/ol.png) -->
-
-<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://9258ce6.webp.li/post3/ol.png" data-fancybox="true"/></div></div>
-
-<p>得到AXI GPIO IP核的名字后，即可使用AxiGPIO函数将该IP核实例化为一个类对象，而后根据Pynq提供的函数实现读写功能。</p>
-<p>也可以参考下面的官方例程：</p>
-<div class="tag-plugin link dis-select"><a class="link-card plain" title="AXI GPIO官方案例" href="https://github.com/Xilinx/PYNQ_Workshop/blob/master/Session_4/2_axi_gpio.ipynb" target="_blank" rel="external nofollow noopener noreferrer" cardlink autofill="icon"><div class="left"><span class="title">AXI GPIO官方案例</span><span class="cap link footnote">https://github.com/Xilinx/PYNQ_Workshop/blob/master/Session_4/2_axi_gpio.ipynb</span></div><div class="right"><div class="lazy img" data-bg="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/link/8f277b4ee0ecd.svg"></div></div></a></div>
+<p>元启发式算法很多，比如遗传算法、爬山法、模拟退火算法等等，论文则采用了鲸鱼优化算法(WOA)。</p>
+<p>关于鲸鱼优化算法的解释网上有很多，因此这里不再赘述，将问题分析到这一步其实已经很明确了。</p>
+<div class="tag-plugin colorful note" color="green"><div class="body"><p>仅代表博主个人理解，有错误欢迎指正！</p></div></div>
 
 
 
-<h2 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h2><p>可以看到，文中引用了很多其它网站，毕竟在最初的学习中，也是广泛搜索了各种网站，然后才慢慢明白。所以我精选出这些我觉得有用的网站，可以省去广泛查找的过程，同时也更加全面。当然，有一定基础的看一下我写的也大概明白了。虽然不是很难，但是硬件的东西，别人说一下可能几分钟就知道了，如果自己去找资料看文档，可能要花费几个小时甚至于几天的时间。</p>
+
+
+
+
 
 <div class="article-footer fs14">
     <section id="license">
@@ -188,18 +136,18 @@
     <section id="share">
       <div class="header"><span>分享文章</span></div>
       <div class="body">
-        <div class="link"><input class="copy-area" readonly="true" id="copy-link" value="https://yuxi-17.github.io/posts/1649035944/" /></div>
+        <div class="link"><input class="copy-area" readonly="true" id="copy-link" value="https://yuxi-17.github.io/posts/1128674413/" /></div>
         <div class="social-wrap dis-select"><a class="social share-item wechat" onclick="util.toggle(&quot;qrcode-wechat&quot)"><img class="lazy"  src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/social/b32ef3da1162a.svg" /></a><a class="social share-item link" onclick="util.copy(&quot;copy-link&quot;, &quot;复制成功&quot;)"><img class="lazy"  src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/social/8411ed322ced6.svg" /></a></div>
         
         <div class="qrcode" id="qrcode-wechat" style="opacity:0;height:0">
-          <img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=https://yuxi-17.github.io/posts/1649035944/"/>
+          <img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=https://yuxi-17.github.io/posts/1128674413/"/>
         </div>
         
       </div>
     </section>
     </div>
 </article>
-<div class="related-wrap" id="read-next"><section class="body"><div class="item" id="prev"><div class="note">较新文章</div><a href="/posts/855715585/">PYNQ教程二:使用AXI总线实现PS与PL交互</a></div><div class="item" id="next"><div class="note">较早文章</div><a href="/posts/1552645455/">LSTM反向传播推导及C++代码实现</a></div></section></div>
+<div class="related-wrap" id="read-next"><section class="body"><div class="item" id="prev"></div><div class="item" id="next"><div class="note">较早文章</div><a href="/posts/618860/">STARNUMA论文解读</a></div></section></div>
 
 
 
@@ -229,7 +177,7 @@
 
 
 
-<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">本文目录</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-PS-GPIO"><span class="toc-text">1 PS GPIO</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-PS-GPIO%E7%9A%84%E9%85%8D%E7%BD%AE"><span class="toc-text">1.1 PS GPIO的配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-PS-GPIO-Python%E4%BB%A3%E7%A0%81"><span class="toc-text">1.2 PS GPIO Python代码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-Arduino%E7%9A%84GPIO"><span class="toc-text">1.3 Arduino的GPIO</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-AXI-GPIO"><span class="toc-text">2 AXI GPIO</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-AXI-GPIO%E9%85%8D%E7%BD%AE"><span class="toc-text">2.1 AXI GPIO配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-AXI-GPIO-Python%E4%BB%A3%E7%A0%81"><span class="toc-text">2.2 AXI GPIO Python代码</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%99%E5%9C%A8%E6%9C%80%E5%90%8E"><span class="toc-text">写在最后</span></a></li></ol></div><div class="widget-footer">
+<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">本文目录</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%85%B1%E6%B5%81%E8%B0%83%E5%BA%A6%E7%9A%84%E5%9F%BA%E6%9C%AC%E8%83%8C%E6%99%AF"><span class="toc-text">1.共流调度的基本背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%85%B1%E6%B5%81%E8%B0%83%E5%BA%A6%E7%9A%84%E4%B8%80%E8%88%AC%E6%83%85%E5%86%B5"><span class="toc-text">2.共流调度的一般情况</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%85%83%E5%90%AF%E5%8F%91%E5%BC%8F%E7%AE%97%E6%B3%95%E6%B1%82%E8%A7%A3%E8%B0%83%E5%BA%A6%E9%97%AE%E9%A2%98"><span class="toc-text">3.元启发式算法求解调度问题</span></a></li></ol></div><div class="widget-footer">
 
 <a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 12c0-4.714 0-7.071 1.464-8.536C4.93 2 7.286 2 12 2c4.714 0 7.071 0 8.535 1.464C22 4.93 22 7.286 22 12c0 4.714 0 7.071-1.465 8.535C19.072 22 16.714 22 12 22s-7.071 0-8.536-1.465C2 19.072 2 16.714 2 12Z"/><path stroke-linecap="round" stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/></g></svg><span>回到顶部</span></a><a class="buttom" onclick="util.scrollComment()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M10.46 1.25h3.08c1.603 0 2.86 0 3.864.095c1.023.098 1.861.3 2.6.752a5.75 5.75 0 0 1 1.899 1.899c.452.738.654 1.577.752 2.6c.095 1.004.095 2.261.095 3.865v1.067c0 1.141 0 2.036-.05 2.759c-.05.735-.153 1.347-.388 1.913a5.75 5.75 0 0 1-3.112 3.112c-.805.334-1.721.408-2.977.43a10.81 10.81 0 0 0-.929.036c-.198.022-.275.054-.32.08c-.047.028-.112.078-.224.232c-.121.166-.258.396-.476.764l-.542.916c-.773 1.307-2.69 1.307-3.464 0l-.542-.916a10.605 10.605 0 0 0-.476-.764c-.112-.154-.177-.204-.224-.232c-.045-.026-.122-.058-.32-.08c-.212-.023-.49-.03-.93-.037c-1.255-.021-2.171-.095-2.976-.429A5.75 5.75 0 0 1 1.688 16.2c-.235-.566-.338-1.178-.389-1.913c-.049-.723-.049-1.618-.049-2.76v-1.066c0-1.604 0-2.86.095-3.865c.098-1.023.3-1.862.752-2.6a5.75 5.75 0 0 1 1.899-1.899c.738-.452 1.577-.654 2.6-.752C7.6 1.25 8.857 1.25 10.461 1.25M6.739 2.839c-.914.087-1.495.253-1.959.537A4.25 4.25 0 0 0 3.376 4.78c-.284.464-.45 1.045-.537 1.96c-.088.924-.089 2.11-.089 3.761v1c0 1.175 0 2.019.046 2.685c.045.659.131 1.089.278 1.441a4.25 4.25 0 0 0 2.3 2.3c.515.214 1.173.294 2.429.316h.031c.398.007.747.013 1.037.045c.311.035.616.104.909.274c.29.17.5.395.682.645c.169.232.342.525.538.856l.559.944a.52.52 0 0 0 .882 0l.559-.944c.196-.331.37-.624.538-.856c.182-.25.392-.476.682-.645c.293-.17.598-.24.909-.274c.29-.032.639-.038 1.037-.045h.032c1.255-.022 1.913-.102 2.428-.316a4.25 4.25 0 0 0 2.3-2.3c.147-.352.233-.782.278-1.441c.046-.666.046-1.51.046-2.685v-1c0-1.651 0-2.837-.089-3.762c-.087-.914-.253-1.495-.537-1.959a4.25 4.25 0 0 0-1.403-1.403c-.464-.284-1.045-.45-1.96-.537c-.924-.088-2.11-.089-3.761-.089h-3c-1.651 0-2.837 0-3.762.089" clip-rule="evenodd"/><path fill="currentColor" d="M9 11a1 1 0 1 1-2 0a1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0a1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0a1 1 0 0 1 2 0"/></svg><span>参与讨论</span></a></div></widget>
 </div></aside><div class='float-panel blur'>
