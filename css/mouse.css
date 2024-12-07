@@ -22,6 +22,16 @@ p {
     auto;
 }
 
+h2:hover {
+  cursor: url(/cur/text.cur),
+    auto;
+}
+
+h1.text.title {
+  cursor: url(/cur/text.cur),
+    auto;
+}
+
 details {
   cursor: url(/cur/text.cur),
     auto;
@@ -44,6 +54,11 @@ a.top:hover {
 }
 
 a.buttom:hover {
+  cursor: url(/cur/link.cur),
+    auto;
+}
+
+a.link-card.plain:hover {
   cursor: url(/cur/link.cur),
     auto;
 }
