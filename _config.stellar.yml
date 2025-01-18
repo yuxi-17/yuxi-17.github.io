@@ -1,0 +1,61 @@
+open_graph:
+  enable: false
+
+article:
+  license: '[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)欢迎评论探讨'
+  share: [wechat, link]
+
+copycode:
+  enable: true
+  js: /js/plugins/copycode.js
+  default_text: 'Copy' # 按钮显示文字
+  success_text: 'Copied' # 复制成功信息
+
+tag_plugins:
+  # {% emoji %}
+  emoji:
+    default:
+    blobcat: https://blog.jsdmirror.com/gh/norevi/waline-blobcatemojis@1.0/blobs/%s.png
+
+# comments:
+#   service: beaudar
+#   beaudar:
+#     repo: https://github.com/yuxi-17/blogs-comment
+
+comments:
+  service: twikoo
+  twikoo:
+    envId: https://yuxi17.netlify.app/.netlify/functions/twikoo
+
+lazyload:
+  enable: false
+  js: https://gcore.jsdelivr.net/npm/vanilla-lazyload@17.3.1/dist/lazyload.min.js
+  transition: blur # blur, fade
+
+inject:
+  head:
+    # - <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC&display=swap" rel="stylesheet">
+    - <link rel="stylesheet" href="/css/mouse.css">
+  script:
+
+style:
+  font-family:
+    body: 'LXGW WenKai Screen,system-ui, "Segoe UI","Microsoft Yahei", -apple-system, Roboto, Ubuntu, "Helvetica Neue", Arial, "WenQuanYi Micro Hei",sans-serif'
+  site:
+    background-image: linear-gradient(to top,#fbc2eb 0%,#a6c1ee 100%);
+  # codeblock:
+  #   highlightjs_theme: /css/arduino-light.css
+
+# 使用twikoo插件统计文章访问量（废弃）
+# footer:
+#   content:<span>文章访问量</span><span id="twikoo_visitors">0</span><span>次</span><br>
+
+# 使用不蒜子统计访问量和访客数，由于会与原先的footer冲突，因此改在“blogs\node_modules\hexo-theme-stellar\layout\_partial\main\footer.ejs”中编写
+# 由于访客数有问题，已弃用，改为Vercount
+# footer:
+#   content:
+    # <center>
+    # <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    # <span id="busuanzi_container_page_pv">该页面访问量<span id="busuanzi_value_page_pv"></span>次</span><br>
+    # <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>|<span id="busuanzi_container_site_uv">本站访客数<span id="busuanzi_value_site_uv"></span>人</span>
+    # </center>
