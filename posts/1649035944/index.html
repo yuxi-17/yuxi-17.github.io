@@ -57,7 +57,7 @@
 <div class="widgets">
 
 
-<widget class="widget-wrapper post-list"><div class="widget-header dis-select"><span class="name">最近更新</span></div><div class="widget-body fs14"><a class="item title" href="/posts/1128674413/"><span class="title">NEAL(Network-Aware Locality Scheduling)论文简要解读</span></a><a class="item title" href="/posts/618860/"><span class="title">STARNUMA论文解读</span></a><a class="item title" href="/posts/1552645455/"><span class="title">LSTM反向传播推导及C++代码实现</span></a><a class="item title" href="/posts/855715585/"><span class="title">PYNQ教程二:使用AXI总线实现PS与PL交互</span></a><a class="item title" href="/posts/1649035944/"><span class="title">PYNQ教程一:GPIO的使用</span></a></div></widget>
+<widget class="widget-wrapper post-list"><div class="widget-header dis-select"><span class="name">最近更新</span></div><div class="widget-body fs14"><a class="item title" href="/posts/1128674413/"><span class="title">NEAL(Network-Aware Locality Scheduling)论文简要解读</span></a><a class="item title" href="/posts/618860/"><span class="title">STARNUMA论文解读</span></a><a class="item title" href="/posts/855715585/"><span class="title">PYNQ教程二:使用AXI总线实现PS与PL交互</span></a><a class="item title" href="/posts/1649035944/"><span class="title">PYNQ教程一:GPIO的使用</span></a><a class="item title" href="/posts/1552645455/"><span class="title">LSTM反向传播推导及C++代码实现</span></a></div></widget>
 </div>
 
 </div></aside><div class="l_main" id="main">
@@ -70,7 +70,7 @@
   <div class="content">
     <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a>
 <span class="sep"></span><a class="cap breadcrumb" href="/">文章</a><span class="sep"></span><a class="cap breadcrumb-link" href="/categories/PYNQ%E6%95%99%E7%A8%8B/">PYNQ教程</a></div>
-<div class="flex-row" id="post-meta"><span class="text created">发布于：<time datetime="2024-06-09T13:48:52.419Z">2024-06-09</time></span><span class="sep updated"></span><span class="text updated">更新于：<time datetime="2024-12-05T02:37:20.244Z">2024-12-05</time></span></div></div></div>
+<div class="flex-row" id="post-meta"><span class="text created">发布于：<time datetime="2024-12-05T02:37:22.000Z">2024-12-05</time></span><span class="sep updated"></span><span class="text updated">更新于：<time datetime="2025-01-25T10:33:16.693Z">2025-01-25</time></span></div></div></div>
     
     <div class="bottom only-title">
       
@@ -96,47 +96,47 @@
 <p>EMIO没有固定的引脚，其配置方法较简单，打开ZYNQ7 IP核配置页面，然后按下面的路径打开：</p>
 <!-- ![emio1](/pic/post3/emio1.png) -->
 
-<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://9258ce6.webp.li/post3/emio1.png" data-fancybox="true"/></div></div>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://webp.raiset.top/post3/emio1.png" data-fancybox="true"/></div></div>
 
 <p>打开后拉到最下面就可以看到GPIO的配置，这里可以选择使用的EMIO的位数：</p>
 <!-- ![emio2](/pic/post3/emio2.png) -->
 
-<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://9258ce6.webp.li/post3/emio2.png" data-fancybox="true"/></div></div>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://webp.raiset.top/post3/emio2.png" data-fancybox="true"/></div></div>
 
 <p>配置完后可以看到IP核多了一个GPIO_0接口，然后可以将这些端口绑定到特定的引脚上。</p>
 <!-- ![zynq7_ip](/pic/post3/zynq7_ip.png) -->
 
-<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://9258ce6.webp.li/post3/zynq7_ip.png" data-fancybox="true"/></div></div>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://webp.raiset.top/post3/zynq7_ip.png" data-fancybox="true"/></div></div>
 
 <p>为了方便测试读写功能，可以将数据传输给其它的IP核，并获取其输出。这里可以使用“Utility Vector Logic”构建一个与门，输入输出大小为2。</p>
 <!-- ![and_gate](/pic/post3/and_gate.png) -->
 
-<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://9258ce6.webp.li/post3/and_gate.png" data-fancybox="true"/></div></div>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://webp.raiset.top/post3/and_gate.png" data-fancybox="true"/></div></div>
 
 <p>GPIO_O只有一个，而与门有两个输入，因此这里需要通过两个“slice”IP核将64位数据分割开来，slice0配置如下，取输入的0-1位输出。</p>
 <!-- ![slice](/pic/post3/slice.png) -->
 
-<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://9258ce6.webp.li/post3/slice.png" data-fancybox="true"/></div></div>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://webp.raiset.top/post3/slice.png" data-fancybox="true"/></div></div>
 
 <p>slice1配置类似，取输入2-3位输出。而后将这两个slice的输出连接到与门。</p>
 <!-- ![and_in](/pic/post3/and_in.png) -->
 
-<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://9258ce6.webp.li/post3/and_in.png" data-fancybox="true"/></div></div>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://webp.raiset.top/post3/and_in.png" data-fancybox="true"/></div></div>
 
 <p>与门的输出并不能直接与GPIO_I连接。前面提到，EMIO只有64位，这里GPIO_O和GPIO_I显然是共用的，如果将与门的输出连接到GPIO_I，那么其结果将会发给低位，也就是0-1位，但是前面0-1位已经被GPIO_O用于输出了，当然如果0-1位配置为“inout”，那就没问题。但是后续的Python代码中PS GPIO的某一位只能被配置为“in”或“out”，而不是“inout”。因此这里需要加一个偏移项，将与门的输出传给GPIO_I的4-5位，从而避免该冲突，这可以通过“Constant”和“Concat”IP核实现偏移功能。</p>
 <!-- ![and_out](/pic/post3/and_out.png) -->
 
-<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://9258ce6.webp.li/post3/and_out.png" data-fancybox="true"/></div></div>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://webp.raiset.top/post3/and_out.png" data-fancybox="true"/></div></div>
 
 <p>如图所示，“Constant”设置了4位，值为0，通过“Concat“将两者拼接起来，组成6位数据，与门的输出在最高两位。</p>
 <p>在Synthesis中，会出现以下警告，但是无关紧要，如果不想出现这样的警告，可以将EMIO的位数设置为6位。</p>
 <!-- ![warning](/pic/post3/warning.png) -->
 
-<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://9258ce6.webp.li/post3/warning.png" data-fancybox="true"/></div></div>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://webp.raiset.top/post3/warning.png" data-fancybox="true"/></div></div>
 
 <h3 id="1-2-PS-GPIO-Python代码"><a href="#1-2-PS-GPIO-Python代码" class="headerlink" title="1.2 PS GPIO Python代码"></a>1.2 PS GPIO Python代码</h3><!-- ![ps_gpio_python](/pic/post3/ps_gpio_python.png) -->
 
-<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://9258ce6.webp.li/post3/ps_gpio_python.png" data-fancybox="true"/></div></div>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://webp.raiset.top/post3/ps_gpio_python.png" data-fancybox="true"/></div></div>
 
 <p>首先烧写bit流文件，然后导入GPIO库，配置0-3位为输出，4-5位为输入，通过”read“和”write“函数实现GPIO的读写功能。</p>
 <div class="tag-plugin colorful note" color="cyan"><div class="body"><p>前面的内容参考了下面的视频，所以不太理解的也可以查看下面的视频讲解</p></div></div>
@@ -145,7 +145,7 @@
 
 <h3 id="1-3-Arduino的GPIO"><a href="#1-3-Arduino的GPIO" class="headerlink" title="1.3 Arduino的GPIO"></a>1.3 Arduino的GPIO</h3><!-- ![arduino](/pic/post3/arduino.png) -->
 
-<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://9258ce6.webp.li/post3/arduino.png" data-fancybox="true"/></div></div>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://webp.raiset.top/post3/arduino.png" data-fancybox="true"/></div></div>
 
 <p>使用Arduino的IO时，同样不需要配置，Python代码也比较简单，可以参考以下网站：</p>
 <div class="tag-plugin link dis-select"><a class="link-card plain" title="Arduino IO" href="https://rkblog.dev/posts/python/using-gpio-usb-and-hdmi-pynq-z2-board/" target="_blank" rel="external nofollow noopener noreferrer" cardlink autofill="icon"><div class="left"><span class="title">Arduino IO</span><span class="cap link footnote">https://rkblog.dev/posts/python/using-gpio-usb-and-hdmi-pynq-z2-board/</span></div><div class="right"><div class="lazy img" data-bg="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/link/8f277b4ee0ecd.svg"></div></div></a></div>
@@ -158,21 +158,21 @@
 <p>我通常启用双通道，一个All Outputs，一个All Inputs，这样就不需要管Default Tri State Value这一栏了。</p>
 <!-- ![axi_gpio](/pic/post3/axi_gpio.png) -->
 
-<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://9258ce6.webp.li/post3/axi_gpio.png" data-fancybox="true"/></div></div>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://webp.raiset.top/post3/axi_gpio.png" data-fancybox="true"/></div></div>
 
 <p>连接也很简单，先手动将AXI GPIO的输出与输入和非门连接，接下来使用Vivado的自动连接就行了。</p>
 <!-- ![axi_gpio_design](/pic/post3/axi_gpio_design.png) -->
 
-<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://9258ce6.webp.li/post3/axi_gpio_design.png" data-fancybox="true"/></div></div>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://webp.raiset.top/post3/axi_gpio_design.png" data-fancybox="true"/></div></div>
 
 <h3 id="2-2-AXI-GPIO-Python代码"><a href="#2-2-AXI-GPIO-Python代码" class="headerlink" title="2.2 AXI GPIO Python代码"></a>2.2 AXI GPIO Python代码</h3><!-- ![axi_gpio_python](/pic/post3/axi_gpio_python.png) -->
 
-<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://9258ce6.webp.li/post3/axi_gpio_python.png" data-fancybox="true"/></div></div>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://webp.raiset.top/post3/axi_gpio_python.png" data-fancybox="true"/></div></div>
 
 <p>首先烧写bit流文件，获取overlay信息：</p>
 <!-- ![ol](/pic/post3/ol.png) -->
 
-<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://9258ce6.webp.li/post3/ol.png" data-fancybox="true"/></div></div>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://webp.raiset.top/post3/ol.png" data-fancybox="true"/></div></div>
 
 <p>得到AXI GPIO IP核的名字后，即可使用AxiGPIO函数将该IP核实例化为一个类对象，而后根据Pynq提供的函数实现读写功能。</p>
 <p>也可以参考下面的官方例程：</p>
@@ -203,7 +203,7 @@
     </section>
     </div>
 </article>
-<div class="related-wrap" id="read-next"><section class="body"><div class="item" id="prev"><div class="note">较新文章</div><a href="/posts/855715585/">PYNQ教程二:使用AXI总线实现PS与PL交互</a></div><div class="item" id="next"><div class="note">较早文章</div><a href="/posts/1552645455/">LSTM反向传播推导及C++代码实现</a></div></section></div>
+<div class="related-wrap" id="read-next"><section class="body"><div class="item" id="prev"><div class="note">较新文章</div><a href="/posts/855715585/">PYNQ教程二:使用AXI总线实现PS与PL交互</a></div><div class="item" id="next"></div></section></div>
 
 
 
