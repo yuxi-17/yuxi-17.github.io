@@ -35,7 +35,7 @@
   <link rel="stylesheet" href="/css/main.css?v=1.28.1">
 
   
-    <link rel="shortcut icon" href="https://9258ce6.webp.li/basic/favicon.ico">
+    <link rel="shortcut icon" href="https://webp.raiset.top/basic/favicon.ico">
   
 
   
@@ -47,7 +47,7 @@
 <div class="l_body s:aa content tech" id="start" layout="post" ><aside class="l_left"><div class="leftbar-container">
 
 
-<header class="header"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="https://9258ce6.webp.li/basic/avatar.jpg" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main" ff="title">Yuxi's Blog</div><div class="sub normal cap">但行前路，无问西东</div><div class="sub hover cap" style="opacity:0"> yuxi17@hnu.edu.cn</div></a></div></header>
+<header class="header"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="https://webp.raiset.top/basic/avatar.jpg" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main" ff="title">Yuxi's Blog</div><div class="sub normal cap">但行前路，无问西东</div><div class="sub hover cap" style="opacity:0"> yuxi17@hnu.edu.cn</div></a></div></header>
 
 <div class="nav-area">
 <div class="search-wrapper" id="search-wrapper"><form class="search-form"><a class="search-button" onclick="document.getElementById(&quot;search-input&quot;).focus();"><svg t="1705074644177" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1560" width="200" height="200"><path d="M1008.839137 935.96571L792.364903 719.491476a56.783488 56.783488 0 0 0-80.152866 0 358.53545 358.53545 0 1 1 100.857314-335.166073 362.840335 362.840335 0 0 1-3.689902 170.145468 51.248635 51.248635 0 1 0 99.217358 26.444296 462.057693 462.057693 0 1 0-158.255785 242.303546l185.930047 185.725053a51.248635 51.248635 0 0 0 72.568068 0 51.248635 51.248635 0 0 0 0-72.978056z" p-id="1561"></path><path d="M616.479587 615.969233a50.428657 50.428657 0 0 0-61.498362-5.534852 174.655348 174.655348 0 0 1-177.525271 3.484907 49.403684 49.403684 0 0 0-58.833433 6.76482l-3.074918 2.869923a49.403684 49.403684 0 0 0 8.609771 78.10292 277.767601 277.767601 0 0 0 286.992355-5.739847 49.403684 49.403684 0 0 0 8.404776-76.667958z" p-id="1562"></path></svg></a><input type="text" class="search-input" id="search-input" placeholder="站内搜索"></form><div id="search-result"></div><div class="search-no-result">没有找到内容！</div></div>
@@ -90,7 +90,7 @@
 <h2 id="1-共流调度的基本背景"><a href="#1-共流调度的基本背景" class="headerlink" title="1.共流调度的基本背景"></a>1.共流调度的基本背景</h2><p>在大数据处理过程中，通常存在聚合操作，比如MapReduce的Reduce操作，Spark的groupByKey等等。这些操作需要将相同键的值合并在一起，比如单词统计任务，可以将一堆文件分给不同节点单独处理，此时就会出现<strong>“单词-出现次数”</strong>的键值对。在reduce阶段将不同节点处理的结果合并在一起，属于同一个键的值加起来，就可以得到这堆文件中每个单词的出现次数。</p>
 <p>当然，键值对不一定是key和单个值，也可能存在<strong>key-tuple</strong>的情况，设想有这么一个任务，需要统计不同人的消费记录，不同节点可以用来处理不同平台的消费记录，然后生成<strong>“ 用户-消费记录元组”</strong>的键值对，比如节点1统计外卖平台，生成键值对{用户1 : (消费记录1,消费记录2…)}、{用户2 : (消费记录1,消费记录2…)}等等。节点2可以用来统计网购平台数据、节点3统计游戏平台数据，诸如此类。那么在reduce的时候，需要将每个用户在不同平台的消费记录合并在一起，比如属于用户1的所有平台消费记录需要进行合并，那么这时就需要思考一个问题，这些数据如今分布在各个节点，究竟交给哪个节点来完成这个合并操作，这个节点为汇聚节点。</p>
 <p>下面是三种分配策略，在我们这个例子中，节点1、2、3就是不同平台的消费数据，而$a^{b}$代表用户a（Key），b为消费记录的个数（或者说元组大小、数据量），比如$1^{3}$代表用户1，有三条消费记录：</p>
-<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://webp.raiset.top/neal/fig1.png" data-fancybox="true"/></div></div>
+<div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/neal/fig1.png" data-fancybox="true"/></div></div>
 
 <p>在a中，根据简单的hash函数来决定汇聚节点。而b和c是其它的调度策略，区别在于用户2的汇聚节点不同（b选择汇聚到节点1，c选择汇聚到节点2）。这里的调度策略并不是重点，关键是如何去评价哪个调度策略是好的：</p>
 <div class="tag-plugin colorful checkbox" ><input type="checkbox"/><span>假如按照最小传输数据量来看，a、b、c传输的元组大小分别为8、7、6，那么SP2是最优的。</span></div>
@@ -102,14 +102,14 @@
 <div class="tag-plugin colorful checkbox" ><input type="checkbox"/><span>但是假如节点2的带宽减小为原来的一半，那么此时SP1的通信时间为6，而SP2不变（因为SP2的节点2只需要发送1个数据，带宽减半后需要2个时间，仍然比节点1的4个时间要短）。</span></div>
 
 <p>这里可以进一步做一个带宽的调整，如下图所示：</p>
-<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://webp.raiset.top/neal/fig2.png" data-fancybox="true"/></div></div>
+<div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/neal/fig2.png" data-fancybox="true"/></div></div>
 
 <p>对于SP2，由于节点1需要4个时间，其余两个节点只需要1个时间，那么可以将这两个节点的带宽缩小，使得它也需要4个时间才能完成传输。这样的好处在于给其它任务腾出了一些带宽，此外数据在同一个时刻到达也更加方便处理。</p>
 <p>从上面几个情况可以得到，在选择汇聚节点时，需要考虑传输的数据量，以及可用的带宽。</p>
 <div class="tag-plugin colorful note" color="cyan"><div class="body"><p>查看节点之间的可用带宽，以及为节点之间的传输分配带宽，可以通过SDN的Openflow控制器来实现。</p></div></div>
 
 <h2 id="2-共流调度的一般情况"><a href="#2-共流调度的一般情况" class="headerlink" title="2.共流调度的一般情况"></a>2.共流调度的一般情况</h2><p>现在假设有n个节点，p个Key，如下图左边表格所示，格子里面的数字代表数据量，也就是前面说的元组大小，考虑到不是所有节点都会有某一个Key的数据，因此存在数据量为0的情况。</p>
-<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://webp.raiset.top/neal/fig3.png" data-fancybox="true"/></div></div>
+<div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/neal/fig3.png" data-fancybox="true"/></div></div>
 
 <p>对于每一个Key来说，其都需要选择一个汇聚节点，如右上方表格所示，每一列只有一个1，其余为0，代表每一个Key有且只有一个汇聚节点，其它节点如果拥有该Key的数据，就需要发送给汇聚节点。这可以进一步简化为右下角的表格，对于Key1来说，其选择节点n为汇聚节点，而Key2选择节点1，Key_p选择节点2。</p>
 <p>如此，这个问题就变成了一个NP难题，共有$n^{p}$种情况（一共p个Key，每个Key都有n种情况）。当然，这里每一列真的需要考虑n种情况吗？</p>
@@ -125,7 +125,7 @@
 <p><strong>现在考虑最慢流传输时间$\tau$，所有节点都在$\tau$时间内完成发送，也在$\tau$时间内完成接收，</strong>即：<br>$$<br>\tau &#x3D; max(\sum_{j&#x3D;1,j\neq i}^n\sum_{k&#x3D;1}^p\frac{h_{ik}}{r_i}x_{jk}\quad\forall i\quad,\quad\sum_{i&#x3D;1,i\neq j}^n\sum_{k&#x3D;1}^p\frac{h_{ik}}{r_j}x_{jk}\quad\forall j)\tag{2.3}<br>$$<br>通过带宽调整，使得所有流的传输时间都等于这个最大时间。</p>
 <h2 id="3-元启发式算法求解调度问题"><a href="#3-元启发式算法求解调度问题" class="headerlink" title="3.元启发式算法求解调度问题"></a>3.元启发式算法求解调度问题</h2><p>现在的问题在于求解每一个Key的汇聚节点的位置，使得最慢流传输时间$\tau$最小。</p>
 <p>这样的问题可以使用元启发式算法求解，其实细心的人早已发现，这和八皇后问题很像，都是每一列只能放一个，只不过八皇后的评估值是位于同一行或同一斜的皇后的对数，而这里是公式2.3，目的都是使得评估值最小。</p>
-<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://webp.raiset.top/neal/fig5.png" data-fancybox="true" style="width:200px;"/></div></div>
+<div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/neal/fig5.png" data-fancybox="true" style="width:200px;"/></div></div>
 
 <p>元启发式算法很多，比如遗传算法、爬山法、模拟退火算法等等，论文则采用了鲸鱼优化算法(WOA)。</p>
 <p>关于鲸鱼优化算法的解释网上有很多，因此这里不再赘述，将问题分析到这一步其实已经很明确了。</p>
@@ -149,10 +149,10 @@
       <div class="header"><span>分享文章</span></div>
       <div class="body">
         <div class="link"><input class="copy-area" readonly="true" id="copy-link" value="https://raiset.top/posts/1128674413/" /></div>
-        <div class="social-wrap dis-select"><a class="social share-item wechat" onclick="util.toggle(&quot;qrcode-wechat&quot)"><img class="lazy"  src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/social/b32ef3da1162a.svg" /></a><a class="social share-item link" onclick="util.copy(&quot;copy-link&quot;, &quot;复制成功&quot;)"><img class="lazy"  src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/social/8411ed322ced6.svg" /></a></div>
+        <div class="social-wrap dis-select"><a class="social share-item wechat" onclick="util.toggle(&quot;qrcode-wechat&quot)"><img  src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/social/b32ef3da1162a.svg" /></a><a class="social share-item link" onclick="util.copy(&quot;copy-link&quot;, &quot;复制成功&quot;)"><img  src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/social/8411ed322ced6.svg" /></a></div>
         
         <div class="qrcode" id="qrcode-wechat" style="opacity:0;height:0">
-          <img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=https://raiset.top/posts/1128674413/"/>
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=https://raiset.top/posts/1128674413/"/>
         </div>
         
       </div>
@@ -227,8 +227,8 @@
     cover: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/cover/76b86c0226ffd.svg`,
   };
   const deps = {
-    jquery: `https://cdn.bootcdn.net/ajax/libs/jquery/3.7.1/jquery.min.js`,
-    marked: `https://cdn.bootcdn.net/ajax/libs/marked/4.0.18/marked.min.js`
+    jquery: `https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js`,
+    marked: `https://cdnjs.cloudflare.com/ajax/libs/marked/15.0.6/marked.min.js`
   }
   
 
@@ -492,31 +492,11 @@
     hoverDelay: 25
   };
 </script>
-<script defer src="https://cdn.bootcdn.net/ajax/libs/flying-pages/2.1.2/flying-pages.min.js"></script><script defer src="https://cdn.bootcdn.net/ajax/libs/vanilla-lazyload/17.8.4/lazyload.min.js"></script>
-<script>
-  // https://www.npmjs.com/package/vanilla-lazyload
-  // Set the options globally
-  // to make LazyLoad self-initialize
-  window.lazyLoadOptions = {
-    elements_selector: ".lazy",
-  };
-  // Listen to the initialization event
-  // and get the instance of LazyLoad
-  window.addEventListener(
-    "LazyLoad::Initialized",
-    function (event) {
-      window.lazyLoadInstance = event.detail.instance;
-    },
-    false
-  );
-  document.addEventListener('DOMContentLoaded', function () {
-    window.lazyLoadInstance?.update();
-  });
-</script><script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/flying-pages/2.1.2/flying-pages.min.js"></script><script>
   ctx.fancybox = {
     selector: `.timenode p>img`,
-    css: `https://cdn.bootcdn.net/ajax/libs/fancyapps-ui/5.0.22/fancybox/fancybox.min.css`,
-    js: `https://cdn.bootcdn.net/ajax/libs/fancyapps-ui/5.0.22/fancybox/fancybox.umd.min.js`
+    css: `https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css`,
+    js: `https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js`
   };
   var selector = '[data-fancybox]:not(.error)';
   if (ctx.fancybox.selector) {
