@@ -1,0 +1,695 @@
+
+<!DOCTYPE html><html lang="zh-CN">
+
+<head>
+  <meta name="baidu-site-verification" content="codeva-6XsWwZ5KNx" />
+  <meta name="google-site-verification" content="mrQfRDd95Pw5bKzS474AHFN-vs2jWxa-Y7HDPHMsp8I" />
+  <meta name="baidu-site-verification" content="codeva-jbLr6Kbtit" />
+  <meta name="msvalidate.01" content="2B0D1C3DD09F36BC9A48B16061CF4C5F" />
+  <meta charset="utf-8">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.28.1" theme-name="Stellar" theme-version="1.28.1">
+  
+  <meta name="generator" content="Hexo 7.2.0">
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f9fafb">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
+  
+  <title>PetaLinux安装与使用-SD卡制作-离线编译 - Yuxi's Blog</title>
+
+  
+  <meta name="description" content="📝本文概览本文将详细介绍PetaLinux 2023.1版本的安装和使用流程，包括：虚拟机环境搭建、PetaLinux安装、在线&#x2F;离线编译方法、SD卡制作与上板验证。不同版本和板子之间可能略有区别。">
+  
+  <meta name="keywords" content="PetaLinux">
+
+  <!-- feed -->
+  
+
+  <link rel="stylesheet" href="/css/main.css?v=1.28.1">
+
+  
+    <link rel="shortcut icon" href="https://webp.raiset.top/basic/favicon.ico">
+  
+
+  
+
+  <link rel="stylesheet" href="/css/mouse.css">
+</head>
+<body><div class="sitebg"><div class="siteblur"></div></div>
+
+<div class="l_body s:aa content tech" id="start" layout="post" ><aside class="l_left"><div class="leftbar-container">
+
+
+<header class="header"><div class="logo-wrap"><a class="avatar" href="/about"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="https://webp.raiset.top/basic/avatar.jpg" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main" ff="title">Yuxi's Blog</div><div class="sub normal cap">但行前路，无问西东</div><div class="sub hover cap" style="opacity:0"> yuxi17@hnu.edu.cn</div></a></div></header>
+
+<div class="nav-area">
+<div class="search-wrapper" id="search-wrapper"><form class="search-form"><a class="search-button" onclick="document.getElementById(&quot;search-input&quot;).focus();"><svg t="1705074644177" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1560" width="200" height="200"><path d="M1008.839137 935.96571L792.364903 719.491476a56.783488 56.783488 0 0 0-80.152866 0 358.53545 358.53545 0 1 1 100.857314-335.166073 362.840335 362.840335 0 0 1-3.689902 170.145468 51.248635 51.248635 0 1 0 99.217358 26.444296 462.057693 462.057693 0 1 0-158.255785 242.303546l185.930047 185.725053a51.248635 51.248635 0 0 0 72.568068 0 51.248635 51.248635 0 0 0 0-72.978056z" p-id="1561"></path><path d="M616.479587 615.969233a50.428657 50.428657 0 0 0-61.498362-5.534852 174.655348 174.655348 0 0 1-177.525271 3.484907 49.403684 49.403684 0 0 0-58.833433 6.76482l-3.074918 2.869923a49.403684 49.403684 0 0 0 8.609771 78.10292 277.767601 277.767601 0 0 0 286.992355-5.739847 49.403684 49.403684 0 0 0 8.404776-76.667958z" p-id="1562"></path></svg></a><input type="text" class="search-input" id="search-input" placeholder="站内搜索"></form><div id="search-result"></div><div class="search-no-result">没有找到内容！</div></div>
+
+
+<nav class="menu dis-select"></nav>
+</div>
+<div class="widgets">
+
+
+<widget class="widget-wrapper post-list"><div class="widget-header dis-select"><span class="name">最近更新</span></div><div class="widget-body fs14"><a class="item title" href="/posts/1812881063/"><span class="title">PetaLinux安装与使用-SD卡制作-离线编译</span></a><a class="item title" href="/posts/2690508721/"><span class="title">Tandem Processor论文解读</span></a><a class="item title" href="/posts/1128674413/"><span class="title">NEAL(Network-Aware Locality Scheduling)论文简要解读</span></a><a class="item title" href="/posts/618860/"><span class="title">STARNUMA论文解读</span></a><a class="item title" href="/posts/855715585/"><span class="title">PYNQ教程二:使用AXI总线实现PS与PL交互</span></a><a class="item title" href="/posts/1649035944/"><span class="title">PYNQ教程一:GPIO的使用</span></a><a class="item title" href="/posts/1552645455/"><span class="title">LSTM反向传播推导及C++代码实现</span></a></div></widget>
+</div>
+
+</div></aside><div class="l_main" id="main">
+
+
+
+
+
+<div class="article banner top">
+  <div class="content">
+    <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a>
+<span class="sep"></span><a class="cap breadcrumb" href="/">文章</a><span class="sep"></span><a class="cap breadcrumb-link" href="/categories/PetaLinux/">PetaLinux</a></div>
+<div class="flex-row" id="post-meta"><span class="text created">发布于：<time datetime="2025-08-31T13:50:17.714Z">2025-08-31</time></span><span class="sep updated"></span><span class="text updated">更新于：<time datetime="2025-09-06T10:07:36.592Z">2025-09-06</time></span></div></div></div>
+    
+    <div class="bottom only-title">
+      
+      <div class="text-area">
+        <h1 class="text title"><span>PetaLinux安装与使用-SD卡制作-离线编译</span></h1>
+        
+      </div>
+    </div>
+    
+  </div>
+  </div><article class="md-text content"><div class="tag-plugin colorful note" color="blue"><div class="title">📝本文概览</div><div class="body"><p>本文将详细介绍PetaLinux 2023.1版本的安装和使用流程，包括：虚拟机环境搭建、PetaLinux安装、在线&#x2F;离线编译方法、SD卡制作与上板验证。不同版本和板子之间可能略有区别。</p></div></div>
+
+<span id="more"></span>
+
+<h2 id="一、安装虚拟机"><a href="#一、安装虚拟机" class="headerlink" title="一、安装虚拟机"></a>一、安装虚拟机</h2><p>查看文档<a target="_blank" rel="noopener" href="https://docs.amd.com/r/2023.1-English/ug1144-petalinux-tools-reference-guide/Installation-Requirements">UG1144</a>，确定所要安装的petalinux版本对应的虚拟机版本，这里我安装的是Ubuntu20.04.6（虽然显示不支持，但实际上没什么问题）。</p>
+<div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905165001027.png" data-fancybox="true"/></div></div>
+
+<p>Ubuntu配置中硬盘可以给大一点，后面如果要离线编译的话用得上。</p>
+<div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905165021303.png" data-fancybox="true" style="width:400px;"/></div></div>
+
+<p>安装虚拟机后可以切换镜像源，方便后面下载库文件。</p>
+<h2 id="二、下载petalinux"><a href="#二、下载petalinux" class="headerlink" title="二、下载petalinux"></a>二、下载petalinux</h2><p>进入<a target="_blank" rel="noopener" href="https://china.xilinx.com/support/download/index.html/content/xilinx/zh/downloadNav/embedded-design-tools/archive.html">官网下载页面</a>：</p>
+<div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905165056693.png" data-fancybox="true" style="width:400px;"/></div></div>
+
+<h2 id="三、安装Petalinux"><a href="#三、安装Petalinux" class="headerlink" title="三、安装Petalinux"></a>三、安装Petalinux</h2><h3 id="1-安装必要的库文件"><a href="#1-安装必要的库文件" class="headerlink" title="1. 安装必要的库文件"></a>1. 安装必要的库文件</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install tofrodos gawk xvfb git libncurses5-dev tftpd zlib1g-dev zlib1g-dev:i386 libssl-dev flex bison chrpath socat autoconf libtool texinfo gcc-multilib libsdl1.2-dev libglib2.0-dev screen pax xterm build-essential libtinfo5 libncurses5 tftpd-hpa -y</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-将petalinux安装包复制到虚拟机中"><a href="#2-将petalinux安装包复制到虚拟机中" class="headerlink" title="2. 将petalinux安装包复制到虚拟机中"></a>2. 将petalinux安装包复制到虚拟机中</h3><div class="tag-plugin colorful note" color="cyan"><div class="title">💡传输方法</div><div class="body"><p>可以使用scp命令复制，前提是虚拟机需要先安装并启动SSH服务（sudo apt install openssh-server 和 sudo systemctl start ssh）。</p></div></div>
+
+<div class="tag-plugin colorful note" color="blue"><div class="title"><strong>SCP传输语法</strong></div><div class="body"><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scp 需要复制的文件 虚拟机用户名@虚拟机ip地址:文件保存的地址</span><br></pre></td></tr></table></figure><p><strong>示例：</strong></p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scp petalinux-v2023.1-05012318-installer.run raiset@192.168.80.130:~/Downloads</span><br></pre></td></tr></table></figure></div></div>
+
+<h3 id="3-创建Petalinux文件夹并给予权限"><a href="#3-创建Petalinux文件夹并给予权限" class="headerlink" title="3. 创建Petalinux文件夹并给予权限"></a>3. 创建Petalinux文件夹并给予权限</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sudo <span class="built_in">mkdir</span> -p /opt/pkg/petalinux</span><br><span class="line">sudo <span class="built_in">chown</span> raiset(虚拟机用户名) /opt/pkg/</span><br><span class="line">sudo <span class="built_in">chgrp</span> raiset /opt/pkg/</span><br><span class="line">sudo <span class="built_in">chown</span> raiset /opt/pkg/petalinux/</span><br><span class="line">sudo <span class="built_in">chgrp</span> raiset /opt/pkg/petalinux/</span><br></pre></td></tr></table></figure>
+
+<div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905165129746.png" data-fancybox="true" style="width:500px;"/></div></div>
+
+<h3 id="4-开始安装"><a href="#4-开始安装" class="headerlink" title="4. 开始安装"></a>4. 开始安装</h3><div class="tag-plugin timeline"><div class="timenode" index="0"><div class="header">第一步：修改权限</div><div class="body fs14"><p>为安装文件添加执行权限：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo <span class="built_in">chmod</span> 777 petalinux-v2023.1-05012318-installer.run</span><br></pre></td></tr></table></figure></div></div><div class="timenode" index="1"><div class="header">第二步：启动安装程序</div><div class="body fs14"><p>指定安装路径为刚才创建的文件夹：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./petalinux-v2023.1-05012318-installer.run -d /opt/pkg/petalinux/</span><br></pre></td></tr></table></figure><div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905165143505.png" data-fancybox="true"/></div></div></div></div><div class="timenode" index="2"><div class="header">第三步：跳过许可协议</div><div class="body fs14"><p>输入 <code>q</code> ，回车，然后跳出一大段文字：</p><div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905165212053.png" data-fancybox="true"/></div></div>再次输入 `q` 退出协议页面，输入 `y` 同意协议：<div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905165223906.png" data-fancybox="true"/></div></div></div></div><div class="timenode" index="3"><div class="header">第四步：开始安装</div><div class="body fs14"><p>依此类推，直到开始安装：</p><div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905165237985.png" data-fancybox="true"/></div></div></div></div></div>
+
+<h2 id="四、PetaLinux使用"><a href="#四、PetaLinux使用" class="headerlink" title="四、PetaLinux使用"></a>四、PetaLinux使用</h2><h3 id="1-配置环境变量"><a href="#1-配置环境变量" class="headerlink" title="1. 配置环境变量"></a>1. 配置环境变量</h3><div class="tag-plugin colorful note" color="warning"><div class="body"><p>每次打开一个Terminal都需要执行此命令，否则无法运行PetaLinux相关指令！</p></div></div>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">source</span> /opt/pkg/petalinux/settings.sh</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-创建工作目录并给予权限"><a href="#2-创建工作目录并给予权限" class="headerlink" title="2. 创建工作目录并给予权限"></a>2. 创建工作目录并给予权限</h3><p>创建一个目录，在该目录下可创建多个PetaLinux工程。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo <span class="built_in">mkdir</span> peta_prj</span><br><span class="line">sudo <span class="built_in">chmod</span> 777 peta_prj/</span><br><span class="line"><span class="built_in">cd</span> peta_prj</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-创建PetaLinux工程"><a href="#3-创建PetaLinux工程" class="headerlink" title="3. 创建PetaLinux工程"></a>3. 创建PetaLinux工程</h3><div class="tag-plugin colorful note" color="blue"><div class="title"><strong>命令格式</strong></div><div class="body"><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">petalinux-create --<span class="built_in">type</span> project --template &lt;PLATFORM&gt; --name &lt;PROJECT_NAME&gt;</span><br></pre></td></tr></table></figure></div></div>
+
+<p><strong>参数说明：</strong></p>
+<ul>
+<li><code>&lt;PLATFORM&gt;</code> - 目标平台类型<details class="tag-plugin colorful folding" color="cyan"><summary><span>支持的平台类型</span></summary><div class="body"><ul><li><code>versal</code> - Versal ACAP</li><li><code>zynqMP</code> - Zynq UltraScale+ MPSoC</li><li><code>zynq</code> - Zynq-7000 devices</li><li><code>microblaze</code> - MicroBlaze™ processor</li></ul></div></details></li>
+<li><code>&lt;PROJECT_NAME&gt;</code> - 工程名称</li>
+</ul>
+<div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905165334505.png" data-fancybox="true"/></div></div>
+
+<h3 id="4-配置PetaLinux（在线编译）"><a href="#4-配置PetaLinux（在线编译）" class="headerlink" title="4. 配置PetaLinux（在线编译）"></a>4. 配置PetaLinux（在线编译）</h3><h4 id="4-1-配置工程"><a href="#4-1-配置工程" class="headerlink" title="4.1 配置工程"></a>4.1 配置工程</h4><p>进入工程目录：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> test_peta </span><br></pre></td></tr></table></figure>
+
+<p>将Vivado生成的XSA文件移动到虚拟机中</p>
+<div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905165358833.png" data-fancybox="true" style="width:300px;"/></div></div>
+
+<p>运行 <code>bash petalinux-config --get-hw-description &lt;XSA_PATH&gt; </code></p>
+<p>其中 <code>&lt;XSA_PATH&gt;</code> 是XSA文件所在路径。</p>
+<div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905165437733.png" data-fancybox="true" style="width:400px;"/></div></div>
+
+<p>一般情况下保持默认配置即可，使用方向键移动到Exit退出。</p>
+<div class="tag-plugin colorful note" color="cyan"><div class="body"><p>不同板子的配置可能不一样，可以参考板子的相关手册，下面几个配置同理。</p></div></div>
+
+<div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905165508753.png" data-fancybox="true"/></div></div>
+
+<h4 id="4-2-配置内核"><a href="#4-2-配置内核" class="headerlink" title="4.2 配置内核"></a>4.2 配置内核</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">petalinux-config -c kernel </span><br></pre></td></tr></table></figure>
+
+<div class="tag-plugin colorful note" color="warning"><div class="body"><p>⚠️保持虚拟机联网状态，这里会从网络下载大量文件！</p></div></div>
+
+<div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905165522826.png" data-fancybox="true" style="width:500px;"/></div></div>
+
+<p>由于以太网的PHY芯片驱动默认没有打开，需要手动配置：</p>
+<p>使用方向键导航，按enter进入，依次选择<code>Device Drivers → Network device support → PHY Device support and infrastructure → Micrel Phys</code></p>
+<p>按 <code>y</code> 选中Micrel Phys驱动，然后选择<code>Exit</code>逐层退出并保存。</p>
+<div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905165530171.png" data-fancybox="true" style="width:500px;"/></div></div>
+
+<h4 id="4-3-配置根文件系统"><a href="#4-3-配置根文件系统" class="headerlink" title="4.3 配置根文件系统"></a>4.3 配置根文件系统</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">petalinux-config -c rootfs</span><br></pre></td></tr></table></figure>
+
+<div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905165546722.png" data-fancybox="true" style="width:500px;"/></div></div>
+
+<p>根文件系统配置一般保持默认即可，直接退出。</p>
+<h3 id="5-编译"><a href="#5-编译" class="headerlink" title="5. 编译"></a>5. 编译</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">petalinux-build</span><br></pre></td></tr></table></figure>
+
+<div class="tag-plugin colorful note" color="warning"><div class="body"><p>⚠️编译过程较长，会从网络下载大量依赖文件。</p></div></div>
+
+<details class="tag-plugin colorful folding" color="red"><summary><span>常见问题解决：cracklib分支问题</span></summary><div class="body"><p><strong>错误现象：</strong> 编译过程中出现以下错误信息：</p><div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905165559970.png" data-fancybox="true"/></div></div><p><strong>解决方案：</strong> GitHub上的cracklib主分支已从master改为main，需要修改配置文件：</p><p><strong>文件路径：</strong> <code>[projectdir]/components/yocto/layers/poky/meta/recipes-extended/cracklib/cracklib_2.9.8.bb</code></p><p><strong>修改内容：</strong> 将分支信息从master改为main：</p><div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905165632730.png" data-fancybox="true"/></div></div></div></details>
+
+<div class="tag-plugin colorful note" color="cyan"><div class="body"><p>有时如果编译不成功，可以多运行几次petalinux-build命令。</p></div></div>
+
+<p>出现以下信息代表编译成功：</p>
+<div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905165642606.png" data-fancybox="true" style="width:400px;"/></div></div>
+
+<h3 id="6-打包"><a href="#6-打包" class="headerlink" title="6. 打包"></a>6. 打包</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">petalinux-package --boot --u-boot --fsbl --fpga --force</span><br></pre></td></tr></table></figure>
+
+<details class="tag-plugin colorful folding" color="blue"><summary><span>参数详解</span></summary><div class="body"><p><strong>--fsbl</strong></p><ul><li>指定FSBL镜像文件位置</li><li>默认路径：<code>images/linux/zynq_fsbl.elf</code></li></ul><p><strong>--fpga</strong>  </p><ul><li>指定bitstream文件位置</li><li>默认路径：<code>images/linux/system.bit</code></li><li>注意：如果XSA文件中不包含bit文件，不应添加此参数</li></ul><p><strong>--u-boot</strong></p><ul><li>指定U-Boot镜像位置  </li><li>默认路径：<code>images/linux/u-boot.elf</code></li></ul><p><strong>--force</strong></p><ul><li>强制覆盖已存在的文件</li></ul></div></details>
+
+<h2 id="五、制作SD卡"><a href="#五、制作SD卡" class="headerlink" title="五、制作SD卡"></a>五、制作SD卡</h2><div class="tag-plugin colorful note" color="blue"><div class="title">参考网站：</div><div class="body"><p><a target="_blank" rel="noopener" href="https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/18842385/How+to+format+SD+card+for+SD+boot">How to format SD card for SD boot</a></p></div></div>
+
+<h3 id="1-准备工作"><a href="#1-准备工作" class="headerlink" title="1. 准备工作"></a>1. 准备工作</h3><ul>
+<li>一张空闲的SD卡</li>
+<li>读卡器</li>
+<li>将SD卡通过读卡器连接至虚拟机</li>
+</ul>
+<h3 id="2-查看SD卡设备"><a href="#2-查看SD卡设备" class="headerlink" title="2. 查看SD卡设备"></a>2. 查看SD卡设备</h3><p>打开Disks工具，查看SD卡设备名称：</p>
+<div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905165711890.png" data-fancybox="true" style="width:500px;"/></div></div>
+
+<div class="tag-plugin colorful note" color="warning"><div class="body"><p>本例中SD卡设备被识别为&#x2F;dev&#x2F;sdb，请根据实际情况调整后续命令中的设备名称！</p></div></div>
+
+<h3 id="3-SD卡分区操作"><a href="#3-SD卡分区操作" class="headerlink" title="3. SD卡分区操作"></a>3. SD卡分区操作</h3><h4 id="3-1-进入分区工具"><a href="#3-1-进入分区工具" class="headerlink" title="3.1 进入分区工具"></a>3.1 进入分区工具</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo fdisk /dev/sdb</span><br></pre></td></tr></table></figure>
+
+<div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905165746660.png" data-fancybox="true" style="width:500px;"/></div></div>
+
+<h4 id="3-2-查看现有分区"><a href="#3-2-查看现有分区" class="headerlink" title="3.2 查看现有分区"></a>3.2 查看现有分区</h4><p>输入 <code>p</code> 并回车查看当前分区状态：</p>
+<div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905181316680.png" data-fancybox="true" style="width:500px;"/></div></div>
+
+<p>如果存在已有分区，需要先删除。输入 <code>d</code> 删除现有分区，然后选择要删除的分区编号：</p>
+<div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905181332484.png" data-fancybox="true" style="width:300px;"/></div></div>
+
+<h4 id="3-3-SD卡分区创建"><a href="#3-3-SD卡分区创建" class="headerlink" title="3.3 SD卡分区创建"></a>3.3 SD卡分区创建</h4><div class="tag-plugin timeline"><div class="timenode" index="0"><div class="header">第一步：</div><div class="body fs14"><p><strong>创建主分区：</strong></p><ol><li>输入 <code>n</code> 创建新分区</li><li>输入 <code>p</code> 设置为primary主分区</li><li>分区编号和起始扇区默认即可，直接回车</li><li>输入 <code>+1G</code> 设置分区大小为1GB</li></ol><div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905202549609.png" data-fancybox="true"/></div></div><p><strong>设置为启动分区：</strong><br>输入 <code>a</code> 将分区1设置为可启动：</p><div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905202557850.png" data-fancybox="true" style="width:400px;"/></div></div><p><strong>设置文件系统类型：</strong><br>输入 <code>t</code> 然后输入 <code>c</code> 设置为FAT32格式：</p><div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905202650117.png" data-fancybox="true" style="width:400px;"/></div></div></div></div><div class="timenode" index="1"><div class="header">第二步：</div><div class="body fs14"><p><strong>创建Root分区：</strong></p><ol><li>输入 <code>n</code> 创建第二个分区</li><li>输入 <code>p</code> 设置为primary主分区</li><li>其他设置默认即可，直接回车使用剩余所有空间</li></ol><div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905202703499.png" data-fancybox="true"/></div></div></div></div><div class="timenode" index="2"><div class="header">第三步：确认并保存</div><div class="body fs14"><p>输入 <code>p</code> 查看分区创建结果：</p><div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905202714597.png" data-fancybox="true"/></div></div><p><strong>写入分区表：</strong><br>输入 <code>w</code> 并回车将分区配置写入SD卡，写入完成后会自动退出fdisk工具。</p></div></div></div>
+
+<h4 id="3-4-格式化分区"><a href="#3-4-格式化分区" class="headerlink" title="3.4 格式化分区"></a>3.4 格式化分区</h4><p>取消挂载：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo umount /dev/sdb1</span><br><span class="line">sudo umount /dev/sdb2</span><br></pre></td></tr></table></figure>
+
+<p>格式化Boot分区为FAT32格式：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo mkfs.vfat -F 32 -n boot /dev/sdb1</span><br></pre></td></tr></table></figure>
+
+<p>格式化Root分区为ext4格式：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo mkfs.ext4 -L root /dev/sdb2</span><br></pre></td></tr></table></figure>
+
+<p>重新插拔SD卡后，使用以下命令验证格式化结果：：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lsblk -f</span><br></pre></td></tr></table></figure>
+
+<div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905202728371.png" data-fancybox="true" style="width:600px;"/></div></div>
+
+<div class="tag-plugin colorful note" color="cyan"><div class="title">💡替代工具</div><div class="body"><p>除了命令行方式，也可以使用图形化工具：Linux: gparted；Windows: DiskGenius。</p></div></div>
+
+<div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905202744008.png" data-fancybox="true" style="width:500px;"/></div></div>
+
+<h3 id="4-写入系统文件"><a href="#4-写入系统文件" class="headerlink" title="4. 写入系统文件"></a>4. 写入系统文件</h3><h4 id="4-1-拷贝Boot文件"><a href="#4-1-拷贝Boot文件" class="headerlink" title="4.1 拷贝Boot文件"></a>4.1 拷贝Boot文件</h4><p>进入<code>工程目录/images/linux</code>，将以下文件拷贝到Boot分区：</p>
+<ul>
+<li><code>boot.scr</code></li>
+<li><code>BOOT.BIN</code> </li>
+<li><code>image.ub</code></li>
+</ul>
+<div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905202753452.png" data-fancybox="true" style="width:500px;"/></div></div>
+
+<h4 id="4-2-写入Root文件系统"><a href="#4-2-写入Root文件系统" class="headerlink" title="4.2 写入Root文件系统"></a>4.2 写入Root文件系统</h4><div class="tag-plugin colorful note" color="cyan"><div class="title">💡写入方式对比</div><div class="body"><p>dd命令：直接写入ext4镜像文件，完整性好； 解压方式：将rootfs.tar.gz解压到挂载点，速度较快。</p></div></div>
+
+<div class="tag-plugin tabs"id="tab_1"><div class="nav-tabs"><div class="tab active"><a href="#tab_1-1">dd命令写入</a></div><div class="tab"><a href="#tab_1-2">解压方式</a></div></div><div class="tab-content"><div class="tab-pane active" id="tab_1-1"><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo <span class="built_in">dd</span> <span class="keyword">if</span>=rootfs.ext4 of=/dev/sdb2</span><br></pre></td></tr></table></figure>
+<p>等待写入完成</p>
+<div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905202801239.png" data-fancybox="true"/></div></div></div><div class="tab-pane" id="tab_1-2"><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo tar -zxf rootfs.tar.gz -C /media/raiset/root</span><br></pre></td></tr></table></figure>
+<p>挂载的位置可以从上面<code>lsblk -f</code>命令输出的结果中看到。</p></div></div></div>
+
+<h2 id="六、上板验证"><a href="#六、上板验证" class="headerlink" title="六、上板验证"></a>六、上板验证</h2><h3 id="1-设置SD卡启动"><a href="#1-设置SD卡启动" class="headerlink" title="1. 设置SD卡启动"></a>1. 设置SD卡启动</h3><p>将开发板设置为SD卡启动模式，具体设置方法请参考板卡用户手册，通常通过跳线帽或拨码开关来设置。</p>
+<h3 id="2-串口连接"><a href="#2-串口连接" class="headerlink" title="2. 串口连接"></a>2. 串口连接</h3><h4 id="2-1-查看端口"><a href="#2-1-查看端口" class="headerlink" title="2.1 查看端口"></a>2.1 查看端口</h4><p>打开Windows设备管理器查看串口号：</p>
+<div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905203535233.png" data-fancybox="true" style="width:400px;"/></div></div>
+
+<div class="tag-plugin colorful note" color="cyan"><div class="body"><p>如果设备管理器中不显示串口，需要下载并安装相应的USB转串口驱动程序。</p></div></div>
+
+<h4 id="2-2-配置串口工具"><a href="#2-2-配置串口工具" class="headerlink" title="2.2 配置串口工具"></a>2.2 配置串口工具</h4><p>以Putty为例，配置连接参数：</p>
+<div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905203658436.png" data-fancybox="true" style="width:400px;"/></div></div>
+
+<h3 id="3-启动测试"><a href="#3-启动测试" class="headerlink" title="3. 启动测试"></a>3. 启动测试</h3><h4 id="3-1-启动过程"><a href="#3-1-启动过程" class="headerlink" title="3.1 启动过程"></a>3.1 启动过程</h4><ol>
+<li><strong>启动开发板</strong> - 插入SD卡并上电</li>
+<li><strong>打开串口工具</strong> - 连接并打开串口窗口  </li>
+<li><strong>等待启动完成</strong> - 观察启动日志输出</li>
+</ol>
+<h4 id="3-2-首次登录配置"><a href="#3-2-首次登录配置" class="headerlink" title="3.2 首次登录配置"></a>3.2 首次登录配置</h4><ol>
+<li><strong>用户名：</strong> 输入 <code>petalinux</code></li>
+<li><strong>设置密码：</strong> 根据提示设置新密码</li>
+<li><strong>确认密码：</strong> 再次输入密码确认</li>
+<li><strong>登录成功：</strong> 进入PetaLinux系统命令行</li>
+</ol>
+<div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905203751755.png" data-fancybox="true"/></div></div>
+
+<h2 id="七、离线编译"><a href="#七、离线编译" class="headerlink" title="七、离线编译"></a>七、离线编译</h2><div class="tag-plugin colorful note" color="blue"><div class="body"><p>离线编译通过预先下载所需文件，避免在编译过程中联网下载，可以显著提升编译速度。</p></div></div>
+
+<h3 id="1-下载离线资源"><a href="#1-下载离线资源" class="headerlink" title="1. 下载离线资源"></a>1. 下载离线资源</h3><p>访问<a target="_blank" rel="noopener" href="https://china.xilinx.com/support/download/index.html/content/xilinx/zh/downloadNav/embedded-design-tools/archive.html">AMD&#x2F;Xilinx下载页面</a>：</p>
+<div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905203808242.png" data-fancybox="true" style="width:400px;"/></div></div>
+
+<p>根据开发板型号选择相应的文件，其中downloads文件所有平台都需要：</p>
+<div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905203827296.png" data-fancybox="true"/></div></div>
+
+<h3 id="2-解压"><a href="#2-解压" class="headerlink" title="2. 解压"></a>2. 解压</h3><p>创建两个文件夹分别用于存放sstate-cache和downloads文件。</p>
+<div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905203838780.png" data-fancybox="true" style="width:400px;"/></div></div>
+
+<p>运行<code>tar -xvf xxx.tar.gz</code>解压文件，解压完成后删去压缩包。</p>
+<h3 id="3-配置离线编译"><a href="#3-配置离线编译" class="headerlink" title="3. 配置离线编译"></a>3. 配置离线编译</h3><div class="tag-plugin timeline"><div class="timenode" index="0"><div class="header">第一步</div><div class="body fs14"><p><strong>进入Yocto Settings菜单：</strong><br>在 <code>petalinux-config</code> 界面中，使用方向键导航到 “Yocto Settings” 并回车进入。</p></div></div><div class="timenode" index="1"><div class="header">第二步</div><div class="body fs14"><p><strong>禁用网络并启用离线模式：</strong></p><ol><li>按 <code>n</code> 取消 “Enable Network sstate feeds”</li><li>按 <code>y</code> 选择 “Enable BB NO NETWORK”</li></ol><div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905203923417.png" data-fancybox="true"/></div></div></div></div><div class="timenode" index="2"><div class="header">第三步</div><div class="body fs14"><p><strong>配置sstate-cache路径：</strong><br>找到 “Local sstate feeds settings” 选项，进入后输入sstate-cache所在路径：</p><div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905203903007.png" data-fancybox="true"/></div></div><p>注意使用绝对路径，不能使用 <code>~/</code> 简写，否则后面会报错。</p></div></div><div class="timenode" index="3"><div class="header">第四步</div><div class="body fs14"><p><strong>配置downloads路径：</strong><br>找到 “Add pre-mirror url” 选项，进入后输入downloads所在路径：</p><div class="tag-plugin colorful note" color="warning"><div class="body"><p>注意必须添加<code>file://</code>前缀。</p></div></div><div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905203913440.png" data-fancybox="true"/></div></div></div></div></div>
+
+<div class="tag-plugin colorful note" color="green"><div class="title">🎉总结</div><div class="body"><p>至此，您已经完成了PetaLinux的完整学习流程，希望这个教程能对您的嵌入式Linux开发工作有所帮助！</p></div></div>
+<div class="article-footer fs14">
+    <section id="license">
+      <div class="header"><span>许可协议</span></div>
+      <div class="body"><p><a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a>欢迎评论探讨</p>
+</div>
+    </section>
+    
+    <section id="share">
+      <div class="header"><span>分享文章</span></div>
+      <div class="body">
+        <div class="link"><input class="copy-area" readonly="true" id="copy-link" value="https://raiset.top/posts/1812881063/" /></div>
+        <div class="social-wrap dis-select"><a class="social share-item wechat" onclick="util.toggle(&quot;qrcode-wechat&quot)"><img  src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/social/b32ef3da1162a.svg" /></a><a class="social share-item link" onclick="util.copy(&quot;copy-link&quot;, &quot;复制成功&quot;)"><img  src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/social/8411ed322ced6.svg" /></a></div>
+        
+        <div class="qrcode" id="qrcode-wechat" style="opacity:0;height:0">
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=https://raiset.top/posts/1812881063/"/>
+        </div>
+        
+      </div>
+    </section>
+    </div>
+</article>
+<div class="related-wrap" id="read-next"><section class="body"><div class="item" id="prev"></div><div class="item" id="next"><div class="note">较早文章</div><a href="/posts/2690508721/">Tandem Processor论文解读</a></div></section></div>
+
+
+
+
+  <div class="related-wrap md-text" id="comments">
+    <section class='header cmt-title cap theme'>
+      <p>快来参与讨论吧~</p>
+
+    </section>
+    <section class='body cmt-body twikoo'>
+      
+
+<div id="twikoo_container"><svg class="loading" style="vertical-align:middle;fill:currentColor;overflow:hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2709"><path d="M832 512c0-176-144-320-320-320V128c211.2 0 384 172.8 384 384h-64zM192 512c0 176 144 320 320 320v64C300.8 896 128 723.2 128 512h64z" p-id="2710"></path></svg></div>
+    </section>
+  </div>
+
+
+
+<footer class="page-footer footnote"><hr><div class="text"><p>本站由 <a href="/">雨夕</a> 使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.28.1">Stellar 1.28.1</a> 主题创建。<br>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
+</div></footer>
+
+<center>
+  <script defer src="https://cn.vercount.one/js"></script>
+  Site Total Visits <span id="vercount_value_site_pv">Loading</span><br>
+  Site Total Visitors <span id="vercount_value_site_uv">Loading</span>
+</center><div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
+<div class="widgets">
+
+
+
+<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">本文目录</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%AE%89%E8%A3%85%E8%99%9A%E6%8B%9F%E6%9C%BA"><span class="toc-text">一、安装虚拟机</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E4%B8%8B%E8%BD%BDpetalinux"><span class="toc-text">二、下载petalinux</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%AE%89%E8%A3%85Petalinux"><span class="toc-text">三、安装Petalinux</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%AE%89%E8%A3%85%E5%BF%85%E8%A6%81%E7%9A%84%E5%BA%93%E6%96%87%E4%BB%B6"><span class="toc-text">1. 安装必要的库文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%B0%86petalinux%E5%AE%89%E8%A3%85%E5%8C%85%E5%A4%8D%E5%88%B6%E5%88%B0%E8%99%9A%E6%8B%9F%E6%9C%BA%E4%B8%AD"><span class="toc-text">2. 将petalinux安装包复制到虚拟机中</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%88%9B%E5%BB%BAPetalinux%E6%96%87%E4%BB%B6%E5%A4%B9%E5%B9%B6%E7%BB%99%E4%BA%88%E6%9D%83%E9%99%90"><span class="toc-text">3. 创建Petalinux文件夹并给予权限</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E5%BC%80%E5%A7%8B%E5%AE%89%E8%A3%85"><span class="toc-text">4. 开始安装</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81PetaLinux%E4%BD%BF%E7%94%A8"><span class="toc-text">四、PetaLinux使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="toc-text">1. 配置环境变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%88%9B%E5%BB%BA%E5%B7%A5%E4%BD%9C%E7%9B%AE%E5%BD%95%E5%B9%B6%E7%BB%99%E4%BA%88%E6%9D%83%E9%99%90"><span class="toc-text">2. 创建工作目录并给予权限</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%88%9B%E5%BB%BAPetaLinux%E5%B7%A5%E7%A8%8B"><span class="toc-text">3. 创建PetaLinux工程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E9%85%8D%E7%BD%AEPetaLinux%EF%BC%88%E5%9C%A8%E7%BA%BF%E7%BC%96%E8%AF%91%EF%BC%89"><span class="toc-text">4. 配置PetaLinux（在线编译）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-1-%E9%85%8D%E7%BD%AE%E5%B7%A5%E7%A8%8B"><span class="toc-text">4.1 配置工程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-2-%E9%85%8D%E7%BD%AE%E5%86%85%E6%A0%B8"><span class="toc-text">4.2 配置内核</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-3-%E9%85%8D%E7%BD%AE%E6%A0%B9%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="toc-text">4.3 配置根文件系统</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E7%BC%96%E8%AF%91"><span class="toc-text">5. 编译</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-%E6%89%93%E5%8C%85"><span class="toc-text">6. 打包</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E5%88%B6%E4%BD%9CSD%E5%8D%A1"><span class="toc-text">五、制作SD卡</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C"><span class="toc-text">1. 准备工作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E6%9F%A5%E7%9C%8BSD%E5%8D%A1%E8%AE%BE%E5%A4%87"><span class="toc-text">2. 查看SD卡设备</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-SD%E5%8D%A1%E5%88%86%E5%8C%BA%E6%93%8D%E4%BD%9C"><span class="toc-text">3. SD卡分区操作</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-%E8%BF%9B%E5%85%A5%E5%88%86%E5%8C%BA%E5%B7%A5%E5%85%B7"><span class="toc-text">3.1 进入分区工具</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-%E6%9F%A5%E7%9C%8B%E7%8E%B0%E6%9C%89%E5%88%86%E5%8C%BA"><span class="toc-text">3.2 查看现有分区</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-SD%E5%8D%A1%E5%88%86%E5%8C%BA%E5%88%9B%E5%BB%BA"><span class="toc-text">3.3 SD卡分区创建</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-4-%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%88%86%E5%8C%BA"><span class="toc-text">3.4 格式化分区</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E5%86%99%E5%85%A5%E7%B3%BB%E7%BB%9F%E6%96%87%E4%BB%B6"><span class="toc-text">4. 写入系统文件</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-1-%E6%8B%B7%E8%B4%9DBoot%E6%96%87%E4%BB%B6"><span class="toc-text">4.1 拷贝Boot文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-2-%E5%86%99%E5%85%A5Root%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="toc-text">4.2 写入Root文件系统</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E4%B8%8A%E6%9D%BF%E9%AA%8C%E8%AF%81"><span class="toc-text">六、上板验证</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E8%AE%BE%E7%BD%AESD%E5%8D%A1%E5%90%AF%E5%8A%A8"><span class="toc-text">1. 设置SD卡启动</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E4%B8%B2%E5%8F%A3%E8%BF%9E%E6%8E%A5"><span class="toc-text">2. 串口连接</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-%E6%9F%A5%E7%9C%8B%E7%AB%AF%E5%8F%A3"><span class="toc-text">2.1 查看端口</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-%E9%85%8D%E7%BD%AE%E4%B8%B2%E5%8F%A3%E5%B7%A5%E5%85%B7"><span class="toc-text">2.2 配置串口工具</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%90%AF%E5%8A%A8%E6%B5%8B%E8%AF%95"><span class="toc-text">3. 启动测试</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B"><span class="toc-text">3.1 启动过程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-%E9%A6%96%E6%AC%A1%E7%99%BB%E5%BD%95%E9%85%8D%E7%BD%AE"><span class="toc-text">3.2 首次登录配置</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%83%E3%80%81%E7%A6%BB%E7%BA%BF%E7%BC%96%E8%AF%91"><span class="toc-text">七、离线编译</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E4%B8%8B%E8%BD%BD%E7%A6%BB%E7%BA%BF%E8%B5%84%E6%BA%90"><span class="toc-text">1. 下载离线资源</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E8%A7%A3%E5%8E%8B"><span class="toc-text">2. 解压</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E9%85%8D%E7%BD%AE%E7%A6%BB%E7%BA%BF%E7%BC%96%E8%AF%91"><span class="toc-text">3. 配置离线编译</span></a></li></ol></li></ol></div><div class="widget-footer">
+
+<a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 12c0-4.714 0-7.071 1.464-8.536C4.93 2 7.286 2 12 2c4.714 0 7.071 0 8.535 1.464C22 4.93 22 7.286 22 12c0 4.714 0 7.071-1.465 8.535C19.072 22 16.714 22 12 22s-7.071 0-8.536-1.465C2 19.072 2 16.714 2 12Z"/><path stroke-linecap="round" stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/></g></svg><span>回到顶部</span></a><a class="buttom" onclick="util.scrollComment()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M10.46 1.25h3.08c1.603 0 2.86 0 3.864.095c1.023.098 1.861.3 2.6.752a5.75 5.75 0 0 1 1.899 1.899c.452.738.654 1.577.752 2.6c.095 1.004.095 2.261.095 3.865v1.067c0 1.141 0 2.036-.05 2.759c-.05.735-.153 1.347-.388 1.913a5.75 5.75 0 0 1-3.112 3.112c-.805.334-1.721.408-2.977.43a10.81 10.81 0 0 0-.929.036c-.198.022-.275.054-.32.08c-.047.028-.112.078-.224.232c-.121.166-.258.396-.476.764l-.542.916c-.773 1.307-2.69 1.307-3.464 0l-.542-.916a10.605 10.605 0 0 0-.476-.764c-.112-.154-.177-.204-.224-.232c-.045-.026-.122-.058-.32-.08c-.212-.023-.49-.03-.93-.037c-1.255-.021-2.171-.095-2.976-.429A5.75 5.75 0 0 1 1.688 16.2c-.235-.566-.338-1.178-.389-1.913c-.049-.723-.049-1.618-.049-2.76v-1.066c0-1.604 0-2.86.095-3.865c.098-1.023.3-1.862.752-2.6a5.75 5.75 0 0 1 1.899-1.899c.738-.452 1.577-.654 2.6-.752C7.6 1.25 8.857 1.25 10.461 1.25M6.739 2.839c-.914.087-1.495.253-1.959.537A4.25 4.25 0 0 0 3.376 4.78c-.284.464-.45 1.045-.537 1.96c-.088.924-.089 2.11-.089 3.761v1c0 1.175 0 2.019.046 2.685c.045.659.131 1.089.278 1.441a4.25 4.25 0 0 0 2.3 2.3c.515.214 1.173.294 2.429.316h.031c.398.007.747.013 1.037.045c.311.035.616.104.909.274c.29.17.5.395.682.645c.169.232.342.525.538.856l.559.944a.52.52 0 0 0 .882 0l.559-.944c.196-.331.37-.624.538-.856c.182-.25.392-.476.682-.645c.293-.17.598-.24.909-.274c.29-.032.639-.038 1.037-.045h.032c1.255-.022 1.913-.102 2.428-.316a4.25 4.25 0 0 0 2.3-2.3c.147-.352.233-.782.278-1.441c.046-.666.046-1.51.046-2.685v-1c0-1.651 0-2.837-.089-3.762c-.087-.914-.253-1.495-.537-1.959a4.25 4.25 0 0 0-1.403-1.403c-.464-.284-1.045-.45-1.96-.537c-.924-.088-2.11-.089-3.761-.089h-3c-1.651 0-2.837 0-3.762.089" clip-rule="evenodd"/><path fill="currentColor" d="M9 11a1 1 0 1 1-2 0a1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0a1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0a1 1 0 0 1 2 0"/></svg><span>参与讨论</span></a></div></widget>
+</div></aside><div class='float-panel blur'>
+  <button type='button' style='display:none' class='laptop-only rightbar-toggle mobile' onclick='sidebar.rightbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
+  </button>
+  <button type='button' style='display:none' class='mobile-only leftbar-toggle mobile' onclick='sidebar.leftbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 11c0-3.771 0-5.657 1.172-6.828C4.343 3 6.229 3 10 3h4c3.771 0 5.657 0 6.828 1.172C22 5.343 22 7.229 22 11v2c0 3.771 0 5.657-1.172 6.828C19.657 21 17.771 21 14 21h-4c-3.771 0-5.657 0-6.828-1.172C2 18.657 2 16.771 2 13z"/><path id="sep" stroke-linecap="round" d="M5.5 10h6m-5 4h4m4.5 7V3"/></g></svg>
+  </button>
+</div>
+</div><div class="scripts">
+<script type="text/javascript">
+  const ctx = {
+    date_suffix: {
+      just: `刚刚`,
+      min: `分钟前`,
+      hour: `小时前`,
+      day: `天前`,
+    },
+    root : `/`,
+  };
+
+  // required plugins (only load if needs)
+  if (`local_search`) {
+    ctx.search = {};
+    ctx.search.service = `local_search`;
+    if (ctx.search.service == 'local_search') {
+      let service_obj = Object.assign({}, `{"field":"all","path":"/search.json","content":true,"sort":"-date"}`);
+      ctx.search[ctx.search.service] = service_obj;
+    }
+  }
+  const def = {
+    avatar: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/3442075.svg`,
+    cover: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/cover/76b86c0226ffd.svg`,
+  };
+  const deps = {
+    jquery: `https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js`,
+    marked: `https://cdnjs.cloudflare.com/ajax/libs/marked/15.0.6/marked.min.js`
+  }
+  
+
+</script>
+
+<script type="text/javascript">
+  const utils = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    css: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    js: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      if (src.startsWith('/')){
+        src = ctx.root + src.substring(1);
+      }
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    jq: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        utils.js(deps.jquery).then(fn)
+      } else {
+        fn()
+      }
+    },
+    
+    onLoading: (el) => {
+      if (el) {
+        $(el).append('<div class="loading-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" stroke-opacity=".3" d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="1.3s" values="60;0"/></path><path stroke-dasharray="15" stroke-dashoffset="15" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0"/><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/></path></g></svg></div>');
+      }
+    },
+    onLoadSuccess: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap').remove();
+      }
+    },
+    onLoadFailure: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap svg').remove();
+        $(el).find('.loading-wrap').append('<svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" d="M12 3L21 20H3L12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0"/></path><path stroke-dasharray="6" stroke-dashoffset="6" d="M12 10V14"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="6;0"/></path></g><circle cx="12" cy="17" r="1" fill="currentColor" fill-opacity="0"><animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.4s" values="0;1"/></circle></svg>');
+        $(el).find('.loading-wrap').addClass('error');
+      }
+    },
+    request: (el, url, callback, onFailure) => {
+      let retryTimes = 3;
+      utils.onLoading(el);
+      function req() {
+        return new Promise((resolve, reject) => {
+          let status = 0; // 0 等待 1 完成 2 超时
+          let timer = setTimeout(() => {
+            if (status === 0) {
+              status = 2;
+              timer = null;
+              reject('请求超时');
+              if (retryTimes == 0) {
+                onFailure();
+              }
+            }
+          }, 5000);
+          fetch(url).then(function(response) {
+            if (status !== 2) {
+              clearTimeout(timer);
+              resolve(response);
+              timer = null;
+              status = 1;
+            }
+            if (response.ok) {
+              return response.json();
+            }
+            throw new Error('Network response was not ok.');
+          }).then(function(data) {
+            retryTimes = 0;
+            utils.onLoadSuccess(el);
+            callback(data);
+          }).catch(function(error) {
+            if (retryTimes > 0) {
+              retryTimes -= 1;
+              setTimeout(() => {
+                req();
+              }, 5000);
+            } else {
+              utils.onLoadFailure(el);
+              onFailure();
+            }
+          });
+        });
+      }
+      req();
+    },
+  };
+</script>
+
+<script>
+  const sidebar = {
+    leftbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    rightbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('rightbar');
+        l_body.removeAttribute('leftbar');
+      }
+    },
+    dismiss: () => {
+      if (l_body) {
+        l_body.removeAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    toggleTOC: () => {
+      document.querySelector('#data-toc').classList.toggle('collapse');
+    }
+  }
+</script>
+
+<!-- required -->
+<script src="/js/main.js?v=1.28.1" async></script>
+
+<!-- optional -->
+
+  <script>
+    function load_twikoo() {
+        if (!document.querySelectorAll("#twikoo_container")[0]) return;
+        utils.js('https://gcore.jsdelivr.net/npm/twikoo@1.6.8/dist/twikoo.all.min.js', {defer: true}).then(function () {
+            const el = document.getElementById("twikoo_container");
+            var path = el.getAttribute('comment_id');
+            if (!path) {
+                path = decodeURI(window.location.pathname);
+            }
+            twikoo.init(Object.assign({"js":"https://gcore.jsdelivr.net/npm/twikoo@1.6.8/dist/twikoo.all.min.js","envId":"https://yuxi17.netlify.app/.netlify/functions/twikoo"}, {
+                el: '#twikoo_container',
+                path: path,
+            }));
+        });
+    }
+
+    window.addEventListener('DOMContentLoaded', (event) => {
+        load_twikoo();
+    });
+</script>
+
+
+
+<script defer>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.services = Object.assign({}, JSON.parse(`{"mdrender":{"js":"/js/services/mdrender.js"},"siteinfo":{"js":"/js/services/siteinfo.js","api":null},"ghinfo":{"js":"/js/services/ghinfo.js"},"sites":{"js":"/js/services/sites.js"},"friends":{"js":"/js/services/friends.js"},"timeline":{"js":"/js/services/timeline.js"},"fcircle":{"js":"/js/services/fcircle.js"},"weibo":{"js":"/js/services/weibo.js"},"memos":{"js":"/js/services/memos.js"}}`));
+    for (let id of Object.keys(ctx.services)) {
+      const js = ctx.services[id].js;
+      if (id == 'siteinfo') {
+        ctx.cardlinks = document.querySelectorAll('a.link-card[cardlink]');
+        if (ctx.cardlinks?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            setCardLink(ctx.cardlinks);
+          });
+        }
+      } else {
+        const els = document.getElementsByClassName(`ds-${id}`);
+        if (els?.length > 0) {
+          utils.jq(() => {
+            if (id == 'timeline' || 'memos' || 'marked') {
+              utils.js(deps.marked).then(function () {
+                utils.js(js, { defer: true });
+              });
+            } else {
+              utils.js(js, { defer: true });
+            }
+          });
+        }
+      }
+    }
+  });
+</script>
+
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.search = {
+      path: `/search.json`,
+    }
+    utils.js('/js/search/local-search.js', { defer: true });
+  });
+</script><script>
+  window.FPConfig = {
+    delay: 0,
+    ignoreKeywords: [],
+    maxRPS: 5,
+    hoverDelay: 25
+  };
+</script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/flying-pages/2.1.2/flying-pages.min.js"></script><script>
+  ctx.fancybox = {
+    selector: `.timenode p>img`,
+    css: `https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css`,
+    js: `https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js`
+  };
+  var selector = '[data-fancybox]:not(.error)';
+  if (ctx.fancybox.selector) {
+    selector += `, ${ctx.fancybox.selector}`
+  }
+  var needFancybox = document.querySelectorAll(selector).length !== 0;
+  if (!needFancybox) {
+    const els = document.getElementsByClassName('ds-memos');
+    if (els != undefined && els.length > 0) {
+      needFancybox = true;
+    }
+  }
+  if (needFancybox) {
+    utils.css(ctx.fancybox.css);
+    utils.js(ctx.fancybox.js, { defer: true }).then(function () {
+      Fancybox.bind(selector, {
+        hideScrollbar: false,
+        Thumbs: {
+          autoStart: false,
+        },
+        caption: (fancybox, slide) => {
+          return slide.triggerEl.alt || slide.triggerEl.dataset.caption || null
+        }
+      });
+    })
+  }
+</script>
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const swiper_api = document.getElementById('swiper-api');
+    if (swiper_api != undefined) {
+      utils.css(`https://unpkg.com/swiper@10.3.1/swiper-bundle.min.css`);
+      utils.js(`https://unpkg.com/swiper@10.3.1/swiper-bundle.min.js`, { defer: true }).then(function () {
+        const effect = swiper_api.getAttribute('effect') || '';
+        var swiper = new Swiper('.swiper#swiper-api', {
+          slidesPerView: 'auto',
+          spaceBetween: 8,
+          centeredSlides: true,
+          effect: effect,
+          rewind: true,
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+          },
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          },
+        });
+      })
+    }
+  });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    window.codeElements = document.querySelectorAll('.code');
+    if (window.codeElements.length > 0) {
+      ctx.copycode = {
+        default_text: `Copy`,
+        success_text: `Copied`,
+        toast: `复制成功`,
+      };
+      utils.js('/js/plugins/copycode.js');
+    }
+  });
+</script>
+
+
+<!-- inject -->
+
+</div></body></html>

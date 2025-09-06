@@ -5,7 +5,26 @@ html {
     auto !important;
 }
 
-/* a, */
+header {
+  cursor: url(/cur/pointer.cur),
+    auto !important;
+}
+
+aside {
+  cursor: url(/cur/pointer.cur),
+    auto !important;
+}
+
+div {
+  cursor: url(/cur/pointer.cur),
+    auto !important;
+}
+
+article {
+  cursor: url(/cur/pointer.cur),
+    auto !important;
+}
+
 img {
   cursor: url(/cur/link.cur),
     auto !important;
@@ -15,26 +34,6 @@ summary {
   cursor: url(/cur/link.cur),
 /* !important可能导致bug */
     auto !important;
-}
-
-p {
-  cursor: url(/cur/text.cur),
-    auto;
-}
-
-h2:hover {
-  cursor: url(/cur/text.cur),
-    auto;
-}
-
-h1.text.title {
-  cursor: url(/cur/text.cur),
-    auto;
-}
-
-details {
-  cursor: url(/cur/text.cur),
-    auto;
 }
 
 /*a标签*/
@@ -63,10 +62,6 @@ a.link-card.plain:hover {
     auto;
 }
 
-input:hover{
-  cursor: url(/cur/text.cur),
-    auto;
-}
 /*按钮*/
 button:hover {
   cursor: url(/cur/link.cur),
@@ -81,6 +76,16 @@ i:hover {
 
 /* copy按钮 */
 div.copy-btn {
+  cursor: url(/cur/link.cur),
+    auto !important;
+}
+
+div.main {
+  cursor: url(/cur/link.cur),
+    auto !important;
+}
+
+div.sub {
   cursor: url(/cur/link.cur),
     auto !important;
 }
@@ -100,6 +105,75 @@ div.copy-btn {
 /*头部的导航栏*/
 #nav .site-page:hover {
   cursor: url(/cur/link.cur),
+    auto;
+}
+
+/* p {
+  cursor: url(/cur/text.cur),
+    auto;
+}
+
+h1.text.title {
+  cursor: url(/cur/text.cur),
+    auto;
+}
+
+h2:hover {
+  cursor: url(/cur/text.cur),
+    auto;
+}
+
+h3:hover {
+  cursor: url(/cur/text.cur),
+    auto;
+}
+
+h4:hover {
+  cursor: url(/cur/text.cur),
+    auto;
+}
+
+details {
+  cursor: url(/cur/text.cur),
+    auto;
+}
+
+input:hover{
+  cursor: url(/cur/text.cur),
+    auto;
+}
+
+div.title {
+  cursor: url(/cur/text.cur),
+    auto;
+}
+
+span.line {
+  cursor: url(/cur/text.cur),
+    auto;
+}
+
+code {
+  cursor: url(/cur/text.cur),
+    auto;
+} */
+
+/* 文本内容通用样式 */
+p, span.line, span.text, li, td, th, blockquote,
+.post-content, .article-content, .content,
+.post-body, .entry-content, .markdown-body, input {
+  cursor: url(/cur/text.cur),
+    auto;
+}
+
+/* 标题文本样式 */
+h1:hover, h2:hover, h3:hover, h4:hover, h5:hover, h6:hover {
+  cursor: url(/cur/text.cur), auto;
+}
+
+/* 代码文本样式 */
+code, pre, .highlight {
+  cursor: url(/cur/text.cur),
     auto;
 }
 
