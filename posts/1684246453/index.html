@@ -1,0 +1,1083 @@
+
+<!DOCTYPE html><html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1" theme-name="Stellar" theme-version="1.33.1">
+  
+  
+  <meta name="generator" content="Hexo 7.2.0">
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
+  <meta name="theme-color" content="#f9fafb">
+  <title>PetaLinux驱动学习——Pinctrl和GPIO子系统 - Raiset</title>
+
+  
+  <meta name="description" content="📝本文概览本文将介绍PetaLinux驱动开发中的Pinctrl子系统和GPIO子系统的相关知识，并借助Zynq开发板完成一个点灯实验。">
+  
+  <meta name="keywords" content="PetaLinux,Linux驱动">
+
+  <!-- feed -->
+  
+
+  <link rel="stylesheet" href="/css/main.css?v=1.33.1">
+
+
+  
+    <link rel="shortcut icon" href="https://webp.raiset.top/basic/favicon.ico">
+  
+
+  
+
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"雨夕","sameAs":[],"image":"https://webp.raiset.top/basic/avatar.jpg"},"dateCreated":"2025-09-25T09:15:15+08:00","dateModified":"2025-10-20T11:27:25+08:00","datePublished":"2025-09-25T09:15:15+08:00","description":"📝本文概览本文将介绍PetaLinux驱动开发中的Pinctrl子系统和GPIO子系统的相关知识，并借助Zynq开发板完成一个点灯实验。","headline":"PetaLinux驱动学习——Pinctrl和GPIO子系统","mainEntityOfPage":{"@type":"WebPage","@id":"https://raiset.top/posts/1684246453/"},"publisher":{"@type":"Organization","name":"雨夕","sameAs":[],"image":"https://webp.raiset.top/basic/avatar.jpg","logo":{"@type":"ImageObject","url":"https://webp.raiset.top/basic/avatar.jpg"}},"url":"https://raiset.top/posts/1684246453/","keywords":"PetaLinux, Linux驱动","image":[]}</script>
+  <link rel="stylesheet" href="https://cdn.staticfile.org/lxgw-wenkai-screen-webfont/1.6.0/lxgwwenkaiscreen.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="/css/mouse.css">
+</head>
+<body><div class="sitebg"><div class="siteblur"></div></div>
+
+<div class="l_body content" id="start" layout="post" type="tech" ><aside class="l_left"><div class="sidebg"></div><div class="leftbar-container">
+
+
+<header class="header"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="https://webp.raiset.top/basic/avatar.jpg" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main">Raiset</div><div class="sub normal cap">但行前路，无问西东</div><div class="sub hover cap" style="opacity:0"> yuxi17@hnu.edu.cn</div></a></div></header>
+
+<div class="nav-area">
+
+<nav class="menu dis-select"></nav>
+</div>
+<div class="widgets">
+<div class="search-wrapper" id="search-wrapper"><form class="search-form"><a class="search-button" onclick="document.getElementById(&quot;search-input&quot;).focus();"><svg t="1705074644177" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1560" width="200" height="200"><path d="M1008.839137 935.96571L792.364903 719.491476a56.783488 56.783488 0 0 0-80.152866 0 358.53545 358.53545 0 1 1 100.857314-335.166073 362.840335 362.840335 0 0 1-3.689902 170.145468 51.248635 51.248635 0 1 0 99.217358 26.444296 462.057693 462.057693 0 1 0-158.255785 242.303546l185.930047 185.725053a51.248635 51.248635 0 0 0 72.568068 0 51.248635 51.248635 0 0 0 0-72.978056z" p-id="1561"></path><path d="M616.479587 615.969233a50.428657 50.428657 0 0 0-61.498362-5.534852 174.655348 174.655348 0 0 1-177.525271 3.484907 49.403684 49.403684 0 0 0-58.833433 6.76482l-3.074918 2.869923a49.403684 49.403684 0 0 0 8.609771 78.10292 277.767601 277.767601 0 0 0 286.992355-5.739847 49.403684 49.403684 0 0 0 8.404776-76.667958z" p-id="1562"></path></svg></a><input type="text" class="search-input" id="search-input" placeholder="站内搜索"></form><div id="search-result"></div><div class="search-no-result">没有找到内容！</div></div>
+
+
+
+<widget class="widget-wrapper recent post-list"><div class="widget-header dis-select"><span class="name">最近更新</span></div><div class="widget-body fs14"><a class="item title" href="/posts/1684246453/"><span class="title">PetaLinux驱动学习——Pinctrl和GPIO子系统</span></a><a class="item title" href="/posts/1812881063/"><span class="title">PetaLinux安装与使用-SD卡制作-离线编译</span></a><a class="item title" href="/posts/2690508721/"><span class="title">Tandem Processor论文解读</span></a><a class="item title" href="/posts/618860/"><span class="title">STARNUMA论文解读</span></a><a class="item title" href="/posts/1128674413/"><span class="title">NEAL(Network-Aware Locality Scheduling)论文简要解读</span></a><a class="item title" href="/posts/855715585/"><span class="title">PYNQ教程二:使用AXI总线实现PS与PL交互</span></a><a class="item title" href="/posts/1649035944/"><span class="title">PYNQ教程一:GPIO的使用</span></a><a class="item title" href="/posts/1552645455/"><span class="title">LSTM反向传播推导及C++代码实现</span></a></div></widget>
+</div>
+
+</div></aside><div class="l_main" id="main">
+
+
+
+
+
+<div class="article banner top">
+  <div class="content">
+    <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a>
+<span class="sep"></span><a class="cap breadcrumb" href="/">文章</a><span class="sep"></span><a class="cap breadcrumb-link" href="/categories/PetaLinux/">PetaLinux</a></div>
+<div class="flex-row" id="post-meta"><span class="text created">发布于：<time datetime="2025-09-25T01:15:15.181Z">2025-09-25</time></span><span class="sep updated"></span><span class="text updated">更新于：<time datetime="2025-10-20T03:27:25.571Z">2025-10-20</time></span></div></div></div>
+    
+    <div class="bottom only-title">
+      
+      <div class="text-area">
+        <h1 class="text title"><span>PetaLinux驱动学习——Pinctrl和GPIO子系统</span></h1>
+        
+      </div>
+    </div>
+    
+  </div>
+  </div><article class="md-text content"><div class="tag-plugin colorful note" color="blue"><div class="title">📝本文概览</div><div class="body"><p>本文将介绍PetaLinux驱动开发中的Pinctrl子系统和GPIO子系统的相关知识，并借助Zynq开发板完成一个点灯实验。</p></div></div>
+
+<span id="more"></span>
+
+<div class="tag-plugin colorful note" color="green"><div class="title">📚参考视频</div><div class="body"><p>正点原子嵌入式Linux驱动开发：<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1fJ411i7PB?spm_id_from=333.788.videopod.episodes&vd_source=70890bac3e65da3639736a38778cbd26&p=27">点击观看</a> <br> ALINX Zynq MPSoC Linux驱动开发：<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1g24y1o7mq?spm_id_from=333.788.videopod.sections&vd_source=70890bac3e65da3639736a38778cbd26">点击观看</a> <br> 前者更适合理论学习，后者更适合实操。</p></div></div>
+
+<h2 id="1-Pinctrl子系统"><a href="#1-Pinctrl子系统" class="headerlink" title="1. Pinctrl子系统"></a>1. Pinctrl子系统</h2><p>从Vivado的PS配置界面可以看出，每个MIO引脚都有多种复用选项，因此如果需要使用某个MIO引脚，需要pinctrl子系统进行相应的配置。</p>
+<div class="tag-plugin image"><div class="image-bg" style="aspect-ratio:651/192;width:500px;"><img class="lazy" src="https://webp.raiset.top/PetaLinux-gpio/image-20250919205932875.png" data-src="https://webp.raiset.top/PetaLinux-gpio/image-20250919205932875.png" data-fancybox="true"onerror="this.src=&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2rem' height='2rem' viewBox='0 0 24 24'%3E%3C!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --%3E%3Cpath fill='%23F44336' d='M22 12.698c-.002 1.47-.013 2.718-.096 3.743c-.097 1.19-.296 2.184-.74 3.009a4.2 4.2 0 0 1-.73.983c-.833.833-1.893 1.21-3.237 1.39C15.884 22 14.2 22 12.053 22h-.106c-2.148 0-3.83 0-5.144-.177c-1.343-.18-2.404-.557-3.236-1.39c-.738-.738-1.12-1.656-1.322-2.795c-.2-1.12-.236-2.512-.243-4.241Q1.999 12.737 2 12v-.054c0-2.148 0-3.83.177-5.144c.18-1.343.557-2.404 1.39-3.236s1.893-1.21 3.236-1.39c1.168-.157 2.67-.175 4.499-.177a.697.697 0 1 1 0 1.396c-1.855.002-3.234.018-4.313.163c-1.189.16-1.906.464-2.436.994S3.72 5.8 3.56 6.99C3.397 8.2 3.395 9.788 3.395 12v.784l.932-.814a2.14 2.14 0 0 1 2.922.097l3.99 3.99a1.86 1.86 0 0 0 2.385.207l.278-.195a2.79 2.79 0 0 1 3.471.209l2.633 2.37c.265-.557.423-1.288.507-2.32c.079-.972.09-2.152.091-3.63a.698.698 0 0 1 1.396 0' opacity='.5'/%3E%3Cpath fill='%23F44336' fill-rule='evenodd' d='M17.5 11c-2.121 0-3.182 0-3.841-.659S13 8.621 13 6.5s0-3.182.659-3.841S15.379 2 17.5 2s3.182 0 3.841.659S22 4.379 22 6.5s0 3.182-.659 3.841S19.621 11 17.5 11m-1.47-7.03a.75.75 0 1 0-1.06 1.06l1.47 1.47l-1.47 1.47a.75.75 0 0 0 1.06 1.06l1.47-1.47l1.47 1.47a.75.75 0 1 0 1.06-1.06L18.56 6.5l1.47-1.47a.75.75 0 0 0-1.06-1.06L17.5 5.44z' clip-rule='evenodd'/%3E%3C/svg%3E&quot;"/><div class="lazy-icon" style="background-image:url(https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd);"></div></div></div>
+
+<p>pinctrl子系统在设备树中配置。</p>
+<p>构建PetaLinux工程并执行<code>petalinux-build</code>编译后，可以在<code>[project_dir]/components/plnx_workspace/device-tree/device-tree</code>目录中找到设备树的相关文件：</p>
+<p>设备树的包含结构如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// system_top.dts 主设备树文件</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;zynq-7000.dtsi&quot;</span>      <span class="comment">// Zynq-7000系列SOC基础定义</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;pcw.dtsi&quot;</span>            <span class="comment">// Processing Configuration Wizard生成的配置</span></span></span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;system-user.dtsi&quot;</span>    <span class="comment">// 用户自定义配置文件</span></span></span><br></pre></td></tr></table></figure>
+
+<p>其中，<code>system-user.dtsi</code>文件位于另一个目录<code>[project_dir]/project-spec/meta-user/recipes-bsp/device-tree/files</code>中，这是用户添加自定义设备树节点的地方。</p>
+<p>不同厂商的开发板有不同的pinctrl配置方法，这是因为它们的底层驱动实现存在差异。</p>
+<p>构建PetaLinux工程并编译后，可以在<code>[project_dir]/build/tmp/work-shared/zynq-generic-7z100/kernel-source</code>目录中找到内核源码。</p>
+<p>在内核源码<code>kernel-source/Documentation/devicetree/bindings/pinctrl/xlnx,zynq-pinctrl.yaml</code>文件中，可以找到Zynq pinctrl的标准配置示例：</p>
+<details class="tag-plugin colorful folding" color="cyan" child="codeblock"><summary><p>UART1 Pinctrl配置示例</p>
+</summary><div class="body"><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">examples:</span><br><span class="line">  - |</span><br><span class="line">  #include &lt;dt-bindings/pinctrl/pinctrl-zynq.h&gt;</span><br><span class="line">  pinctrl0: pinctrl@700 &#123;</span><br><span class="line">    compatible = &quot;xlnx,zynq-pinctrl&quot;;</span><br><span class="line">    reg = &lt;0x700 0x200&gt;;</span><br><span class="line">    syscon = &lt;&amp;slcr&gt;;</span><br><span class="line"></span><br><span class="line">    pinctrl_uart1_default: uart1-default &#123;</span><br><span class="line">      mux &#123;</span><br><span class="line">        groups = &quot;uart1_10_grp&quot;;</span><br><span class="line">        function = &quot;uart1&quot;;</span><br><span class="line">      &#125;;</span><br><span class="line"></span><br><span class="line">      conf &#123;</span><br><span class="line">        groups = &quot;uart1_10_grp&quot;;</span><br><span class="line">        slew-rate = &lt;0&gt;;</span><br><span class="line">        power-source = &lt;IO_STANDARD_LVCMOS18&gt;;</span><br><span class="line">      &#125;;</span><br><span class="line"></span><br><span class="line">      conf-rx &#123;</span><br><span class="line">        pins = &quot;MIO49&quot;;</span><br><span class="line">        bias-high-impedance;</span><br><span class="line">      &#125;;</span><br><span class="line"> </span><br><span class="line">      conf-tx &#123;</span><br><span class="line">        pins = &quot;MIO48&quot;;</span><br><span class="line">        bias-disable;</span><br><span class="line">      &#125;;</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;; </span><br><span class="line"></span><br><span class="line">  uart1 &#123;</span><br><span class="line">     pinctrl-names = &quot;default&quot;;</span><br><span class="line">     pinctrl-0 = &lt;&amp;pinctrl_uart1_default&gt;;</span><br><span class="line">  &#125;;</span><br></pre></td></tr></table></figure></div></details>
+
+<p>关于mux和conf的配置该yaml文件中已经解释得很清楚了，比如groups、function的取值有哪些、引脚的配置有哪些、mux和conf中必须包含的内容等等，这里介绍一下这个示例的配置：</p>
+<!-- tab 基础配置 -->
+<p><strong>pinctrl0节点</strong>：在<code>zynq-7000.dtsi</code>中已定义基本信息（如compatible属性），用户只需在<code>system-user.dtsi</code>中通过<code>&amp;pinctrl0</code>追加即可，示例这里是为了体现完整性。</p>
+<p><strong>配置结构</strong>：</p>
+<ul>
+<li><code>mux</code>节点：配置引脚复用功能</li>
+<li><code>conf</code>节点：配置引脚电气特性</li>
+<li><code>conf-rx/conf-tx</code>：针对特定引脚的专门配置</li>
+</ul>
+<p><strong>引脚分组</strong><br>每个外设都有多个可选的引脚组合（grp），以UART1为例：</p>
+<ul>
+<li>MIO8-9：<code>uart1_0_grp</code></li>
+<li>MIO12-13：<code>uart1_1_grp</code> </li>
+<li>······</li>
+<li>MIO48-49：<code>uart1_10_grp</code></li>
+</ul>
+<div class="tag-plugin image"><div class="image-bg" style="aspect-ratio:467/420;width:400px;"><img class="lazy" src="https://webp.raiset.top/PetaLinux-gpio/image-20250919205950776.png" data-src="https://webp.raiset.top/PetaLinux-gpio/image-20250919205950776.png" data-fancybox="true"onerror="this.src=&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2rem' height='2rem' viewBox='0 0 24 24'%3E%3C!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --%3E%3Cpath fill='%23F44336' d='M22 12.698c-.002 1.47-.013 2.718-.096 3.743c-.097 1.19-.296 2.184-.74 3.009a4.2 4.2 0 0 1-.73.983c-.833.833-1.893 1.21-3.237 1.39C15.884 22 14.2 22 12.053 22h-.106c-2.148 0-3.83 0-5.144-.177c-1.343-.18-2.404-.557-3.236-1.39c-.738-.738-1.12-1.656-1.322-2.795c-.2-1.12-.236-2.512-.243-4.241Q1.999 12.737 2 12v-.054c0-2.148 0-3.83.177-5.144c.18-1.343.557-2.404 1.39-3.236s1.893-1.21 3.236-1.39c1.168-.157 2.67-.175 4.499-.177a.697.697 0 1 1 0 1.396c-1.855.002-3.234.018-4.313.163c-1.189.16-1.906.464-2.436.994S3.72 5.8 3.56 6.99C3.397 8.2 3.395 9.788 3.395 12v.784l.932-.814a2.14 2.14 0 0 1 2.922.097l3.99 3.99a1.86 1.86 0 0 0 2.385.207l.278-.195a2.79 2.79 0 0 1 3.471.209l2.633 2.37c.265-.557.423-1.288.507-2.32c.079-.972.09-2.152.091-3.63a.698.698 0 0 1 1.396 0' opacity='.5'/%3E%3Cpath fill='%23F44336' fill-rule='evenodd' d='M17.5 11c-2.121 0-3.182 0-3.841-.659S13 8.621 13 6.5s0-3.182.659-3.841S15.379 2 17.5 2s3.182 0 3.841.659S22 4.379 22 6.5s0 3.182-.659 3.841S19.621 11 17.5 11m-1.47-7.03a.75.75 0 1 0-1.06 1.06l1.47 1.47l-1.47 1.47a.75.75 0 0 0 1.06 1.06l1.47-1.47l1.47 1.47a.75.75 0 1 0 1.06-1.06L18.56 6.5l1.47-1.47a.75.75 0 0 0-1.06-1.06L17.5 5.44z' clip-rule='evenodd'/%3E%3C/svg%3E&quot;"/><div class="lazy-icon" style="background-image:url(https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd);"></div></div></div>
+
+<p>示例中选择MIO48-49作为UART1，因此使用<code>uart1_10_grp</code>。</p>
+<p><strong>conf参数含义</strong>：</p>
+<ul>
+<li><code>slew-rate</code>：引脚转换速率（0&#x3D;慢速，1&#x3D;快速），影响信号的上升和下降时间</li>
+<li><code>power-source</code>：I&#x2F;O电平标准<br>MIO48-49属于bank1，通常对应手册中的bank501。有效值为1，2，3，4，这里使用宏定义的方式，相关的宏定义在<code>dt-bindings/pinctrl/pinctrl-zynq.h</code>中，所以前面include了这个文件：<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> IO_STANDARD_LVCMOS18    1</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> IO_STANDARD_LVCMOS25    2</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> IO_STANDARD_LVCMOS33    3</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> IO_STANDARD_HSTL    4</span></span><br></pre></td></tr></table></figure></li>
+<li><code>bias-high-impedance</code>：高阻抗偏置</li>
+<li><code>bias-disable</code>：禁用上下拉</li>
+</ul>
+<p><strong>一个外设可以具有多种引脚配置状态</strong>，这里示例中uart1只有一种配置，即default，它指向的就是pinctrl中的pinctrl_uart1_default。假如有多种配置，比如：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&amp;i2c0 &#123;</span><br><span class="line">    pinctrl-names = <span class="string">&quot;default&quot;</span>, <span class="string">&quot;gpio&quot;</span>, <span class="string">&quot;sleep&quot;</span>;</span><br><span class="line">    pinctrl<span class="number">-0</span> = &lt;&amp;i2c0_pins_default&gt;;</span><br><span class="line">    pinctrl<span class="number">-1</span> = &lt;&amp;i2c0_pins_gpio&gt;;</span><br><span class="line">    pinctrl<span class="number">-2</span> = &lt;&amp;i2c0_pins_sleep&gt;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>对应的pinctrl节点中则需要定义三种状态：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&amp;pinctrl0 &#123;</span><br><span class="line">    i2c0_pins_default: i2c0-<span class="keyword">default</span> &#123;</span><br><span class="line">        mux &#123;</span><br><span class="line">            <span class="comment">// 默认模式配置</span></span><br><span class="line">        &#125;;</span><br><span class="line">        conf &#123;</span><br><span class="line">            <span class="comment">// 默认模式配置</span></span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    i2c0_pins_gpio: i2c0-gpio &#123;</span><br><span class="line">        <span class="comment">// GPIO模式配置</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    i2c0_pins_sleep: i2c0-sleep &#123;</span><br><span class="line">        <span class="comment">// 低功耗模式配置</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>驱动程序可以根据实际需要在不同状态间切换：<br><strong>default</strong>：正常工作模式，通常在驱动初始化时请求<br><strong>sleep</strong>：低功耗模式，设备进入睡眠状态时使用<br><strong>gpio</strong>：通用GPIO模式，需要将引脚作为GPIO使用时切换</p>
+<p>现在假设使用MIO0-MIO3控制LED，则需要在<code>system-user.dtsi</code>中添加如下配置：</p>
+<details class="tag-plugin colorful folding" color="orange" child="codeblock"><summary><p>LED Pinctrl配置</p>
+</summary><div class="body"><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;dt-bindings/gpio/gpio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;dt-bindings/pinctrl/pinctrl-zynq.h&gt;</span></span></span><br><span class="line"></span><br><span class="line">/include/ <span class="string">&quot;system-conf.dtsi&quot;</span></span><br><span class="line">/ &#123;</span><br><span class="line">    led_gpio &#123;</span><br><span class="line">        pinctrl-names = <span class="string">&quot;default&quot;</span>;</span><br><span class="line">        pinctrl<span class="number">-0</span> = &lt;&amp;pinctrl_led_default&gt;;</span><br><span class="line">        </span><br><span class="line">        led-gpios = &lt;&amp;gpio0 <span class="number">0</span> GPIO_ACTIVE_HIGH&gt;, <span class="comment">/* led0 */</span></span><br><span class="line">                    &lt;&amp;gpio0 <span class="number">1</span> GPIO_ACTIVE_HIGH&gt;, <span class="comment">/* led1 */</span></span><br><span class="line">                    &lt;&amp;gpio0 <span class="number">2</span> GPIO_ACTIVE_HIGH&gt;, <span class="comment">/* led2 */</span></span><br><span class="line">                    &lt;&amp;gpio0 <span class="number">3</span> GPIO_ACTIVE_HIGH&gt;; <span class="comment">/* led3 */</span></span><br><span class="line">    &#125;;</span><br><span class="line">&#125;; </span><br><span class="line"></span><br><span class="line">&amp;pinctrl0 &#123;</span><br><span class="line">    pinctrl_led_default: led-<span class="keyword">default</span> &#123;</span><br><span class="line">        mux &#123;</span><br><span class="line">            function = <span class="string">&quot;gpio0&quot;</span>;</span><br><span class="line">            groups = <span class="string">&quot;gpio0_0_grp&quot;</span>, <span class="string">&quot;gpio0_1_grp&quot;</span>, </span><br><span class="line">                     <span class="string">&quot;gpio0_2_grp&quot;</span>, <span class="string">&quot;gpio0_3_grp&quot;</span>;</span><br><span class="line">        &#125;;</span><br><span class="line">       </span><br><span class="line">        conf &#123;</span><br><span class="line">            groups = <span class="string">&quot;gpio0_0_grp&quot;</span>, <span class="string">&quot;gpio0_1_grp&quot;</span>, </span><br><span class="line">                     <span class="string">&quot;gpio0_2_grp&quot;</span>, <span class="string">&quot;gpio0_3_grp&quot;</span>;   </span><br><span class="line">            pins = <span class="string">&quot;MIO0&quot;</span>, <span class="string">&quot;MIO1&quot;</span>, <span class="string">&quot;MIO2&quot;</span>, <span class="string">&quot;MIO3&quot;</span>;</span><br><span class="line">            slew-rate = &lt;<span class="number">0</span>&gt;;</span><br><span class="line">            power-source = &lt;IO_STANDARD_LVCMOS33&gt;;</span><br><span class="line">            bias-disable;</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></div></details>
+
+<p>这里相比于之前说的多了led-gpios这一个属性，这就属于接下来要讲的gpio子系统的内容了。</p>
+<h2 id="2-GPIO子系统"><a href="#2-GPIO子系统" class="headerlink" title="2. GPIO子系统"></a>2. GPIO子系统</h2><p>正点原子Linux开发手册提到：</p>
+<div class="tag-plugin image"><div class="image-bg" style="aspect-ratio:848/221;"><img class="lazy" src="https://webp.raiset.top/PetaLinux-gpio/image-20250919210015907.png" data-src="https://webp.raiset.top/PetaLinux-gpio/image-20250919210015907.png" data-fancybox="true"onerror="this.src=&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2rem' height='2rem' viewBox='0 0 24 24'%3E%3C!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --%3E%3Cpath fill='%23F44336' d='M22 12.698c-.002 1.47-.013 2.718-.096 3.743c-.097 1.19-.296 2.184-.74 3.009a4.2 4.2 0 0 1-.73.983c-.833.833-1.893 1.21-3.237 1.39C15.884 22 14.2 22 12.053 22h-.106c-2.148 0-3.83 0-5.144-.177c-1.343-.18-2.404-.557-3.236-1.39c-.738-.738-1.12-1.656-1.322-2.795c-.2-1.12-.236-2.512-.243-4.241Q1.999 12.737 2 12v-.054c0-2.148 0-3.83.177-5.144c.18-1.343.557-2.404 1.39-3.236s1.893-1.21 3.236-1.39c1.168-.157 2.67-.175 4.499-.177a.697.697 0 1 1 0 1.396c-1.855.002-3.234.018-4.313.163c-1.189.16-1.906.464-2.436.994S3.72 5.8 3.56 6.99C3.397 8.2 3.395 9.788 3.395 12v.784l.932-.814a2.14 2.14 0 0 1 2.922.097l3.99 3.99a1.86 1.86 0 0 0 2.385.207l.278-.195a2.79 2.79 0 0 1 3.471.209l2.633 2.37c.265-.557.423-1.288.507-2.32c.079-.972.09-2.152.091-3.63a.698.698 0 0 1 1.396 0' opacity='.5'/%3E%3Cpath fill='%23F44336' fill-rule='evenodd' d='M17.5 11c-2.121 0-3.182 0-3.841-.659S13 8.621 13 6.5s0-3.182.659-3.841S15.379 2 17.5 2s3.182 0 3.841.659S22 4.379 22 6.5s0 3.182-.659 3.841S19.621 11 17.5 11m-1.47-7.03a.75.75 0 1 0-1.06 1.06l1.47 1.47l-1.47 1.47a.75.75 0 0 0 1.06 1.06l1.47-1.47l1.47 1.47a.75.75 0 1 0 1.06-1.06L18.56 6.5l1.47-1.47a.75.75 0 0 0-1.06-1.06L17.5 5.44z' clip-rule='evenodd'/%3E%3C/svg%3E&quot;"/><div class="lazy-icon" style="background-image:url(https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd);"></div></div></div>
+
+<h3 id="2-1-GPIO设备树配置格式"><a href="#2-1-GPIO设备树配置格式" class="headerlink" title="2.1 GPIO设备树配置格式"></a>2.1 GPIO设备树配置格式</h3><div class="tag-plugin colorful note" color="cyan"><div class="title">GPIO在设备树中的配置格式相当固定，详细说明可以在内核文档中找到：</div><div class="body"><p><code>kernel-source/Documentation/devicetree/bindings/gpio/gpio.txt</code></p></div></div>
+
+<p><strong>基本语法：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[name]-gpios = &lt;&amp;gpiox offset flags&gt;;</span><br></pre></td></tr></table></figure>
+
+<p><strong>参数解释：</strong></p>
+<ul>
+<li><code>[name]</code>：自定义名称</li>
+<li><code>&amp;gpiox</code>：GPIO控制器节点引用（Zynq-7000中所有MIO都在gpio0中）</li>
+<li><code>offset</code>：表示GPIO编号，即gpio0的第几个I&#x2F;O</li>
+<li><code>flags</code>：配置标志，可以在<code>kernel-source/include/dt-bindings/gpio/gpio.h</code>中查看，可以使用或逻辑组合，比如配置高电平有效且上拉则flags为<code>GPIO_ACTIVE_HIGH | GPIO_PULL_UP</code></li>
+</ul>
+<h3 id="2-2-GPIO子系统API"><a href="#2-2-GPIO子系统API" class="headerlink" title="2.2 GPIO子系统API"></a>2.2 GPIO子系统API</h3><p>GPIO相关的API文档在<code>kernel-source/Documentation/driver-api/gpio/consumer.rst</code>和<code>kernel-source/Documentation/driver-api/gpio/board.rst</code>中。 </p>
+<div class="tag-plugin colorful note" color="cyan"><div class="body"><p>使用API需包含linux&#x2F;gpio&#x2F;consumer.h头文件，常用的API如下。</p></div></div>
+
+<h4 id="2-2-1-获取GPIO描述符"><a href="#2-2-1-获取GPIO描述符" class="headerlink" title="2.2.1 获取GPIO描述符"></a>2.2.1 获取GPIO描述符</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> gpio_desc *<span class="title function_">gpiod_get</span><span class="params">(<span class="keyword">struct</span> device *dev, <span class="type">const</span> <span class="type">char</span> *con_id, <span class="keyword">enum</span> gpiod_flags flags)</span></span><br></pre></td></tr></table></figure>
+
+<p><code>dev</code>参数可以从device_create中得到（后面编写内核驱动代码时会提到）。</p>
+<p><code>con_id</code>就是前面设备树定义中[name]-gpios的[name]，比如aaa-gpios，con_id就是”aaa”。</p>
+<p><code>flags</code>用于指定方向和初始值，可选值如下：</p>
+<details class="tag-plugin colorful folding" color="orange"><summary><p>flags可选值</p>
+</summary><div class="body"><p>· GPIOD_ASIS 或 0 表示不初始化 GPIO，方向必须稍后使用专用函数设置。<br>· GPIOD_IN 初始化 GPIO 为输入.<br>· GPIOD_OUT_LOW 初始化 GPIO 为输出，且输出值为 0.<br>· GPIOD_OUT_HIGH 初始化 GPIO 为输出，且输出值为 1.<br>· GPIOD_OUT_LOW_OPEN_DRAIN 与 GPIOD_OUT_LOW 相同，但使用开漏输出方式。<br>· GPIOD_OUT_HIGH_OPEN_DRAIN 与 GPIOD_OUT_HIGH 相同，但使用开漏输出方式。</p> </div></details>
+
+<p>如果有多个GPIO，可以分开定义：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">led0-gpios = &lt;&amp;gpio0 <span class="number">0</span> GPIO_ACTIVE_HIGH&gt;;</span><br><span class="line">led1-gpios = &lt;&amp;gpio0 <span class="number">1</span> GPIO_ACTIVE_HIGH&gt;;</span><br></pre></td></tr></table></figure>
+
+<p>然后分别获取描述符：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">led0 = gpiod_get(device, <span class="string">&quot;led0&quot;</span>, GPIOD_OUT_HIGH);</span><br><span class="line">led1 = gpiod_get(device, <span class="string">&quot;led1&quot;</span>, GPIOD_OUT_HIGH);</span><br></pre></td></tr></table></figure>
+
+<p>也可以像前面led-gpios一样一次性定义多个gpio，此时则可以使用以下函数：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> gpio_desc *<span class="title function_">gpiod_get_index</span><span class="params">(<span class="keyword">struct</span> device *dev, <span class="type">const</span> <span class="type">char</span> *con_id, <span class="type">unsigned</span> <span class="type">int</span> idx,<span class="keyword">enum</span> gpiod_flags flags)</span></span><br></pre></td></tr></table></figure>
+
+<p>可以看到，多了一个参数idx，代表获取第几个gpio，比如：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">led0 = gpiod_get_index(device, <span class="string">&quot;led&quot;</span>, <span class="number">0</span>, GPIOD_OUT_HIGH);</span><br><span class="line">led1 = gpiod_get_index(device, <span class="string">&quot;led&quot;</span>, <span class="number">1</span>, GPIOD_OUT_HIGH);</span><br></pre></td></tr></table></figure>
+
+<p>但这样还是每次只控制一个gpio，如果想同时控制多个gpio可以使用数组的方式：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> gpio_descs *<span class="title function_">gpiod_get_array</span><span class="params">(<span class="keyword">struct</span> device *dev,<span class="type">const</span> <span class="type">char</span> *con_id,<span class="keyword">enum</span> gpiod_flags flags)</span></span><br></pre></td></tr></table></figure>
+
+<p>参数和gpiod_get一样，只是返回的结构体不一样：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">gpio_descs</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">gpio_array</span> *<span class="title">info</span>;</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> ndescs;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">gpio_desc</span> *<span class="title">desc</span>[];</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>返回的结构体中包含了一个gpio_desc类型的结构体数组。</p>
+<h4 id="2-2-2-GPIO方向配置"><a href="#2-2-2-GPIO方向配置" class="headerlink" title="2.2.2 GPIO方向配置"></a>2.2.2 GPIO方向配置</h4><p>如果前面gpiod_get没有设置方向和初值，则可以使用以下函数设置：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 设置为输入模式</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">gpiod_direction_input</span><span class="params">(<span class="keyword">struct</span> gpio_desc *desc)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 设置为输出模式，并指定初值</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">gpiod_direction_output</span><span class="params">(<span class="keyword">struct</span> gpio_desc *desc, <span class="type">int</span> value)</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>参数说明：</strong></p>
+<ul>
+<li><code>desc</code>：之前获取的GPIO描述符</li>
+<li><code>value</code>：输出初值（0或1）</li>
+</ul>
+<h4 id="2-2-3-GPIO读写操作"><a href="#2-2-3-GPIO读写操作" class="headerlink" title="2.2.3 GPIO读写操作"></a>2.2.3 GPIO读写操作</h4><div class="tag-plugin tabs"id="tab_2"><div class="nav-tabs"><div class="tab active"><a href="#tab_2-1">单个GPIO操作</a></div><div class="tab"><a href="#tab_2-2">GPIO数组操作</a></div></div><div class="tab-content"><div class="tab-pane active" id="tab_2-1"><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">gpiod_get_value</span><span class="params">(<span class="type">const</span> <span class="keyword">struct</span> gpio_desc *desc)</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">gpiod_set_value</span><span class="params">(<span class="keyword">struct</span> gpio_desc *desc, <span class="type">int</span> value)</span>;</span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="tab_2-2"><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">gpiod_get_array_value</span><span class="params">(<span class="type">unsigned</span> <span class="type">int</span> array_size, </span></span><br><span class="line"><span class="params">                         <span class="keyword">struct</span> gpio_desc **desc_array, </span></span><br><span class="line"><span class="params">                         <span class="keyword">struct</span> gpio_array *array_info, </span></span><br><span class="line"><span class="params">                         <span class="type">unsigned</span> <span class="type">long</span> *value_bitmap)</span>;</span><br><span class="line"><span class="type">int</span> <span class="title function_">gpiod_set_array_value</span><span class="params">(<span class="type">unsigned</span> <span class="type">int</span> array_size, </span></span><br><span class="line"><span class="params">                         <span class="keyword">struct</span> gpio_desc **desc_array, </span></span><br><span class="line"><span class="params">                         <span class="keyword">struct</span> gpio_array *array_info, </span></span><br><span class="line"><span class="params">                         <span class="type">unsigned</span> <span class="type">long</span> *value_bitmap)</span>;</span><br></pre></td></tr></table></figure>
+<p>仔细观察可以发现，前面三个参数刚好来自gpiod_get_array返回的结构体。</p>
+<p>value_bitmap是位图，位图的第N位为0&#x2F;1，对应的gpio_descs-&gt; desc[N]为0&#x2F;1。</p>
+<p><strong>使用示例：</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 获取GPIO数组</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">gpio_descs</span> *<span class="title">my_gpio_descs</span> =</span> gpiod_get_array(device, <span class="string">&quot;led&quot;</span>, GPIOD_OUT_LOW);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 设置LED0和LED2亮起（位图为0101 = 5）</span></span><br><span class="line"><span class="type">unsigned</span> <span class="type">long</span> my_gpio_value_bitmap = <span class="number">5</span>;</span><br><span class="line">gpiod_set_array_value(my_gpio_descs-&gt;ndescs, </span><br><span class="line">                     my_gpio_descs-&gt;desc, </span><br><span class="line">                     my_gpio_descs-&gt;info, </span><br><span class="line">                     &amp;my_gpio_value_bitmap);</span><br></pre></td></tr></table></figure></div></div></div>
+
+<h4 id="2-2-4-释放GPIO描述符"><a href="#2-2-4-释放GPIO描述符" class="headerlink" title="2.2.4 释放GPIO描述符"></a>2.2.4 释放GPIO描述符</h4><p><strong>单个GPIO</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">gpiod_put</span><span class="params">(<span class="keyword">struct</span> gpio_desc *desc)</span>;</span><br></pre></td></tr></table></figure>
+
+<p><strong>GPIO数组</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">gpiod_put_array</span><span class="params">(<span class="keyword">struct</span> gpio_descs *descs)</span>;</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-点灯实验"><a href="#3-点灯实验" class="headerlink" title="3. 点灯实验"></a>3. 点灯实验</h2><h3 id="3-1-硬件设计配置"><a href="#3-1-硬件设计配置" class="headerlink" title="3.1 硬件设计配置"></a>3.1 硬件设计配置</h3><div class="tag-plugin timeline"><div class="timenode" index="0"><div class="header"><span>Vivado Block Design配置</span></div><div class="body fs14"><p>在Vivado Block Design中完成基础系统配置：</p><ol><li><strong>外设接口启用</strong>：打开SD卡、以太网、串口并根据开发板手册选择对应的MIO引脚</li><li><strong>电平设置</strong>：配置Bank 0和Bank 1的电平（对应板子手册的Bank500&#x2F;501电平）</li></ol><p><strong>由于我所使用的开发板只有4个PL LED，没有PS LED，因此通过EMIO来控制LED，位宽为4。</strong></p><div class="tag-plugin image"><div class="image-bg" style="aspect-ratio:624/1114;width:400px;"><img class="lazy" src="https://webp.raiset.top/PetaLinux-gpio/image-20250919210035644.png" data-src="https://webp.raiset.top/PetaLinux-gpio/image-20250919210035644.png" data-fancybox="true"onerror="this.src=&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2rem' height='2rem' viewBox='0 0 24 24'%3E%3C!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --%3E%3Cpath fill='%23F44336' d='M22 12.698c-.002 1.47-.013 2.718-.096 3.743c-.097 1.19-.296 2.184-.74 3.009a4.2 4.2 0 0 1-.73.983c-.833.833-1.893 1.21-3.237 1.39C15.884 22 14.2 22 12.053 22h-.106c-2.148 0-3.83 0-5.144-.177c-1.343-.18-2.404-.557-3.236-1.39c-.738-.738-1.12-1.656-1.322-2.795c-.2-1.12-.236-2.512-.243-4.241Q1.999 12.737 2 12v-.054c0-2.148 0-3.83.177-5.144c.18-1.343.557-2.404 1.39-3.236s1.893-1.21 3.236-1.39c1.168-.157 2.67-.175 4.499-.177a.697.697 0 1 1 0 1.396c-1.855.002-3.234.018-4.313.163c-1.189.16-1.906.464-2.436.994S3.72 5.8 3.56 6.99C3.397 8.2 3.395 9.788 3.395 12v.784l.932-.814a2.14 2.14 0 0 1 2.922.097l3.99 3.99a1.86 1.86 0 0 0 2.385.207l.278-.195a2.79 2.79 0 0 1 3.471.209l2.633 2.37c.265-.557.423-1.288.507-2.32c.079-.972.09-2.152.091-3.63a.698.698 0 0 1 1.396 0' opacity='.5'/%3E%3Cpath fill='%23F44336' fill-rule='evenodd' d='M17.5 11c-2.121 0-3.182 0-3.841-.659S13 8.621 13 6.5s0-3.182.659-3.841S15.379 2 17.5 2s3.182 0 3.841.659S22 4.379 22 6.5s0 3.182-.659 3.841S19.621 11 17.5 11m-1.47-7.03a.75.75 0 1 0-1.06 1.06l1.47 1.47l-1.47 1.47a.75.75 0 0 0 1.06 1.06l1.47-1.47l1.47 1.47a.75.75 0 1 0 1.06-1.06L18.56 6.5l1.47-1.47a.75.75 0 0 0-1.06-1.06L17.5 5.44z' clip-rule='evenodd'/%3E%3C/svg%3E&quot;"/><div class="lazy-icon" style="background-image:url(https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd);"></div></div></div></div></div><div class="timenode" index="1"><div class="header"><span>GPIO引脚导出</span></div><div class="body fs14"><p>将GPIO_O进行Make External操作：<br><strong>注意</strong>：如果使用MIO控制LED，则不需要Make External和引脚绑定操作</p><div class="tag-plugin image"><div class="image-bg" style="aspect-ratio:865/140;"><img class="lazy" src="https://webp.raiset.top/PetaLinux-gpio/image-20250919210046703.png" data-src="https://webp.raiset.top/PetaLinux-gpio/image-20250919210046703.png" data-fancybox="true"onerror="this.src=&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2rem' height='2rem' viewBox='0 0 24 24'%3E%3C!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --%3E%3Cpath fill='%23F44336' d='M22 12.698c-.002 1.47-.013 2.718-.096 3.743c-.097 1.19-.296 2.184-.74 3.009a4.2 4.2 0 0 1-.73.983c-.833.833-1.893 1.21-3.237 1.39C15.884 22 14.2 22 12.053 22h-.106c-2.148 0-3.83 0-5.144-.177c-1.343-.18-2.404-.557-3.236-1.39c-.738-.738-1.12-1.656-1.322-2.795c-.2-1.12-.236-2.512-.243-4.241Q1.999 12.737 2 12v-.054c0-2.148 0-3.83.177-5.144c.18-1.343.557-2.404 1.39-3.236s1.893-1.21 3.236-1.39c1.168-.157 2.67-.175 4.499-.177a.697.697 0 1 1 0 1.396c-1.855.002-3.234.018-4.313.163c-1.189.16-1.906.464-2.436.994S3.72 5.8 3.56 6.99C3.397 8.2 3.395 9.788 3.395 12v.784l.932-.814a2.14 2.14 0 0 1 2.922.097l3.99 3.99a1.86 1.86 0 0 0 2.385.207l.278-.195a2.79 2.79 0 0 1 3.471.209l2.633 2.37c.265-.557.423-1.288.507-2.32c.079-.972.09-2.152.091-3.63a.698.698 0 0 1 1.396 0' opacity='.5'/%3E%3Cpath fill='%23F44336' fill-rule='evenodd' d='M17.5 11c-2.121 0-3.182 0-3.841-.659S13 8.621 13 6.5s0-3.182.659-3.841S15.379 2 17.5 2s3.182 0 3.841.659S22 4.379 22 6.5s0 3.182-.659 3.841S19.621 11 17.5 11m-1.47-7.03a.75.75 0 1 0-1.06 1.06l1.47 1.47l-1.47 1.47a.75.75 0 0 0 1.06 1.06l1.47-1.47l1.47 1.47a.75.75 0 1 0 1.06-1.06L18.56 6.5l1.47-1.47a.75.75 0 0 0-1.06-1.06L17.5 5.44z' clip-rule='evenodd'/%3E%3C/svg%3E&quot;"/><div class="lazy-icon" style="background-image:url(https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd);"></div></div></div></div></div><div class="timenode" index="2"><div class="header"><span>引脚约束配置</span></div><div class="body fs14"><p>在I&#x2F;O Planning中将导出的GPIO信号绑定到PL LED引脚。</p></div></div><div class="timenode" index="3"><div class="header"><span>生成和编译</span></div><div class="body fs14"><p>完成以上配置后：</p><ol><li>生成XSA文件</li><li>构建PetaLinux工程</li><li>执行编译操作</li></ol></div></div></div>
+
+<h3 id="3-2-设备树配置"><a href="#3-2-设备树配置" class="headerlink" title="3.2 设备树配置"></a>3.2 设备树配置</h3><div class="tag-plugin colorful note" color="blue"><div class="body"><p>由于使用的是EMIO方式，不涉及引脚复用，所以<strong>不需要配置pinctrl子系统</strong>，只需要配置GPIO子系统即可。</p></div></div>
+
+<p>修改<code>system-user.dtsi</code>文件：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;dt-bindings/gpio/gpio.h&gt;</span></span></span><br><span class="line">/include/ <span class="string">&quot;system-conf.dtsi&quot;</span></span><br><span class="line"></span><br><span class="line">/ &#123;</span><br><span class="line">    led_gpio&#123;</span><br><span class="line">        led-gpios = &lt;&amp;gpio0 <span class="number">54</span> GPIO_ACTIVE_HIGH&gt;, <span class="comment">/* led0 */</span></span><br><span class="line">                    &lt;&amp;gpio0 <span class="number">55</span> GPIO_ACTIVE_HIGH&gt;, <span class="comment">/* led1 */</span></span><br><span class="line">                    &lt;&amp;gpio0 <span class="number">56</span> GPIO_ACTIVE_HIGH&gt;, <span class="comment">/* led2 */</span></span><br><span class="line">                    &lt;&amp;gpio0 <span class="number">57</span> GPIO_ACTIVE_HIGH&gt;; <span class="comment">/* led3 */</span></span><br><span class="line">    &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<div class="tag-plugin colorful note" color="yellow"><div class="body"><p>Zynq-7000系列中，MIO占据了gpio0的前54个编号（0-53），EMIO从编号54开始。</p></div></div>
+
+<h3 id="3-3-Linux驱动程序开发"><a href="#3-3-Linux驱动程序开发" class="headerlink" title="3.3 Linux驱动程序开发"></a>3.3 Linux驱动程序开发</h3><h4 id="3-3-1-字符设备驱动模板"><a href="#3-3-1-字符设备驱动模板" class="headerlink" title="3.3.1 字符设备驱动模板"></a>3.3.1 字符设备驱动模板</h4><details class="tag-plugin colorful folding" color="blue" child="codeblock"><summary><p>以下是一个简单的字符设备驱动模板。</p>
+</summary><div class="body"><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;linux/module.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;linux/kernel.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;linux/fs.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;linux/init.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;linux/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;linux/cdev.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;linux/device.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> xxx_COUNT 1</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> xxx_NAME <span class="string">&quot;xxx&quot;</span></span></span><br><span class="line"> </span><br><span class="line"><span class="type">static</span> <span class="class"><span class="keyword">struct</span> <span class="title">xxx_device</span>&#123;</span></span><br><span class="line">    <span class="type">dev_t</span>               devid;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">cdev</span>         <span class="title">cdev</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="keyword">class</span>       *<span class="keyword">class</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">device</span>      *<span class="title">device</span>;</span></span><br><span class="line">&#125; xxx;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 文件操作函数</span></span><br><span class="line"><span class="type">static</span> <span class="type">int</span> <span class="title function_">xxx_open</span><span class="params">(<span class="keyword">struct</span> inode *inode, <span class="keyword">struct</span> file *filp)</span> &#123;  </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">static</span> <span class="type">int</span> <span class="title function_">xxx_release</span><span class="params">(<span class="keyword">struct</span> inode *inode, <span class="keyword">struct</span> file *filp)</span> &#123;  </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">static</span> <span class="type">ssize_t</span> <span class="title function_">xxx_write</span><span class="params">(<span class="keyword">struct</span> file *filp, <span class="type">const</span> <span class="type">char</span> *buf, </span></span><br><span class="line"><span class="params">                        <span class="type">size_t</span> count, <span class="type">loff_t</span> *ppos)</span> &#123;  </span><br><span class="line">    <span class="type">int</span> retval;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">char</span> databuf[x];</span><br><span class="line"></span><br><span class="line">    retval = copy_from_user(databuf, buf, count);</span><br><span class="line">    <span class="keyword">if</span>(retval &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        printk(<span class="string">&quot;copy_from_user error\r\n&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> -EFAULT;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 执行操作</span></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125; </span><br><span class="line"></span><br><span class="line"><span class="type">static</span> <span class="type">ssize_t</span> <span class="title function_">xxx_read</span><span class="params">(<span class="keyword">struct</span> file *filp, <span class="type">char</span> __user *buf, </span></span><br><span class="line"><span class="params">                       <span class="type">size_t</span> count, <span class="type">loff_t</span> *ppos)</span> &#123; </span><br><span class="line">    <span class="type">int</span> retval = <span class="number">0</span>; </span><br><span class="line">    <span class="type">unsigned</span> <span class="type">char</span> databuf[x];</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 执行操作</span></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/* 向用户空间发送数据 */</span> </span><br><span class="line">    retval = copy_to_user(buf, databuf, count);</span><br><span class="line">    <span class="keyword">if</span>(retval &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        printk(<span class="string">&quot;copy_to_user error\r\n&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> -EFAULT;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>; </span><br><span class="line">&#125; </span><br><span class="line"></span><br><span class="line"><span class="comment">// 文件操作结构体</span></span><br><span class="line"><span class="type">static</span> <span class="type">const</span> <span class="class"><span class="keyword">struct</span> <span class="title">file_operations</span> <span class="title">xxx_fops</span> =</span> &#123;</span><br><span class="line">    .owner   = THIS_MODULE,</span><br><span class="line">    .open    = xxx_open,</span><br><span class="line">    .release = xxx_release,</span><br><span class="line">    .write   = xxx_write,</span><br><span class="line">    .read    = xxx_read</span><br><span class="line">    <span class="comment">// 其余文件操作...</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 模块初始化函数</span></span><br><span class="line"><span class="type">static</span> <span class="type">int</span> __init <span class="title function_">xxx_init</span><span class="params">(<span class="type">void</span>)</span> &#123;</span><br><span class="line">    <span class="type">int</span> retval; </span><br><span class="line"></span><br><span class="line">    <span class="comment">// 1. 申请设备号</span></span><br><span class="line">    retval = alloc_chrdev_region(&amp;xxx.devid, <span class="number">0</span>, xxx_COUNT, xxx_NAME); </span><br><span class="line">    <span class="keyword">if</span> (retval &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        printk(<span class="string">&quot;fail to register devid\r\n&quot;</span>);</span><br><span class="line">        <span class="keyword">goto</span> fail_devid;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2. 添加字符设备</span></span><br><span class="line">    xxx.cdev.owner = THIS_MODULE;</span><br><span class="line">    cdev_init(&amp;xxx.cdev, &amp;xxx_fops);</span><br><span class="line">    retval = cdev_add(&amp;xxx.cdev, xxx.devid, xxx_COUNT);</span><br><span class="line">    <span class="keyword">if</span> (retval &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        printk(<span class="string">&quot;fail to add cdev\r\n&quot;</span>);</span><br><span class="line">        <span class="keyword">goto</span> fail_cdev;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 3. 创建设备类</span></span><br><span class="line">    xxx.class = class_create(THIS_MODULE, xxx_NAME);</span><br><span class="line">    <span class="keyword">if</span>(IS_ERR(xxx.class))&#123;</span><br><span class="line">        printk(<span class="string">&quot;fail to create device class\r\n&quot;</span>);</span><br><span class="line">        retval = PTR_ERR(xxx.class);</span><br><span class="line">        <span class="keyword">goto</span> fail_class;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 4. 自动创建设备文件：/dev/xxx</span></span><br><span class="line">    xxx.device = device_create(xxx.class, <span class="literal">NULL</span>, xxx.devid, <span class="literal">NULL</span>, xxx_NAME);</span><br><span class="line">    <span class="keyword">if</span>(IS_ERR(xxx.device))&#123;</span><br><span class="line">        printk(<span class="string">&quot;fail to create device\r\n&quot;</span>);</span><br><span class="line">        retval = PTR_ERR(xxx.device);</span><br><span class="line">        <span class="keyword">goto</span> fail_device;</span><br><span class="line">    &#125; </span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 5. 其余特定需求的初始化</span></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 错误处理</span></span><br><span class="line">fail_device:</span><br><span class="line">    class_destroy(xxx.class);</span><br><span class="line">fail_class:</span><br><span class="line">    cdev_del(&amp;xxx.cdev);</span><br><span class="line">fail_cdev:</span><br><span class="line">    unregister_chrdev_region(xxx.devid, xxx_COUNT);</span><br><span class="line">fail_devid:</span><br><span class="line">    <span class="keyword">return</span> retval;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 模块退出函数</span></span><br><span class="line"><span class="type">static</span> <span class="type">void</span> __exit <span class="title function_">xxx_exit</span><span class="params">(<span class="type">void</span>)</span> &#123;  </span><br><span class="line">    <span class="comment">// 销毁设备文件</span></span><br><span class="line">    device_destroy(xxx.class, xxx.devid);</span><br><span class="line">    <span class="comment">// 销毁设备类</span></span><br><span class="line">    class_destroy(xxx.class);</span><br><span class="line">    <span class="comment">// 删除字符设备</span></span><br><span class="line">    cdev_del(&amp;xxx.cdev);</span><br><span class="line">    <span class="comment">// 释放设备号</span></span><br><span class="line">    unregister_chrdev_region(xxx.devid, xxx_COUNT);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">module_init(xxx_init);</span><br><span class="line">module_exit(xxx_exit);</span><br><span class="line">MODULE_LICENSE(<span class="string">&quot;GPL&quot;</span>);</span><br><span class="line">MODULE_AUTHOR(<span class="string">&quot;xxx&quot;</span>);</span><br></pre></td></tr></table></figure></div></details>
+
+<p>对于特定的驱动，只需要在该模板上修改增删即可。</p>
+<h4 id="3-3-2-LED驱动实现"><a href="#3-3-2-LED驱动实现" class="headerlink" title="3.3.2 LED驱动实现"></a>3.3.2 LED驱动实现</h4><p>对于特定的LED控制驱动,只需要在通用模板上进行以下修改：</p>
+<ol>
+<li><strong>去除read操作</strong>：LED只需要写入控制，不需要读取状态</li>
+<li><strong>init函数</strong>：添加GPIO描述符的获取操作</li>
+<li><strong>exit函数</strong>：添加GPIO资源的释放操作</li>
+<li><strong>write函数实现</strong>：根据用户数据控制对应LED</li>
+</ol>
+<details class="tag-plugin colorful folding" color="cyan" child="codeblock"><summary><p>LED驱动完整代码</p>
+</summary><div class="body"><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;linux/module.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;linux/kernel.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;linux/fs.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;linux/init.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;linux/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;linux/cdev.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;linux/device.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;linux/of.h&gt;</span>               <span class="comment">// of_find_node_by_path所需</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;linux/gpio/consumer.h&gt;</span>    <span class="comment">// GPIO API所需</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> LED_COUNT 1</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> LED_NAME <span class="string">&quot;led&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// LED设备结构体</span></span><br><span class="line"><span class="type">static</span> <span class="class"><span class="keyword">struct</span> <span class="title">led_device</span>&#123;</span></span><br><span class="line">    <span class="type">dev_t</span>                devid;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">cdev</span>          <span class="title">cdev</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="keyword">class</span>        *<span class="keyword">class</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">device</span>       *<span class="title">device</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">gpio_descs</span>   *<span class="title">led_gpios</span>;</span>  <span class="comment">// GPIO描述符数组</span></span><br><span class="line">&#125; led;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 文件操作函数</span></span><br><span class="line"><span class="type">static</span> <span class="type">int</span> <span class="title function_">led_open</span><span class="params">(<span class="keyword">struct</span> inode *inode, <span class="keyword">struct</span> file *filp)</span> &#123;  </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">static</span> <span class="type">int</span> <span class="title function_">led_release</span><span class="params">(<span class="keyword">struct</span> inode *inode, <span class="keyword">struct</span> file *filp)</span> &#123;  </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">static</span> <span class="type">ssize_t</span> <span class="title function_">led_write</span><span class="params">(<span class="keyword">struct</span> file *filp, <span class="type">const</span> <span class="type">char</span> *buf, </span></span><br><span class="line"><span class="params">                        <span class="type">size_t</span> count, <span class="type">loff_t</span> *ppos)</span> &#123;  </span><br><span class="line">    <span class="type">int</span> retval;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">char</span> databuf[<span class="number">1</span>];</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">long</span> led_bitmap;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 从用户空间复制数据</span></span><br><span class="line">    retval = copy_from_user(databuf, buf, count);</span><br><span class="line">    <span class="keyword">if</span>(retval &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        printk(<span class="string">&quot;copy_from_user error\r\n&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> -EFAULT;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 根据databuf的值决定打开哪个灯（位图方式）</span></span><br><span class="line">    led_bitmap = databuf[<span class="number">0</span>] == <span class="number">0</span> ? <span class="number">1</span> :  <span class="comment">// LED0: 0001</span></span><br><span class="line">                 databuf[<span class="number">0</span>] == <span class="number">1</span> ? <span class="number">2</span> :  <span class="comment">// LED1: 0010</span></span><br><span class="line">                 databuf[<span class="number">0</span>] == <span class="number">2</span> ? <span class="number">4</span> :  <span class="comment">// LED2: 0100</span></span><br><span class="line">                 databuf[<span class="number">0</span>] == <span class="number">3</span> ? <span class="number">8</span> :  <span class="comment">// LED3: 1000</span></span><br><span class="line">                 <span class="number">0</span>;                     <span class="comment">// 其他值关闭所有LED</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 设置GPIO数组的值</span></span><br><span class="line">    gpiod_set_array_value(led.led_gpios-&gt;ndescs, </span><br><span class="line">                         led.led_gpios-&gt;desc, </span><br><span class="line">                         led.led_gpios-&gt;info, </span><br><span class="line">                         &amp;led_bitmap);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 文件操作结构体</span></span><br><span class="line"><span class="type">static</span> <span class="type">const</span> <span class="class"><span class="keyword">struct</span> <span class="title">file_operations</span> <span class="title">led_fops</span> =</span> &#123;</span><br><span class="line">    .owner   = THIS_MODULE,</span><br><span class="line">    .open    = led_open,</span><br><span class="line">    .release = led_release,</span><br><span class="line">    .write   = led_write,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 模块初始化函数</span></span><br><span class="line"><span class="type">static</span> <span class="type">int</span> __init <span class="title function_">led_init</span><span class="params">(<span class="type">void</span>)</span> &#123;</span><br><span class="line">    <span class="type">int</span> retval;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 1. 注册设备号</span></span><br><span class="line">    retval = alloc_chrdev_region(&amp;led.devid, <span class="number">0</span>, LED_COUNT, LED_NAME);</span><br><span class="line">    <span class="keyword">if</span> (retval &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        printk(<span class="string">&quot;fail to register devid\r\n&quot;</span>);</span><br><span class="line">        <span class="keyword">goto</span> fail_devid;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2. 添加字符设备</span></span><br><span class="line">    led.cdev.owner = THIS_MODULE;</span><br><span class="line">    cdev_init(&amp;led.cdev, &amp;led_fops);</span><br><span class="line">    retval = cdev_add(&amp;led.cdev, led.devid, LED_COUNT);</span><br><span class="line">    <span class="keyword">if</span> (retval &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        printk(<span class="string">&quot;fail to add cdev\r\n&quot;</span>);</span><br><span class="line">        <span class="keyword">goto</span> fail_cdev;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 3. 创建设备类</span></span><br><span class="line">    led.class = class_create(THIS_MODULE, LED_NAME);</span><br><span class="line">    <span class="keyword">if</span>(IS_ERR(led.class)) &#123;</span><br><span class="line">        printk(<span class="string">&quot;fail to create device class\r\n&quot;</span>);</span><br><span class="line">        retval = PTR_ERR(led.class);</span><br><span class="line">        <span class="keyword">goto</span> fail_class;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 4. 自动创建设备文件：/dev/led</span></span><br><span class="line">    led.device = device_create(led.class, <span class="literal">NULL</span>, led.devid, <span class="literal">NULL</span>, LED_NAME);</span><br><span class="line">    <span class="keyword">if</span>(IS_ERR(led.device)) &#123;</span><br><span class="line">        printk(<span class="string">&quot;fail to create device\r\n&quot;</span>);</span><br><span class="line">        retval = PTR_ERR(led.device);</span><br><span class="line">        <span class="keyword">goto</span> fail_device;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 5. 指定设备树节点（防止多个led-gpios情况）</span></span><br><span class="line">    led.device-&gt;of_node = of_find_node_by_path(<span class="string">&quot;/led_gpio&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span>(led.device-&gt;of_node == <span class="literal">NULL</span>) &#123;</span><br><span class="line">        printk(<span class="string">&quot;fail to find node\r\n&quot;</span>);</span><br><span class="line">        retval = -EINVAL;</span><br><span class="line">        <span class="keyword">goto</span> fail_findnd;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 6. 获取GPIO描述符数组</span></span><br><span class="line">    led.led_gpios = gpiod_get_array(led.device, <span class="string">&quot;led&quot;</span>, GPIOD_OUT_LOW);</span><br><span class="line">    <span class="keyword">if</span>(IS_ERR(led.led_gpios)) &#123;</span><br><span class="line">        printk(<span class="string">&quot;fail to get gpio array\r\n&quot;</span>);</span><br><span class="line">        retval = PTR_ERR(led.led_gpios);</span><br><span class="line">        <span class="keyword">goto</span> fail_gpio;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    printk(<span class="string">&quot;LED driver loaded successfully\r\n&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 错误处理</span></span><br><span class="line">    fail_gpio:</span><br><span class="line">    fail_findnd:</span><br><span class="line">        device_destroy(led.class, led.devid);</span><br><span class="line">    fail_device:</span><br><span class="line">        class_destroy(led.class);</span><br><span class="line">    fail_class:</span><br><span class="line">        cdev_del(&amp;led.cdev);</span><br><span class="line">    fail_cdev:</span><br><span class="line">        unregister_chrdev_region(led.devid, LED_COUNT);</span><br><span class="line">    fail_devid:</span><br><span class="line">        <span class="keyword">return</span> retval;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 模块退出函数</span></span><br><span class="line"><span class="type">static</span> <span class="type">void</span> __exit <span class="title function_">led_exit</span><span class="params">(<span class="type">void</span>)</span> &#123;   </span><br><span class="line">    <span class="comment">// 释放GPIO描述符</span></span><br><span class="line">    gpiod_put_array(led.led_gpios);</span><br><span class="line">    <span class="comment">// 销毁设备文件</span></span><br><span class="line">    device_destroy(led.class, led.devid);</span><br><span class="line">    <span class="comment">// 销毁设备类</span></span><br><span class="line">    class_destroy(led.class);</span><br><span class="line">    <span class="comment">// 删除字符设备</span></span><br><span class="line">    cdev_del(&amp;led.cdev);</span><br><span class="line">    <span class="comment">// 释放设备号</span></span><br><span class="line">    unregister_chrdev_region(led.devid, LED_COUNT);</span><br><span class="line">    </span><br><span class="line">    printk(<span class="string">&quot;LED driver unloaded\r\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">module_init(led_init);</span><br><span class="line">module_exit(led_exit);</span><br><span class="line">MODULE_LICENSE(<span class="string">&quot;GPL&quot;</span>);</span><br><span class="line">MODULE_AUTHOR(<span class="string">&quot;raiset&quot;</span>);</span><br><span class="line">MODULE_DESCRIPTION(<span class="string">&quot;LED GPIO Driver for PetaLinux&quot;</span>);</span><br></pre></td></tr></table></figure></div></details>
+
+<h3 id="3-4-用户空间应用程序"><a href="#3-4-用户空间应用程序" class="headerlink" title="3.4 用户空间应用程序"></a>3.4 用户空间应用程序</h3><div class="tag-plugin colorful note" color="cyan"><div class="title">📱应用程序作用</div><div class="body"><p>用户空间应用程序负责与内核驱动交互，通过标准的文件操作接口（open&#x2F;write&#x2F;close）实现LED控制。</p></div></div>
+
+<details class="tag-plugin colorful folding" color="blue" child="codeblock"><summary><p>LED控制应用程序</p>
+</summary><div class="body"><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> FILE_NAME <span class="string">&quot;/dev/led&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> **argv)</span> &#123;</span><br><span class="line">    <span class="type">int</span> fd;</span><br><span class="line">    <span class="type">int</span> ret;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">char</span> databuf[<span class="number">1</span>];</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 参数数量检查</span></span><br><span class="line">    <span class="keyword">if</span>(argc != <span class="number">2</span>) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Usage: %s &lt;led_number&gt;\r\n&quot;</span>, argv[<span class="number">0</span>]);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;  led_number: 0-3 (LED0-LED3)\r\n&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 打开设备文件</span></span><br><span class="line">    fd = open(FILE_NAME, O_RDWR);</span><br><span class="line">    <span class="keyword">if</span>(fd &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Error: cannot open file %s\r\n&quot;</span>, FILE_NAME);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Please check if the driver is loaded: sudo insmod led.ko\r\n&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 将字符串转换为整数</span></span><br><span class="line">    databuf[<span class="number">0</span>] = (<span class="type">unsigned</span> <span class="type">char</span>)atoi(argv[<span class="number">1</span>]);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 参数范围检查</span></span><br><span class="line">    <span class="keyword">if</span>(databuf[<span class="number">0</span>] &gt; <span class="number">3</span>) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Warning: LED number should be 0-3, got %d\r\n&quot;</span>, databuf[<span class="number">0</span>]);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 写入数据到驱动</span></span><br><span class="line">    ret = write(fd, databuf, <span class="number">1</span>);</span><br><span class="line">    <span class="keyword">if</span>(ret &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Error: cannot write to file %s\r\n&quot;</span>, FILE_NAME);</span><br><span class="line">        close(fd);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;LED%d controlled successfully\r\n&quot;</span>, databuf[<span class="number">0</span>]);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 关闭设备文件</span></span><br><span class="line">    ret = close(fd);</span><br><span class="line">    <span class="keyword">if</span>(ret &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Error: cannot close file %s\r\n&quot;</span>, FILE_NAME);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></details>
+
+<p>⚙️主要功能：</p>
+<ol>
+<li><strong>参数验证</strong>：检查命令行参数是否正确</li>
+<li><strong>设备文件操作</strong>：打开<code>/dev/led</code>设备文件</li>
+<li><strong>数据传输</strong>：将LED编号写入驱动</li>
+</ol>
+<h3 id="3-5-交叉编译"><a href="#3-5-交叉编译" class="headerlink" title="3.5 交叉编译"></a>3.5 交叉编译</h3><div class="tag-plugin colorful note" color="red"><div class="body"><p>也可以参考第4节使用petalinux-create的方法，这样无需配置交叉编译器，也不需要自己写Makefile。</p></div></div>
+
+<div class="tag-plugin colorful note" color="cycan"><div class="body"><p>由于开发主机（x86&#x2F;x64）和目标开发板（ARM）架构不同，驱动和应用程序需要在主机上使用交叉编译器进行编译，然后将目标文件传输到开发板上运行。</p></div></div>
+
+<h4 id="3-5-1-生成SDK"><a href="#3-5-1-生成SDK" class="headerlink" title="3.5.1 生成SDK"></a>3.5.1 生成SDK</h4><p>在PetaLinux工程目录下执行以下命令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">petalinux-build --sdk</span><br><span class="line">petalinux-package --sysroot</span><br></pre></td></tr></table></figure>
+
+<div class="tag-plugin image"><div class="image-bg" style="aspect-ratio:865/131;"><img class="lazy" src="https://webp.raiset.top/PetaLinux-gpio/image-20250919210114900.png" data-src="https://webp.raiset.top/PetaLinux-gpio/image-20250919210114900.png" data-fancybox="true"onerror="this.src=&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2rem' height='2rem' viewBox='0 0 24 24'%3E%3C!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --%3E%3Cpath fill='%23F44336' d='M22 12.698c-.002 1.47-.013 2.718-.096 3.743c-.097 1.19-.296 2.184-.74 3.009a4.2 4.2 0 0 1-.73.983c-.833.833-1.893 1.21-3.237 1.39C15.884 22 14.2 22 12.053 22h-.106c-2.148 0-3.83 0-5.144-.177c-1.343-.18-2.404-.557-3.236-1.39c-.738-.738-1.12-1.656-1.322-2.795c-.2-1.12-.236-2.512-.243-4.241Q1.999 12.737 2 12v-.054c0-2.148 0-3.83.177-5.144c.18-1.343.557-2.404 1.39-3.236s1.893-1.21 3.236-1.39c1.168-.157 2.67-.175 4.499-.177a.697.697 0 1 1 0 1.396c-1.855.002-3.234.018-4.313.163c-1.189.16-1.906.464-2.436.994S3.72 5.8 3.56 6.99C3.397 8.2 3.395 9.788 3.395 12v.784l.932-.814a2.14 2.14 0 0 1 2.922.097l3.99 3.99a1.86 1.86 0 0 0 2.385.207l.278-.195a2.79 2.79 0 0 1 3.471.209l2.633 2.37c.265-.557.423-1.288.507-2.32c.079-.972.09-2.152.091-3.63a.698.698 0 0 1 1.396 0' opacity='.5'/%3E%3Cpath fill='%23F44336' fill-rule='evenodd' d='M17.5 11c-2.121 0-3.182 0-3.841-.659S13 8.621 13 6.5s0-3.182.659-3.841S15.379 2 17.5 2s3.182 0 3.841.659S22 4.379 22 6.5s0 3.182-.659 3.841S19.621 11 17.5 11m-1.47-7.03a.75.75 0 1 0-1.06 1.06l1.47 1.47l-1.47 1.47a.75.75 0 0 0 1.06 1.06l1.47-1.47l1.47 1.47a.75.75 0 1 0 1.06-1.06L18.56 6.5l1.47-1.47a.75.75 0 0 0-1.06-1.06L17.5 5.44z' clip-rule='evenodd'/%3E%3C/svg%3E&quot;"/><div class="lazy-icon" style="background-image:url(https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd);"></div></div></div>
+
+<p>执行成功后，在<code>&lt;项目路径&gt;/images/linux/</code>目录下会生成一个<code>sdk</code>文件夹。</p>
+<h4 id="3-5-2-配置交叉编译环境"><a href="#3-5-2-配置交叉编译环境" class="headerlink" title="3.5.2 配置交叉编译环境"></a>3.5.2 配置交叉编译环境</h4><p>按照上面的终端提示，执行以下命令加载交叉编译环境：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">source /home/raiset/Project/peta_prj/zynq_test/images/linux/sdk/environment-setup-cortexa9t2hf-neon-xilinx-linux-gnueabi</span><br></pre></td></tr></table></figure>
+
+<p>验证环境变量是否设置成功：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">echo $CROSS_COMPILE</span><br><span class="line">echo $CC</span><br></pre></td></tr></table></figure>
+
+<div class="tag-plugin image"><div class="image-bg" style="aspect-ratio:865/44;"><img class="lazy" src="https://webp.raiset.top/PetaLinux-gpio/image-20250919210129266.png" data-src="https://webp.raiset.top/PetaLinux-gpio/image-20250919210129266.png" data-fancybox="true"onerror="this.src=&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2rem' height='2rem' viewBox='0 0 24 24'%3E%3C!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --%3E%3Cpath fill='%23F44336' d='M22 12.698c-.002 1.47-.013 2.718-.096 3.743c-.097 1.19-.296 2.184-.74 3.009a4.2 4.2 0 0 1-.73.983c-.833.833-1.893 1.21-3.237 1.39C15.884 22 14.2 22 12.053 22h-.106c-2.148 0-3.83 0-5.144-.177c-1.343-.18-2.404-.557-3.236-1.39c-.738-.738-1.12-1.656-1.322-2.795c-.2-1.12-.236-2.512-.243-4.241Q1.999 12.737 2 12v-.054c0-2.148 0-3.83.177-5.144c.18-1.343.557-2.404 1.39-3.236s1.893-1.21 3.236-1.39c1.168-.157 2.67-.175 4.499-.177a.697.697 0 1 1 0 1.396c-1.855.002-3.234.018-4.313.163c-1.189.16-1.906.464-2.436.994S3.72 5.8 3.56 6.99C3.397 8.2 3.395 9.788 3.395 12v.784l.932-.814a2.14 2.14 0 0 1 2.922.097l3.99 3.99a1.86 1.86 0 0 0 2.385.207l.278-.195a2.79 2.79 0 0 1 3.471.209l2.633 2.37c.265-.557.423-1.288.507-2.32c.079-.972.09-2.152.091-3.63a.698.698 0 0 1 1.396 0' opacity='.5'/%3E%3Cpath fill='%23F44336' fill-rule='evenodd' d='M17.5 11c-2.121 0-3.182 0-3.841-.659S13 8.621 13 6.5s0-3.182.659-3.841S15.379 2 17.5 2s3.182 0 3.841.659S22 4.379 22 6.5s0 3.182-.659 3.841S19.621 11 17.5 11m-1.47-7.03a.75.75 0 1 0-1.06 1.06l1.47 1.47l-1.47 1.47a.75.75 0 0 0 1.06 1.06l1.47-1.47l1.47 1.47a.75.75 0 1 0 1.06-1.06L18.56 6.5l1.47-1.47a.75.75 0 0 0-1.06-1.06L17.5 5.44z' clip-rule='evenodd'/%3E%3C/svg%3E&quot;"/><div class="lazy-icon" style="background-image:url(https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd);"></div></div></div>
+
+<div class="tag-plugin image"><div class="image-bg" style="aspect-ratio:865/100;"><img class="lazy" src="https://webp.raiset.top/PetaLinux-gpio/image-20250919210131877.png" data-src="https://webp.raiset.top/PetaLinux-gpio/image-20250919210131877.png" data-fancybox="true"onerror="this.src=&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2rem' height='2rem' viewBox='0 0 24 24'%3E%3C!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --%3E%3Cpath fill='%23F44336' d='M22 12.698c-.002 1.47-.013 2.718-.096 3.743c-.097 1.19-.296 2.184-.74 3.009a4.2 4.2 0 0 1-.73.983c-.833.833-1.893 1.21-3.237 1.39C15.884 22 14.2 22 12.053 22h-.106c-2.148 0-3.83 0-5.144-.177c-1.343-.18-2.404-.557-3.236-1.39c-.738-.738-1.12-1.656-1.322-2.795c-.2-1.12-.236-2.512-.243-4.241Q1.999 12.737 2 12v-.054c0-2.148 0-3.83.177-5.144c.18-1.343.557-2.404 1.39-3.236s1.893-1.21 3.236-1.39c1.168-.157 2.67-.175 4.499-.177a.697.697 0 1 1 0 1.396c-1.855.002-3.234.018-4.313.163c-1.189.16-1.906.464-2.436.994S3.72 5.8 3.56 6.99C3.397 8.2 3.395 9.788 3.395 12v.784l.932-.814a2.14 2.14 0 0 1 2.922.097l3.99 3.99a1.86 1.86 0 0 0 2.385.207l.278-.195a2.79 2.79 0 0 1 3.471.209l2.633 2.37c.265-.557.423-1.288.507-2.32c.079-.972.09-2.152.091-3.63a.698.698 0 0 1 1.396 0' opacity='.5'/%3E%3Cpath fill='%23F44336' fill-rule='evenodd' d='M17.5 11c-2.121 0-3.182 0-3.841-.659S13 8.621 13 6.5s0-3.182.659-3.841S15.379 2 17.5 2s3.182 0 3.841.659S22 4.379 22 6.5s0 3.182-.659 3.841S19.621 11 17.5 11m-1.47-7.03a.75.75 0 1 0-1.06 1.06l1.47 1.47l-1.47 1.47a.75.75 0 0 0 1.06 1.06l1.47-1.47l1.47 1.47a.75.75 0 1 0 1.06-1.06L18.56 6.5l1.47-1.47a.75.75 0 0 0-1.06-1.06L17.5 5.44z' clip-rule='evenodd'/%3E%3C/svg%3E&quot;"/><div class="lazy-icon" style="background-image:url(https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd);"></div></div></div>
+
+<mark class="tag-plugin colorful mark" color="warning">每次打开新的终端都需要重新source一下环境配置文件。</mark> 
+
+<h3 id="3-6-Makefile编写"><a href="#3-6-Makefile编写" class="headerlink" title="3.6 Makefile编写"></a>3.6 Makefile编写</h3><h4 id="3-6-1-驱动模块Makefile"><a href="#3-6-1-驱动模块Makefile" class="headerlink" title="3.6.1 驱动模块Makefile"></a>3.6.1 驱动模块Makefile</h4><details class="tag-plugin colorful folding" color="orange" child="codeblock"><summary><p>驱动Makefile</p>
+</summary><div class="body"><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 指定要编译的模块目标文件</span></span><br><span class="line">obj-m := led.o</span><br><span class="line"></span><br><span class="line"><span class="comment"># Linux内核源码路径（需要根据实际情况修改）</span></span><br><span class="line">LINUX_KERNEL_SRC := /home/raiset/Project/peta_prj/zynq_test/build/tmp/work/zynq_generic_7z100-xilinx-linux-gnueabi/linux-xlnx/6.1.5-xilinx-v2023.1+gitAUTOINC+716921b6d7-r0/linux-zynq_generic_7z100-standard-build</span><br><span class="line"></span><br><span class="line"><span class="comment"># 目标架构（ARM 32位）</span></span><br><span class="line">ARCH := arm</span><br><span class="line"></span><br><span class="line"><span class="comment"># 当前目录</span></span><br><span class="line">SRC := <span class="variable">$(<span class="built_in">shell</span> pwd)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 编译目标</span></span><br><span class="line"><span class="section">all:</span></span><br><span class="line">	<span class="variable">$(MAKE)</span> ARCH=<span class="variable">$(ARCH)</span> CROSS_COMPILE=<span class="variable">$(CROSS_COMPILE)</span> -C <span class="variable">$(LINUX_KERNEL_SRC)</span> M=<span class="variable">$(PWD)</span> modules</span><br><span class="line"></span><br><span class="line"><span class="comment"># 清理目标</span></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">	rm -f *.o *.mod.o *.mod.c *.order *.symvers *.ko *.mod</span><br><span class="line"></span><br><span class="line"><span class="meta"><span class="keyword">.PHONY</span>: all clean</span></span><br></pre></td></tr></table></figure></div></details>
+
+<p>需要修改的参数如下：</p>
+<ul>
+<li><p><code>obj-m</code>：指定要编译的模块</p>
+</li>
+<li><p><code>LINUX_KERNEL_SRC</code>：内核源码路径，需要根据实际PetaLinux工程路径修改</p>
+</li>
+<li><p><code>ARCH</code>：如果是64位的板子，则ARCH改为arm64</p>
+</li>
+</ul>
+<h4 id="3-6-2-应用程序Makefile"><a href="#3-6-2-应用程序Makefile" class="headerlink" title="3.6.2 应用程序Makefile"></a>3.6.2 应用程序Makefile</h4><details class="tag-plugin colorful folding" color="orange" child="codeblock"><summary><p>应用程序Makefile</p>
+</summary><div class="body"><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 使用环境变量中的交叉编译器</span></span><br><span class="line">CC := <span class="variable">$(CC)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 编译选项</span></span><br><span class="line">CFLAGS += -Wall -O2</span><br><span class="line">LDFLAGS +=</span><br><span class="line"></span><br><span class="line"><span class="comment"># 目标文件名</span></span><br><span class="line">TARGET := led_test</span><br><span class="line"></span><br><span class="line"><span class="comment"># 源文件</span></span><br><span class="line">SRCS := led_test.c</span><br><span class="line"></span><br><span class="line"><span class="comment"># 目标文件</span></span><br><span class="line">OBJS := $(SRCS:.c=.o)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 编译规则</span></span><br><span class="line"><span class="section">all: <span class="variable">$(TARGET)</span></span></span><br><span class="line"> </span><br><span class="line"><span class="variable">$(TARGET)</span>: <span class="variable">$(OBJS)</span></span><br><span class="line">	<span class="variable">$(CC)</span> <span class="variable">$(LDFLAGS)</span> -o <span class="variable">$@</span> <span class="variable">$^</span></span><br><span class="line"></span><br><span class="line"><span class="section">%.o: %.c</span></span><br><span class="line">	<span class="variable">$(CC)</span> <span class="variable">$(CFLAGS)</span> -c -o <span class="variable">$@</span> <span class="variable">$&lt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 清理规则</span></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">	rm -f <span class="variable">$(OBJS)</span> <span class="variable">$(TARGET)</span></span><br><span class="line"></span><br><span class="line"><span class="meta"><span class="keyword">.PHONY</span>: all clean</span></span><br></pre></td></tr></table></figure></div></details>
+
+<p>这里只需要修改<code>TARGET</code>、<code>SRCS</code>即可。</p>
+<h3 id="3-7-上板测试与验证"><a href="#3-7-上板测试与验证" class="headerlink" title="3.7 上板测试与验证"></a>3.7 上板测试与验证</h3><h4 id="3-7-1-文件传输"><a href="#3-7-1-文件传输" class="headerlink" title="3.7.1 文件传输"></a>3.7.1 文件传输</h4><p>将编译好的<code>led.ko</code>和应用程序传输到开发板上，可以使用网络传输，也可以直接复制到SD卡的文件系统下：</p>
+<div class="tag-plugin image"><div class="image-bg" style="aspect-ratio:497/160;width:400px;"><img class="lazy" src="https://webp.raiset.top/PetaLinux-gpio/image-20250919210142644.png" data-src="https://webp.raiset.top/PetaLinux-gpio/image-20250919210142644.png" data-fancybox="true"onerror="this.src=&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2rem' height='2rem' viewBox='0 0 24 24'%3E%3C!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --%3E%3Cpath fill='%23F44336' d='M22 12.698c-.002 1.47-.013 2.718-.096 3.743c-.097 1.19-.296 2.184-.74 3.009a4.2 4.2 0 0 1-.73.983c-.833.833-1.893 1.21-3.237 1.39C15.884 22 14.2 22 12.053 22h-.106c-2.148 0-3.83 0-5.144-.177c-1.343-.18-2.404-.557-3.236-1.39c-.738-.738-1.12-1.656-1.322-2.795c-.2-1.12-.236-2.512-.243-4.241Q1.999 12.737 2 12v-.054c0-2.148 0-3.83.177-5.144c.18-1.343.557-2.404 1.39-3.236s1.893-1.21 3.236-1.39c1.168-.157 2.67-.175 4.499-.177a.697.697 0 1 1 0 1.396c-1.855.002-3.234.018-4.313.163c-1.189.16-1.906.464-2.436.994S3.72 5.8 3.56 6.99C3.397 8.2 3.395 9.788 3.395 12v.784l.932-.814a2.14 2.14 0 0 1 2.922.097l3.99 3.99a1.86 1.86 0 0 0 2.385.207l.278-.195a2.79 2.79 0 0 1 3.471.209l2.633 2.37c.265-.557.423-1.288.507-2.32c.079-.972.09-2.152.091-3.63a.698.698 0 0 1 1.396 0' opacity='.5'/%3E%3Cpath fill='%23F44336' fill-rule='evenodd' d='M17.5 11c-2.121 0-3.182 0-3.841-.659S13 8.621 13 6.5s0-3.182.659-3.841S15.379 2 17.5 2s3.182 0 3.841.659S22 4.379 22 6.5s0 3.182-.659 3.841S19.621 11 17.5 11m-1.47-7.03a.75.75 0 1 0-1.06 1.06l1.47 1.47l-1.47 1.47a.75.75 0 0 0 1.06 1.06l1.47-1.47l1.47 1.47a.75.75 0 1 0 1.06-1.06L18.56 6.5l1.47-1.47a.75.75 0 0 0-1.06-1.06L17.5 5.44z' clip-rule='evenodd'/%3E%3C/svg%3E&quot;"/><div class="lazy-icon" style="background-image:url(https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd);"></div></div></div>
+
+<h4 id="3-7-2-驱动加载与测试"><a href="#3-7-2-驱动加载与测试" class="headerlink" title="3.7.2 驱动加载与测试"></a>3.7.2 驱动加载与测试</h4><div class="tag-plugin timeline"><div class="timenode" index="0"><div class="header"><span>加载驱动模块</span></div><div class="body fs14"><p>在开发板上执行以下命令加载驱动：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo insmod led.ko</span><br></pre></td></tr></table></figure><div class="tag-plugin image"><div class="image-bg" style="aspect-ratio:623/78;width:400px;"><img class="lazy" src="https://webp.raiset.top/PetaLinux-gpio/image-20250919210150602.png" data-src="https://webp.raiset.top/PetaLinux-gpio/image-20250919210150602.png" data-fancybox="true"onerror="this.src=&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2rem' height='2rem' viewBox='0 0 24 24'%3E%3C!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --%3E%3Cpath fill='%23F44336' d='M22 12.698c-.002 1.47-.013 2.718-.096 3.743c-.097 1.19-.296 2.184-.74 3.009a4.2 4.2 0 0 1-.73.983c-.833.833-1.893 1.21-3.237 1.39C15.884 22 14.2 22 12.053 22h-.106c-2.148 0-3.83 0-5.144-.177c-1.343-.18-2.404-.557-3.236-1.39c-.738-.738-1.12-1.656-1.322-2.795c-.2-1.12-.236-2.512-.243-4.241Q1.999 12.737 2 12v-.054c0-2.148 0-3.83.177-5.144c.18-1.343.557-2.404 1.39-3.236s1.893-1.21 3.236-1.39c1.168-.157 2.67-.175 4.499-.177a.697.697 0 1 1 0 1.396c-1.855.002-3.234.018-4.313.163c-1.189.16-1.906.464-2.436.994S3.72 5.8 3.56 6.99C3.397 8.2 3.395 9.788 3.395 12v.784l.932-.814a2.14 2.14 0 0 1 2.922.097l3.99 3.99a1.86 1.86 0 0 0 2.385.207l.278-.195a2.79 2.79 0 0 1 3.471.209l2.633 2.37c.265-.557.423-1.288.507-2.32c.079-.972.09-2.152.091-3.63a.698.698 0 0 1 1.396 0' opacity='.5'/%3E%3Cpath fill='%23F44336' fill-rule='evenodd' d='M17.5 11c-2.121 0-3.182 0-3.841-.659S13 8.621 13 6.5s0-3.182.659-3.841S15.379 2 17.5 2s3.182 0 3.841.659S22 4.379 22 6.5s0 3.182-.659 3.841S19.621 11 17.5 11m-1.47-7.03a.75.75 0 1 0-1.06 1.06l1.47 1.47l-1.47 1.47a.75.75 0 0 0 1.06 1.06l1.47-1.47l1.47 1.47a.75.75 0 1 0 1.06-1.06L18.56 6.5l1.47-1.47a.75.75 0 0 0-1.06-1.06L17.5 5.44z' clip-rule='evenodd'/%3E%3C/svg%3E&quot;"/><div class="lazy-icon" style="background-image:url(https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd);"></div></div></div><p>加载驱动时会执行<code>led_init</code>函数中的内容，初始化设备并创建设备文件。</p></div></div><div class="timenode" index="1"><div class="header"><span>验证设备注册（可选）</span></div><div class="body fs14"><p>通过以下命令验证设备号分配是否成功：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat /proc/devices</span><br></pre></td></tr></table></figure><div class="tag-plugin image"><div class="image-bg" style="aspect-ratio:374/446;"><img class="lazy" src="https://webp.raiset.top/PetaLinux-gpio/image-20250919210202887.png" data-src="https://webp.raiset.top/PetaLinux-gpio/image-20250919210202887.png" data-fancybox="true"onerror="this.src=&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2rem' height='2rem' viewBox='0 0 24 24'%3E%3C!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --%3E%3Cpath fill='%23F44336' d='M22 12.698c-.002 1.47-.013 2.718-.096 3.743c-.097 1.19-.296 2.184-.74 3.009a4.2 4.2 0 0 1-.73.983c-.833.833-1.893 1.21-3.237 1.39C15.884 22 14.2 22 12.053 22h-.106c-2.148 0-3.83 0-5.144-.177c-1.343-.18-2.404-.557-3.236-1.39c-.738-.738-1.12-1.656-1.322-2.795c-.2-1.12-.236-2.512-.243-4.241Q1.999 12.737 2 12v-.054c0-2.148 0-3.83.177-5.144c.18-1.343.557-2.404 1.39-3.236s1.893-1.21 3.236-1.39c1.168-.157 2.67-.175 4.499-.177a.697.697 0 1 1 0 1.396c-1.855.002-3.234.018-4.313.163c-1.189.16-1.906.464-2.436.994S3.72 5.8 3.56 6.99C3.397 8.2 3.395 9.788 3.395 12v.784l.932-.814a2.14 2.14 0 0 1 2.922.097l3.99 3.99a1.86 1.86 0 0 0 2.385.207l.278-.195a2.79 2.79 0 0 1 3.471.209l2.633 2.37c.265-.557.423-1.288.507-2.32c.079-.972.09-2.152.091-3.63a.698.698 0 0 1 1.396 0' opacity='.5'/%3E%3Cpath fill='%23F44336' fill-rule='evenodd' d='M17.5 11c-2.121 0-3.182 0-3.841-.659S13 8.621 13 6.5s0-3.182.659-3.841S15.379 2 17.5 2s3.182 0 3.841.659S22 4.379 22 6.5s0 3.182-.659 3.841S19.621 11 17.5 11m-1.47-7.03a.75.75 0 1 0-1.06 1.06l1.47 1.47l-1.47 1.47a.75.75 0 0 0 1.06 1.06l1.47-1.47l1.47 1.47a.75.75 0 1 0 1.06-1.06L18.56 6.5l1.47-1.47a.75.75 0 0 0-1.06-1.06L17.5 5.44z' clip-rule='evenodd'/%3E%3C/svg%3E&quot;"/><div class="lazy-icon" style="background-image:url(https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd);"></div></div></div></div></div><div class="timenode" index="2"><div class="header"><span>验证设备文件（可选）</span></div><div class="body fs14"><p>检查设备文件是否创建成功：</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ls /dev/</span><br></pre></td></tr></table></figure><div class="tag-plugin image"><div class="image-bg" style="aspect-ratio:427/218;"><img class="lazy" src="https://webp.raiset.top/PetaLinux-gpio/image-20250919210210577.png" data-src="https://webp.raiset.top/PetaLinux-gpio/image-20250919210210577.png" data-fancybox="true"onerror="this.src=&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2rem' height='2rem' viewBox='0 0 24 24'%3E%3C!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --%3E%3Cpath fill='%23F44336' d='M22 12.698c-.002 1.47-.013 2.718-.096 3.743c-.097 1.19-.296 2.184-.74 3.009a4.2 4.2 0 0 1-.73.983c-.833.833-1.893 1.21-3.237 1.39C15.884 22 14.2 22 12.053 22h-.106c-2.148 0-3.83 0-5.144-.177c-1.343-.18-2.404-.557-3.236-1.39c-.738-.738-1.12-1.656-1.322-2.795c-.2-1.12-.236-2.512-.243-4.241Q1.999 12.737 2 12v-.054c0-2.148 0-3.83.177-5.144c.18-1.343.557-2.404 1.39-3.236s1.893-1.21 3.236-1.39c1.168-.157 2.67-.175 4.499-.177a.697.697 0 1 1 0 1.396c-1.855.002-3.234.018-4.313.163c-1.189.16-1.906.464-2.436.994S3.72 5.8 3.56 6.99C3.397 8.2 3.395 9.788 3.395 12v.784l.932-.814a2.14 2.14 0 0 1 2.922.097l3.99 3.99a1.86 1.86 0 0 0 2.385.207l.278-.195a2.79 2.79 0 0 1 3.471.209l2.633 2.37c.265-.557.423-1.288.507-2.32c.079-.972.09-2.152.091-3.63a.698.698 0 0 1 1.396 0' opacity='.5'/%3E%3Cpath fill='%23F44336' fill-rule='evenodd' d='M17.5 11c-2.121 0-3.182 0-3.841-.659S13 8.621 13 6.5s0-3.182.659-3.841S15.379 2 17.5 2s3.182 0 3.841.659S22 4.379 22 6.5s0 3.182-.659 3.841S19.621 11 17.5 11m-1.47-7.03a.75.75 0 1 0-1.06 1.06l1.47 1.47l-1.47 1.47a.75.75 0 0 0 1.06 1.06l1.47-1.47l1.47 1.47a.75.75 0 1 0 1.06-1.06L18.56 6.5l1.47-1.47a.75.75 0 0 0-1.06-1.06L17.5 5.44z' clip-rule='evenodd'/%3E%3C/svg%3E&quot;"/><div class="lazy-icon" style="background-image:url(https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd);"></div></div></div></div></div><div class="timenode" index="3"><div class="header"><span>设备树信息查看（可选）</span></div><div class="body fs14"><p>如果需要查看设备树信息，可以进入<code>/proc/device-tree</code>目录：</p><div class="tag-plugin image"><div class="image-bg" style="aspect-ratio:738/276;"><img class="lazy" src="https://webp.raiset.top/PetaLinux-gpio/image-20250919210216917.png" data-src="https://webp.raiset.top/PetaLinux-gpio/image-20250919210216917.png" data-fancybox="true"onerror="this.src=&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2rem' height='2rem' viewBox='0 0 24 24'%3E%3C!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --%3E%3Cpath fill='%23F44336' d='M22 12.698c-.002 1.47-.013 2.718-.096 3.743c-.097 1.19-.296 2.184-.74 3.009a4.2 4.2 0 0 1-.73.983c-.833.833-1.893 1.21-3.237 1.39C15.884 22 14.2 22 12.053 22h-.106c-2.148 0-3.83 0-5.144-.177c-1.343-.18-2.404-.557-3.236-1.39c-.738-.738-1.12-1.656-1.322-2.795c-.2-1.12-.236-2.512-.243-4.241Q1.999 12.737 2 12v-.054c0-2.148 0-3.83.177-5.144c.18-1.343.557-2.404 1.39-3.236s1.893-1.21 3.236-1.39c1.168-.157 2.67-.175 4.499-.177a.697.697 0 1 1 0 1.396c-1.855.002-3.234.018-4.313.163c-1.189.16-1.906.464-2.436.994S3.72 5.8 3.56 6.99C3.397 8.2 3.395 9.788 3.395 12v.784l.932-.814a2.14 2.14 0 0 1 2.922.097l3.99 3.99a1.86 1.86 0 0 0 2.385.207l.278-.195a2.79 2.79 0 0 1 3.471.209l2.633 2.37c.265-.557.423-1.288.507-2.32c.079-.972.09-2.152.091-3.63a.698.698 0 0 1 1.396 0' opacity='.5'/%3E%3Cpath fill='%23F44336' fill-rule='evenodd' d='M17.5 11c-2.121 0-3.182 0-3.841-.659S13 8.621 13 6.5s0-3.182.659-3.841S15.379 2 17.5 2s3.182 0 3.841.659S22 4.379 22 6.5s0 3.182-.659 3.841S19.621 11 17.5 11m-1.47-7.03a.75.75 0 1 0-1.06 1.06l1.47 1.47l-1.47 1.47a.75.75 0 0 0 1.06 1.06l1.47-1.47l1.47 1.47a.75.75 0 1 0 1.06-1.06L18.56 6.5l1.47-1.47a.75.75 0 0 0-1.06-1.06L17.5 5.44z' clip-rule='evenodd'/%3E%3C/svg%3E&quot;"/><div class="lazy-icon" style="background-image:url(https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd);"></div></div></div><p><mark class="tag-plugin colorful mark" color="yellow">某些设备树属性值可能显示为乱码，这是二进制数据的正常表现。</mark> </p></div></div></div>
+
+<h4 id="3-7-3-LED控制测试"><a href="#3-7-3-LED控制测试" class="headerlink" title="3.7.3 LED控制测试"></a>3.7.3 LED控制测试</h4><p><strong>测试LED0（第一个灯）：</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ./led_test 0</span><br></pre></td></tr></table></figure>
+
+<div class="tag-plugin image"><div class="image-bg" style="aspect-ratio:825/258;"><img class="lazy" src="https://webp.raiset.top/PetaLinux-gpio/image-20250919210225137.png" data-src="https://webp.raiset.top/PetaLinux-gpio/image-20250919210225137.png" data-fancybox="true"onerror="this.src=&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2rem' height='2rem' viewBox='0 0 24 24'%3E%3C!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --%3E%3Cpath fill='%23F44336' d='M22 12.698c-.002 1.47-.013 2.718-.096 3.743c-.097 1.19-.296 2.184-.74 3.009a4.2 4.2 0 0 1-.73.983c-.833.833-1.893 1.21-3.237 1.39C15.884 22 14.2 22 12.053 22h-.106c-2.148 0-3.83 0-5.144-.177c-1.343-.18-2.404-.557-3.236-1.39c-.738-.738-1.12-1.656-1.322-2.795c-.2-1.12-.236-2.512-.243-4.241Q1.999 12.737 2 12v-.054c0-2.148 0-3.83.177-5.144c.18-1.343.557-2.404 1.39-3.236s1.893-1.21 3.236-1.39c1.168-.157 2.67-.175 4.499-.177a.697.697 0 1 1 0 1.396c-1.855.002-3.234.018-4.313.163c-1.189.16-1.906.464-2.436.994S3.72 5.8 3.56 6.99C3.397 8.2 3.395 9.788 3.395 12v.784l.932-.814a2.14 2.14 0 0 1 2.922.097l3.99 3.99a1.86 1.86 0 0 0 2.385.207l.278-.195a2.79 2.79 0 0 1 3.471.209l2.633 2.37c.265-.557.423-1.288.507-2.32c.079-.972.09-2.152.091-3.63a.698.698 0 0 1 1.396 0' opacity='.5'/%3E%3Cpath fill='%23F44336' fill-rule='evenodd' d='M17.5 11c-2.121 0-3.182 0-3.841-.659S13 8.621 13 6.5s0-3.182.659-3.841S15.379 2 17.5 2s3.182 0 3.841.659S22 4.379 22 6.5s0 3.182-.659 3.841S19.621 11 17.5 11m-1.47-7.03a.75.75 0 1 0-1.06 1.06l1.47 1.47l-1.47 1.47a.75.75 0 0 0 1.06 1.06l1.47-1.47l1.47 1.47a.75.75 0 1 0 1.06-1.06L18.56 6.5l1.47-1.47a.75.75 0 0 0-1.06-1.06L17.5 5.44z' clip-rule='evenodd'/%3E%3C/svg%3E&quot;"/><div class="lazy-icon" style="background-image:url(https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd);"></div></div></div>
+
+<p>可以看到最左边的LED亮起，说明驱动工作正常。</p>
+<p><strong>测试LED1（第二个灯）：</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ./led_test 1</span><br></pre></td></tr></table></figure>
+
+<p>依此类推，运行<code>sudo ./led_test 1</code>时亮第2个灯，这和驱动中的<code>led_write</code>函数定义的逻辑一致。</p>
+<div class="tag-plugin image"><div class="image-bg" style="aspect-ratio:825/223;"><img class="lazy" src="https://webp.raiset.top/PetaLinux-gpio/image-20250919210234227.png" data-src="https://webp.raiset.top/PetaLinux-gpio/image-20250919210234227.png" data-fancybox="true"onerror="this.src=&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2rem' height='2rem' viewBox='0 0 24 24'%3E%3C!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --%3E%3Cpath fill='%23F44336' d='M22 12.698c-.002 1.47-.013 2.718-.096 3.743c-.097 1.19-.296 2.184-.74 3.009a4.2 4.2 0 0 1-.73.983c-.833.833-1.893 1.21-3.237 1.39C15.884 22 14.2 22 12.053 22h-.106c-2.148 0-3.83 0-5.144-.177c-1.343-.18-2.404-.557-3.236-1.39c-.738-.738-1.12-1.656-1.322-2.795c-.2-1.12-.236-2.512-.243-4.241Q1.999 12.737 2 12v-.054c0-2.148 0-3.83.177-5.144c.18-1.343.557-2.404 1.39-3.236s1.893-1.21 3.236-1.39c1.168-.157 2.67-.175 4.499-.177a.697.697 0 1 1 0 1.396c-1.855.002-3.234.018-4.313.163c-1.189.16-1.906.464-2.436.994S3.72 5.8 3.56 6.99C3.397 8.2 3.395 9.788 3.395 12v.784l.932-.814a2.14 2.14 0 0 1 2.922.097l3.99 3.99a1.86 1.86 0 0 0 2.385.207l.278-.195a2.79 2.79 0 0 1 3.471.209l2.633 2.37c.265-.557.423-1.288.507-2.32c.079-.972.09-2.152.091-3.63a.698.698 0 0 1 1.396 0' opacity='.5'/%3E%3Cpath fill='%23F44336' fill-rule='evenodd' d='M17.5 11c-2.121 0-3.182 0-3.841-.659S13 8.621 13 6.5s0-3.182.659-3.841S15.379 2 17.5 2s3.182 0 3.841.659S22 4.379 22 6.5s0 3.182-.659 3.841S19.621 11 17.5 11m-1.47-7.03a.75.75 0 1 0-1.06 1.06l1.47 1.47l-1.47 1.47a.75.75 0 0 0 1.06 1.06l1.47-1.47l1.47 1.47a.75.75 0 1 0 1.06-1.06L18.56 6.5l1.47-1.47a.75.75 0 0 0-1.06-1.06L17.5 5.44z' clip-rule='evenodd'/%3E%3C/svg%3E&quot;"/><div class="lazy-icon" style="background-image:url(https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd);"></div></div></div>
+
+<h2 id="4-使用petalinux-create创建用户模块和应用程序"><a href="#4-使用petalinux-create创建用户模块和应用程序" class="headerlink" title="4. 使用petalinux-create创建用户模块和应用程序"></a>4. 使用petalinux-create创建用户模块和应用程序</h2><p>运行以下命令创建用户模块和应用程序：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">petalinux-create -t modules --name ledmodule --enable</span><br><span class="line">petalinux-create -t apps --name ledapp --enable</span><br></pre></td></tr></table></figure>
+
+<p>在<code>project_dir/project-spec/meta-user/recipes-modules/ledmodule/files</code>目录下可以找到ledmodule.c文件，在该文件中编写驱动代码。<br>在<code>project_dir/project-spec/meta-user/recipes-apps/ledapp/files</code>目录下可以找到ledapp.c文件，在该文件中编写应用程序代码。</p>
+<p>之后运行<code>petalinux-build</code>命令编译工程，该驱动会自动加入到内核中，上板后使用<code>sudo ledapp 0</code>即可测试。</p>
+</article>
+<div class="article-footer">
+    <section id="license">
+      <div class="header"><span>许可协议</span></div>
+      <div class="body"><p><a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a>欢迎评论探讨</p>
+</div>
+    </section>
+    
+
+
+    <section id="share">
+      <div class="header"><span>分享文章</span></div>
+      <div class="body">
+        <div class="link"><input class="copy-area" readonly="true" id="copy-link" value="https://raiset.top/posts/1684246453/" /></div>
+        <div class="social-wrap dis-select"><a class="social share-item wechat" onclick="util.toggle(&quot;qrcode-wechat&quot;)"><img  src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/social/b32ef3da1162a.svg" /></a><a class="social share-item link" onclick="util.copy(&quot;copy-link&quot;, &quot;复制成功&quot;)"><img  src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/social/8411ed322ced6.svg" /></a></div>
+        
+        <div class="qrcode" id="qrcode-wechat" style="opacity:0;height:0">
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=https://raiset.top/posts/1684246453/"/>
+        </div>
+        
+      </div>
+    </section>
+    </div>
+
+<div class="related-wrap" id="read-next"><section class="body"><div class="item" id="prev"><div class="note">较新文章</div><a href="/posts/1649035944/">PYNQ教程一:GPIO的使用</a></div><div class="item" id="next"><div class="note">较早文章</div><a href="/posts/1812881063/">PetaLinux安装与使用-SD卡制作-离线编译</a></div></section></div>
+
+
+
+
+  <div class="related-wrap md-text" id="comments">
+    <section class='header cmt-title cap theme'>
+      <p>快来参与讨论吧~</p>
+
+    </section>
+    <section class='body cmt-body twikoo'>
+      
+
+<div id="twikoo_container"><svg class="loading" style="vertical-align:middle;fill:currentColor;overflow:hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2709"><path d="M832 512c0-176-144-320-320-320V128c211.2 0 384 172.8 384 384h-64zM192 512c0 176 144 320 320 320v64C300.8 896 128 723.2 128 512h64z" p-id="2710"></path></svg></div>
+    </section>
+  </div>
+
+
+
+<footer class="page-footer footnote"><hr><div class="text"><center>
+<script defer src="https://events.vercount.one/js"></script>    
+Site Total Visits: <span id="vercount_value_site_pv">Loading</span><br>
+Site Total Visitors: <span id="vercount_value_site_uv">Loading</span>
+</center>
+</div></footer>
+<div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
+<div class="widgets">
+
+
+
+<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">本文目录</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Pinctrl%E5%AD%90%E7%B3%BB%E7%BB%9F"><span class="toc-text">1. Pinctrl子系统</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-GPIO%E5%AD%90%E7%B3%BB%E7%BB%9F"><span class="toc-text">2. GPIO子系统</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-GPIO%E8%AE%BE%E5%A4%87%E6%A0%91%E9%85%8D%E7%BD%AE%E6%A0%BC%E5%BC%8F"><span class="toc-text">2.1 GPIO设备树配置格式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-GPIO%E5%AD%90%E7%B3%BB%E7%BB%9FAPI"><span class="toc-text">2.2 GPIO子系统API</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-1-%E8%8E%B7%E5%8F%96GPIO%E6%8F%8F%E8%BF%B0%E7%AC%A6"><span class="toc-text">2.2.1 获取GPIO描述符</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-2-GPIO%E6%96%B9%E5%90%91%E9%85%8D%E7%BD%AE"><span class="toc-text">2.2.2 GPIO方向配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-3-GPIO%E8%AF%BB%E5%86%99%E6%93%8D%E4%BD%9C"><span class="toc-text">2.2.3 GPIO读写操作</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-4-%E9%87%8A%E6%94%BEGPIO%E6%8F%8F%E8%BF%B0%E7%AC%A6"><span class="toc-text">2.2.4 释放GPIO描述符</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E7%82%B9%E7%81%AF%E5%AE%9E%E9%AA%8C"><span class="toc-text">3. 点灯实验</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E7%A1%AC%E4%BB%B6%E8%AE%BE%E8%AE%A1%E9%85%8D%E7%BD%AE"><span class="toc-text">3.1 硬件设计配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E8%AE%BE%E5%A4%87%E6%A0%91%E9%85%8D%E7%BD%AE"><span class="toc-text">3.2 设备树配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-Linux%E9%A9%B1%E5%8A%A8%E7%A8%8B%E5%BA%8F%E5%BC%80%E5%8F%91"><span class="toc-text">3.3 Linux驱动程序开发</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-1-%E5%AD%97%E7%AC%A6%E8%AE%BE%E5%A4%87%E9%A9%B1%E5%8A%A8%E6%A8%A1%E6%9D%BF"><span class="toc-text">3.3.1 字符设备驱动模板</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-2-LED%E9%A9%B1%E5%8A%A8%E5%AE%9E%E7%8E%B0"><span class="toc-text">3.3.2 LED驱动实现</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-%E7%94%A8%E6%88%B7%E7%A9%BA%E9%97%B4%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F"><span class="toc-text">3.4 用户空间应用程序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-5-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91"><span class="toc-text">3.5 交叉编译</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-5-1-%E7%94%9F%E6%88%90SDK"><span class="toc-text">3.5.1 生成SDK</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-5-2-%E9%85%8D%E7%BD%AE%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E7%8E%AF%E5%A2%83"><span class="toc-text">3.5.2 配置交叉编译环境</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-6-Makefile%E7%BC%96%E5%86%99"><span class="toc-text">3.6 Makefile编写</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-6-1-%E9%A9%B1%E5%8A%A8%E6%A8%A1%E5%9D%97Makefile"><span class="toc-text">3.6.1 驱动模块Makefile</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-6-2-%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8FMakefile"><span class="toc-text">3.6.2 应用程序Makefile</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-7-%E4%B8%8A%E6%9D%BF%E6%B5%8B%E8%AF%95%E4%B8%8E%E9%AA%8C%E8%AF%81"><span class="toc-text">3.7 上板测试与验证</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-7-1-%E6%96%87%E4%BB%B6%E4%BC%A0%E8%BE%93"><span class="toc-text">3.7.1 文件传输</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-7-2-%E9%A9%B1%E5%8A%A8%E5%8A%A0%E8%BD%BD%E4%B8%8E%E6%B5%8B%E8%AF%95"><span class="toc-text">3.7.2 驱动加载与测试</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-7-3-LED%E6%8E%A7%E5%88%B6%E6%B5%8B%E8%AF%95"><span class="toc-text">3.7.3 LED控制测试</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E4%BD%BF%E7%94%A8petalinux-create%E5%88%9B%E5%BB%BA%E7%94%A8%E6%88%B7%E6%A8%A1%E5%9D%97%E5%92%8C%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F"><span class="toc-text">4. 使用petalinux-create创建用户模块和应用程序</span></a></li></ol></div><div class="widget-footer"><a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/><path d="M7 3.338A9.95 9.95 0 0 1 12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12c0-1.821.487-3.53 1.338-5"/></g></svg><span>回到顶部</span></a><a class="buttom" onclick="util.scrollComment()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5" d="M8 10.5h8M8 14h5.5M17 3.338A9.95 9.95 0 0 0 12 2C6.477 2 2 6.477 2 12c0 1.6.376 3.112 1.043 4.453c.178.356.237.763.134 1.148l-.595 2.226a1.3 1.3 0 0 0 1.591 1.592l2.226-.596a1.63 1.63 0 0 1 1.149.133A9.96 9.96 0 0 0 12 22c5.523 0 10-4.477 10-10c0-1.821-.487-3.53-1.338-5"/></svg><span>参与讨论</span></a></div></widget>
+</div></aside><div class='float-panel'>
+  <button type='button' style='display:none' class='laptop-only rightbar-toggle mobile' onclick='sidebar.rightbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
+  </button>
+  <button type='button' style='display:none' class='mobile-only leftbar-toggle mobile' onclick='sidebar.leftbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 11c0-3.771 0-5.657 1.172-6.828C4.343 3 6.229 3 10 3h4c3.771 0 5.657 0 6.828 1.172C22 5.343 22 7.229 22 11v2c0 3.771 0 5.657-1.172 6.828C19.657 21 17.771 21 14 21h-4c-3.771 0-5.657 0-6.828-1.172C2 18.657 2 16.771 2 13z"/><path id="sep" stroke-linecap="round" d="M5.5 10h6m-5 4h4m4.5 7V3"/></g></svg>
+  </button>
+</div>
+</div><div class="scripts">
+
+
+<script type="text/javascript">
+  window.canonical = {"originalHost":null,"officialHosts":["localhost"],"encoded":""};
+  const ctx = {
+    date_suffix: {
+      just: `刚刚`,
+      min: `分钟前`,
+      hour: `小时前`,
+      day: `天前`,
+    },
+    root : `/`,
+    tag_plugins: {
+      chat: Object.assign({"api":"https://siteinfo.listentothewind.cn/api/v1"}),
+    }
+  };
+
+  // required plugins (only load if needs)
+  if (`local_search`) {
+    ctx.search = {};
+    ctx.search.service = `local_search`;
+    if (ctx.search.service == 'local_search') {
+      let service_obj = Object.assign({}, `{"field":"all","path":"/search.json","content":true,"skip_search":null,"sort":"-date"}`);
+      ctx.search[ctx.search.service] = service_obj;
+    }
+  }
+  const def = {
+    avatar: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/3442075.svg`,
+    cover: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/cover/76b86c0226ffd.svg`,
+    loading: `https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd`,
+  };
+  const deps = {
+    jquery: `https://gcore.jsdelivr.net/npm/jquery@3.7/dist/jquery.min.js`,
+    marked: `https://gcore.jsdelivr.net/npm/marked@13.0/lib/marked.umd.min.js`,
+    lazyload: `/%5Bobject%20Object%5D`
+  }
+  
+
+</script>
+
+<script type="text/javascript">
+  
+  function RunItem() {
+    this.list = []; // 存放回调函数
+    this.start = () => {
+      for (var i = 0; i < this.list.length; i++) {
+        this.list[i].run();
+      }
+    };
+    this.push = (fn, name, setRequestAnimationFrame = true) => {
+      let myfn = fn
+      if (setRequestAnimationFrame) {
+        myfn = () => {
+          utils.requestAnimationFrame(fn)
+        }
+      }
+      var f = new Item(myfn, name);
+      this.list.push(f);
+    };
+    this.remove = (name) => {
+      for (let index = 0; index < this.list.length; index++) {
+        const e = this.list[index];
+        if (e.name == name) {
+          this.list.splice(index, 1);
+        }
+      }
+    }
+    // 构造一个可以run的对象
+    function Item(fn, name) {
+      // 函数名称
+      this.name = name || fn.name;
+      // run方法
+      this.run = () => {
+        try {
+          fn()
+        } catch (error) {
+          console.log(error);
+        }
+      };
+    }
+  }
+
+  const utils = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    css: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    js: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      if (src.startsWith('/')) {
+        src = ctx.root + src.substring(1);
+      }
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function () {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    jq: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        utils.js(deps.jquery).then(fn)
+      } else {
+        fn()
+      }
+    },
+
+    onLoading: (el) => {
+      if (el) {
+        $(el).append('<div class="loading-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" stroke-opacity=".3" d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="1.3s" values="60;0"/></path><path stroke-dasharray="15" stroke-dashoffset="15" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0"/><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/></path></g></svg></div>');
+      }
+    },
+    onLoadSuccess: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap').remove();
+      }
+    },
+    onLoadFailure: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap svg').remove();
+        $(el).find('.loading-wrap').append('<svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" d="M12 3L21 20H3L12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0"/></path><path stroke-dasharray="6" stroke-dashoffset="6" d="M12 10V14"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="6;0"/></path></g><circle cx="12" cy="17" r="1" fill="currentColor" fill-opacity="0"><animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.4s" values="0;1"/></circle></svg>');
+        $(el).find('.loading-wrap').addClass('error');
+      }
+    },
+    request: (el, url, callback, onFailure) => {
+      const maxRetry = 3;
+      let retryCount = 0;
+
+      return new Promise((resolve, reject) => {
+        const load = () => {
+          utils.onLoading?.(el);
+
+          let timedOut = false;
+          const timeout = setTimeout(() => {
+            timedOut = true;
+            console.warn('[request] 超时:', url);
+
+            if (++retryCount >= maxRetry) {
+              utils.onLoadFailure?.(el);
+              onFailure?.();
+              reject('请求超时');
+            } else {
+              setTimeout(load, 1000);
+            }
+          }, 5000);
+
+          fetch(url).then(resp => {
+            if (timedOut) return;
+            clearTimeout(timeout);
+
+            if (!resp.ok) throw new Error('响应失败');
+            return resp;
+          }).then(data => {
+            if (timedOut) return;
+            utils.onLoadSuccess?.(el);
+            callback(data);
+            resolve(data);
+          }).catch(err => {
+            clearTimeout(timeout);
+            console.warn('[request] 错误:', err);
+
+            if (++retryCount >= maxRetry) {
+              utils.onLoadFailure?.(el);
+              onFailure?.();
+              reject(err);
+            } else {
+              setTimeout(load, 1000);
+            }
+          });
+        };
+
+        load();
+      });
+    },
+    requestWithoutLoading: (url, options = {}, maxRetry = 2, timeout = 5000) => {
+      return new Promise((resolve, reject) => {
+        let retryCount = 0;
+
+        const tryRequest = () => {
+          let timedOut = false;
+          const timer = setTimeout(() => {
+            timedOut = true;
+            if (++retryCount > maxRetry) reject('timeout');
+            else tryRequest();
+          }, timeout);
+
+          fetch(url, options)
+            .then(resp => {
+              clearTimeout(timer);
+              if (!resp.ok) throw new Error('bad response');
+              resolve(resp);
+            })
+            .catch(err => {
+              clearTimeout(timer);
+              if (++retryCount > maxRetry) reject(err);
+              else setTimeout(tryRequest, 500);
+            });
+        };
+
+        tryRequest();
+      });
+    },
+    /********************** requestAnimationFrame ********************************/
+    // 1、requestAnimationFrame 会把每一帧中的所有 DOM 操作集中起来，在一次重绘或回流中就完成，并且重绘或回流的时间间隔紧紧跟随浏览器的刷新频率，一般来说，这个频率为每秒60帧。
+    // 2、在隐藏或不可见的元素中，requestAnimationFrame 将不会进行重绘或回流，这当然就意味着更少的的 cpu，gpu 和内存使用量。
+    requestAnimationFrame: (fn) => {
+      if (!window.requestAnimationFrame) {
+        window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame;
+      }
+      window.requestAnimationFrame(fn)
+    },
+    dark: {},
+  };
+
+  // utils.dark.mode 当前模式 dark or light
+  // utils.dark.toggle() 暗黑模式触发器
+  // utils.dark.push(callBack[,"callBackName"]) 传入触发器回调函数
+  utils.dark.method = {
+    toggle: new RunItem(),
+  };
+  utils.dark = Object.assign(utils.dark, {
+    push: utils.dark.method.toggle.push,
+  });
+</script>
+<script>
+  const sidebar = {
+    leftbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    rightbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('rightbar');
+        l_body.removeAttribute('leftbar');
+      }
+    },
+    dismiss: () => {
+      if (l_body) {
+        l_body.removeAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    toggleTOC: () => {
+      document.querySelector('#data-toc').classList.toggle('collapse');
+    }
+  }
+</script>
+<script type="text/javascript">
+  (() => {
+    const tagSwitchers = document.querySelectorAll('.tag-subtree.parent-tag > a > .tag-switcher-wrapper')
+    for (const tagSwitcher of tagSwitchers) {
+      tagSwitcher.addEventListener('click', (e) => {
+        const parent = e.target.closest('.tag-subtree.parent-tag')
+        parent.classList.toggle('expanded')
+        e.preventDefault()
+      })
+    }
+
+    // Get active tag from query string, then activate it.
+    const urlParams = new URLSearchParams(window.location.search)
+    const activeTag = urlParams.get('tag')
+    if (activeTag) {
+      let tag = document.querySelector(`.tag-subtree[data-tag="${activeTag}"]`)
+      if (tag) {
+        tag.querySelector('a').classList.add('active')
+        
+        while (tag) {
+          tag.classList.add('expanded')
+          tag = tag.parentElement.closest('.tag-subtree.parent-tag')
+        }
+      }
+    }
+  })()
+</script>
+
+<script async src="https://gcore.jsdelivr.net/npm/vanilla-lazyload@19.1/dist/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazy",
+    callback_loaded: (el) => {
+      el.classList.add('loaded');
+      const wrapper = el.closest('.lazy-box');
+      const icon = wrapper?.querySelector('.lazy-icon');
+      if (icon) icon.remove();
+    }
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    window.lazyLoadInstance?.update();
+  });
+
+  window.wrapLazyloadImages = (container) => {
+    if (typeof container === 'string') {
+      container = document.querySelector(container);
+    }
+    if (!container) return;
+    
+    const images = container.querySelectorAll('img');
+    images.forEach((img) => {
+      if (img.classList.contains('lazy')) return;
+
+      const src = img.getAttribute('src');
+      if (!src) return;
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'lazy-box';
+
+      const newImg = img.cloneNode();
+      newImg.removeAttribute('src');
+      newImg.setAttribute('data-src', src);
+      newImg.classList.add('lazy');
+
+      const icon = document.createElement('div');
+      icon.className = 'lazy-icon';
+      if (def.loading) {
+        icon.style.backgroundImage = `url("${def.loading}")`;
+      }
+
+      wrapper.appendChild(newImg);
+      wrapper.appendChild(icon);
+
+      img.replaceWith(wrapper);
+    });
+
+    // 通知 LazyLoad 更新
+    if (window.lazyLoadInstance?.update) {
+      window.lazyLoadInstance.update();
+    }
+  }
+  
+</script>
+
+<!-- required -->
+<script src="/js/main.js?v=1.33.1" defer></script>
+
+<script type="text/javascript">
+  const applyTheme = (theme) => {
+    if (theme === 'auto') {
+      document.documentElement.removeAttribute('data-theme')
+    } else {
+      document.documentElement.setAttribute('data-theme', theme)
+    }
+
+    // applyThemeToGiscus(theme)
+  }
+
+  // FIXME: 这会导致无法使用 preferred_color_scheme 以外的主题
+  const applyThemeToGiscus = (theme) => {
+    // theme = theme === 'auto' ? 'preferred_color_scheme' : theme
+    const cmt = document.getElementById('giscus')
+    if (cmt) {
+      // This works before giscus load.
+      cmt.setAttribute('data-theme', theme)
+    }
+
+    const iframe = document.querySelector('#comments > section.giscus > iframe')
+    if (iframe) {
+      // This works after giscus loaded.
+      const src = iframe.src
+      const newSrc = src.replace(/theme=[\w]+/, `theme=${theme}`)
+      iframe.src = newSrc
+    }
+  }
+
+  const switchTheme = () => {
+    // light -> dark -> auto -> light -> ...
+    const currentTheme = document.documentElement.getAttribute('data-theme')
+    let newTheme;
+    switch (currentTheme) {
+      case 'light':
+        newTheme = 'dark'
+        break
+      case 'dark':
+        newTheme = 'auto'
+        break
+      default:
+        newTheme = 'light'
+    }
+    applyTheme(newTheme)
+    window.localStorage.setItem('Stellar.theme', newTheme)
+    utils.dark.mode = newTheme === 'auto' ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light") : newTheme;
+    utils.dark.method.toggle.start();
+
+    const messages = {
+      light: `切换到浅色模式`,
+      dark: `切换到深色模式`,
+      auto: `切换到跟随系统配色`,
+    }
+    hud?.toast?.(messages[newTheme])
+  }
+
+  (() => {
+    // Apply user's preferred theme, if any.
+    const theme = window.localStorage.getItem('Stellar.theme')
+    if (theme !== null) {
+      applyTheme(theme)
+    } else {
+      utils.dark.mode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+    utils.dark.method.toggle.start();
+  })()
+</script>
+
+
+<!-- optional -->
+
+  <script type="module">
+  const el = document.getElementById('twikoo_container');
+  util.viewportLazyload(el, load_twikoo, false);
+
+  function load_twikoo() {
+    if (!el) return;
+    utils.js('https://gcore.jsdelivr.net/npm/twikoo@1.6/dist/twikoo.all.min.js', {defer: true}).then(function () {
+      const path = el.getAttribute('comment_id') ?? decodeURI(window.location.pathname);
+      twikoo.init(Object.assign({"js":"https://gcore.jsdelivr.net/npm/twikoo@1.6/dist/twikoo.all.min.js","envId":"https://yuxi17.netlify.app/.netlify/functions/twikoo"}, {
+        el: '#twikoo_container',
+        path: path,
+      }));
+    });
+  }
+</script>
+
+
+
+<script defer>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.services = Object.assign({}, JSON.parse(`{"mdrender":{"js":"/js/services/mdrender.js"},"siteinfo":{"js":"/js/services/siteinfo.js","api":null},"ghinfo":{"js":"/js/services/ghinfo.js"},"rating":{"js":"/js/services/rating.js","api":"https://star-vote.xaox.cc/api/rating"},"vote":{"js":"/js/services/vote.js","api":"https://star-vote.xaox.cc/api/vote"},"sites":{"js":"/js/services/sites.js"},"friends":{"js":"/js/services/friends.js"},"friends_and_posts":{"js":"/js/services/friends_and_posts.js"},"timeline":{"js":"/js/services/timeline.js"},"fcircle":{"js":"/js/services/fcircle.js"},"weibo":{"js":"/js/services/weibo.js"},"memos":{"js":"/js/services/memos.js"},"voice":{"js":"/js/plugins/voice.js"},"video":{"js":"/js/plugins/video.js"},"download-file":{"js":"/js/plugins/download-file.js"},"twikoo":{"js":"/js/services/twikoo_latest_comment.js"},"waline":{"js":"/js/services/waline_latest_comment.js"},"artalk":{"js":"/js/services/artalk_latest_comment.js"},"giscus":{"js":"/js/services/giscus_latest_comment.js"},"contributors":{"edit_this_page":{"_posts/":null,"wiki/stellar/":"https://github.com/xaoxuu/hexo-theme-stellar-docs/blob/main/"},"js":"/js/services/contributors.js"}}`));
+    for (let id of Object.keys(ctx.services)) {
+      const js = ctx.services[id].js;
+      if (id == 'siteinfo') {
+        ctx.cardlinks = document.querySelectorAll('a.link-card[cardlink]');
+        if (ctx.cardlinks?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            setCardLink(ctx.cardlinks);
+          });
+        }
+      } else if (id == 'voice') {
+        ctx.voiceAudios = document.querySelectorAll('.voice>audio');
+        if (ctx.voiceAudios?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            createVoiceDom(ctx.voiceAudios);
+          });
+        }
+      } else if (id == 'video') {
+        ctx.videos = document.querySelectorAll('.video>video');
+        if (ctx.videos?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            videoEvents(ctx.videos);
+          });
+        }
+      } else if (id == 'download-file') {
+        ctx.files = document.querySelectorAll('.file');
+        if (ctx.files?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            downloadFileEvent(ctx.files);
+          });
+        }
+      } else {
+        const els = document.getElementsByClassName(`ds-${id}`);
+        if (els?.length > 0) {
+          utils.jq(() => {
+            if (id == 'timeline' || 'memos' || 'marked') {
+              utils.js(deps.marked).then(function () {
+                utils.js(js, { defer: true });
+              });
+            } else {
+              utils.js(js, { defer: true });
+            }
+          });
+        }
+      }
+    }
+
+    // chat iphone time
+    let phoneTimes = document.querySelectorAll('.chat .status-bar .time');
+
+    if (phoneTimes.length > 0) {
+      NowTime();
+      var date = new Date();
+      var sec = date.getSeconds();
+      var firstAdjustInterval = setInterval(firstAdjustTime, 1000 * (60 - sec));
+    }
+
+    function firstAdjustTime() {
+      NowTime();
+      clearInterval(firstAdjustInterval);
+      setInterval(NowTime, 1000 * 60);
+    }
+
+    function NowTime() {
+      for (let i = 0; i < phoneTimes.length; ++i) {
+        var timeSpan = phoneTimes[i];
+        var date = new Date();
+        var hour = date.getHours();
+        var min = date.getMinutes();
+        timeSpan.innerHTML = check(hour) + ":" + check(min);
+      }
+    };
+
+    function check(val) {
+      if (val < 10) {
+        return ("0" + val);
+      }
+      return (val);
+    }
+
+    // chat quote
+    const chat_quote_obverser = new IntersectionObserver((entries, observer) => {
+      entries.filter((entry) => { return entry.isIntersecting }).sort((a, b) => a.intersectionRect.y !== b.intersectionRect.y ? a.intersectionRect.y - b.intersectionRect.y : a.intersectionRect.x - b.intersectionRect.x).forEach((entry, index) => {
+          observer.unobserve(entry.target);
+          setTimeout(() => {
+            entry.target.classList.add('quote-blink');
+            setTimeout(() => {
+              entry.target.classList.remove('quote-blink');
+            }, 1000);
+          }, Math.max(100, 16) * (index + 1));
+        });
+    });
+
+    var chatQuotes = document.querySelectorAll(".chat .talk .quote");
+    chatQuotes.forEach((quote) => {
+      quote.addEventListener('click', function () {
+        var chatCellDom = document.getElementById("quote-" + quote.getAttribute("quotedCellTag"));
+        if (chatCellDom) {
+          var chatDiv = chatCellDom.parentElement;
+          var mid = chatDiv.clientHeight / 2;
+          var offsetTop = chatCellDom.offsetTop;
+          if (offsetTop > mid - chatCellDom.clientHeight / 2) {
+            chatDiv.scrollTo({
+              top: chatCellDom.offsetTop - mid + chatCellDom.clientHeight / 2,
+              behavior: "smooth"
+            });
+          } else {
+            chatDiv.scrollTo({
+              top: 0,
+              behavior: "smooth"
+            });
+          }
+          chat_quote_obverser.observe(chatCellDom);
+        }
+      });
+    });
+  });
+</script>
+
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.search = {
+      path: `/search.json`,
+    }
+    utils.js('/js/search/local-search.js', { defer: true });
+  });
+</script><script>
+  window.FPConfig = {
+    delay: 0,
+    ignoreKeywords: [],
+    maxRPS: 5,
+    hoverDelay: 25
+  };
+</script>
+<script defer src="https://gcore.jsdelivr.net/npm/flying-pages@2/flying-pages.min.js"></script><script>
+  ctx.fancybox = {
+    selector: `.timenode p>img`,
+    css: `https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css`,
+    js: `https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js`
+  };
+  var selector = '[data-fancybox]:not(.error), .with-fancybox .atk-content img:not([atk-emoticon])';
+  if (ctx.fancybox.selector) {
+    selector += `, ${ctx.fancybox.selector}`
+  }
+  var needFancybox = document.querySelectorAll(selector).length !== 0;
+  if (!needFancybox) {
+    const memos = document.getElementsByClassName('ds-memos');
+    if (memos != undefined && memos.length > 0) {
+      needFancybox = true;
+    }
+    const fancybox = document.getElementsByClassName('with-fancybox');
+    if (fancybox != undefined && fancybox.length > 0) {
+      needFancybox = true;
+    }
+  }
+  if (needFancybox) {
+    utils.css(ctx.fancybox.css);
+    utils.js(ctx.fancybox.js, { defer: true }).then(function () {
+      Fancybox.bind(selector, {
+        hideScrollbar: false,
+        Thumbs: {
+          autoStart: false,
+        },
+        caption: (fancybox, slide) => {
+          return slide.triggerEl.alt || slide.triggerEl.dataset.caption || null
+        }
+      });
+    })
+  }
+</script>
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const swiper_api = document.getElementById('swiper-api');
+    if (swiper_api != undefined) {
+      utils.css(`https://unpkg.com/swiper@10.3/swiper-bundle.min.css`);
+      utils.js(`https://unpkg.com/swiper@10.3/swiper-bundle.min.js`, { defer: true }).then(function () {
+        const effect = swiper_api.getAttribute('effect') || '';
+        var swiper = new Swiper('.swiper#swiper-api', {
+          slidesPerView: 'auto',
+          spaceBetween: 8,
+          centeredSlides: true,
+          effect: effect,
+          rewind: true,
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+          },
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          },
+        });
+      })
+    }
+  });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    window.codeElements = document.querySelectorAll('.code');
+    if (window.codeElements.length > 0) {
+      ctx.copycode = {
+        default_text: `Copy`,
+        success_text: `Copied`,
+        toast: `复制成功`,
+      };
+      utils.js('/js/plugins/copycode.js');
+    }
+  });
+</script>
+
+
+<!-- inject -->
+
+</div></body></html>

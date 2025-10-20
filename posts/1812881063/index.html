@@ -2,12 +2,9 @@
 <!DOCTYPE html><html lang="zh-CN">
 
 <head>
-  <meta name="baidu-site-verification" content="codeva-6XsWwZ5KNx" />
-  <meta name="google-site-verification" content="mrQfRDd95Pw5bKzS474AHFN-vs2jWxa-Y7HDPHMsp8I" />
-  <meta name="baidu-site-verification" content="codeva-jbLr6Kbtit" />
-  <meta name="msvalidate.01" content="2B0D1C3DD09F36BC9A48B16061CF4C5F" />
   <meta charset="utf-8">
-  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.28.1" theme-name="Stellar" theme-version="1.28.1">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1" theme-name="Stellar" theme-version="1.33.1">
+  
   
   <meta name="generator" content="Hexo 7.2.0">
   <meta http-equiv='x-dns-prefetch-control' content='on' />
@@ -16,11 +13,10 @@
   <meta name="force-rendering" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
   <meta name="HandheldFriendly" content="True" >
-  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f9fafb">
   <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
-  
+  <meta name="theme-color" content="#f9fafb">
   <title>PetaLinux安装与使用-SD卡制作-离线编译 - Raiset</title>
 
   
@@ -31,7 +27,8 @@
   <!-- feed -->
   
 
-  <link rel="stylesheet" href="/css/main.css?v=1.28.1">
+  <link rel="stylesheet" href="/css/main.css?v=1.33.1">
+
 
   
     <link rel="shortcut icon" href="https://webp.raiset.top/basic/favicon.ico">
@@ -39,25 +36,26 @@
 
   
 
-  <link rel="stylesheet" href="/css/mouse.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"雨夕","sameAs":[],"image":"https://webp.raiset.top/basic/avatar.jpg"},"dateCreated":"2025-09-25T09:15:15+08:00","dateModified":"2025-10-20T10:49:35+08:00","datePublished":"2025-09-25T09:15:15+08:00","description":"📝本文概览本文将详细介绍PetaLinux 2023.1版本的安装和使用流程，包括：虚拟机环境搭建、PetaLinux安装、在线&#x2F;离线编译方法、SD卡制作与上板验证。不同版本和板子之间可能略有区别。","headline":"PetaLinux安装与使用-SD卡制作-离线编译","mainEntityOfPage":{"@type":"WebPage","@id":"https://raiset.top/posts/1812881063/"},"publisher":{"@type":"Organization","name":"雨夕","sameAs":[],"image":"https://webp.raiset.top/basic/avatar.jpg","logo":{"@type":"ImageObject","url":"https://webp.raiset.top/basic/avatar.jpg"}},"url":"https://raiset.top/posts/1812881063/","keywords":"PetaLinux","image":[]}</script>
+  <link rel="stylesheet" href="https://cdn.staticfile.org/lxgw-wenkai-screen-webfont/1.6.0/lxgwwenkaiscreen.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="/css/mouse.css">
 </head>
 <body><div class="sitebg"><div class="siteblur"></div></div>
 
-<div class="l_body s:aa content tech" id="start" layout="post" ><aside class="l_left"><div class="leftbar-container">
+<div class="l_body content" id="start" layout="post" type="tech" ><aside class="l_left"><div class="sidebg"></div><div class="leftbar-container">
 
 
-<header class="header"><div class="logo-wrap"><a class="avatar" href="/about"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="https://webp.raiset.top/basic/avatar.jpg" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main" ff="title">Raiset</div><div class="sub normal cap">但行前路，无问西东</div><div class="sub hover cap" style="opacity:0"> yuxi17@hnu.edu.cn</div></a></div></header>
+<header class="header"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="https://webp.raiset.top/basic/avatar.jpg" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main">Raiset</div><div class="sub normal cap">但行前路，无问西东</div><div class="sub hover cap" style="opacity:0"> yuxi17@hnu.edu.cn</div></a></div></header>
 
 <div class="nav-area">
-<div class="search-wrapper" id="search-wrapper"><form class="search-form"><a class="search-button" onclick="document.getElementById(&quot;search-input&quot;).focus();"><svg t="1705074644177" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1560" width="200" height="200"><path d="M1008.839137 935.96571L792.364903 719.491476a56.783488 56.783488 0 0 0-80.152866 0 358.53545 358.53545 0 1 1 100.857314-335.166073 362.840335 362.840335 0 0 1-3.689902 170.145468 51.248635 51.248635 0 1 0 99.217358 26.444296 462.057693 462.057693 0 1 0-158.255785 242.303546l185.930047 185.725053a51.248635 51.248635 0 0 0 72.568068 0 51.248635 51.248635 0 0 0 0-72.978056z" p-id="1561"></path><path d="M616.479587 615.969233a50.428657 50.428657 0 0 0-61.498362-5.534852 174.655348 174.655348 0 0 1-177.525271 3.484907 49.403684 49.403684 0 0 0-58.833433 6.76482l-3.074918 2.869923a49.403684 49.403684 0 0 0 8.609771 78.10292 277.767601 277.767601 0 0 0 286.992355-5.739847 49.403684 49.403684 0 0 0 8.404776-76.667958z" p-id="1562"></path></svg></a><input type="text" class="search-input" id="search-input" placeholder="站内搜索"></form><div id="search-result"></div><div class="search-no-result">没有找到内容！</div></div>
-
 
 <nav class="menu dis-select"></nav>
 </div>
 <div class="widgets">
+<div class="search-wrapper" id="search-wrapper"><form class="search-form"><a class="search-button" onclick="document.getElementById(&quot;search-input&quot;).focus();"><svg t="1705074644177" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1560" width="200" height="200"><path d="M1008.839137 935.96571L792.364903 719.491476a56.783488 56.783488 0 0 0-80.152866 0 358.53545 358.53545 0 1 1 100.857314-335.166073 362.840335 362.840335 0 0 1-3.689902 170.145468 51.248635 51.248635 0 1 0 99.217358 26.444296 462.057693 462.057693 0 1 0-158.255785 242.303546l185.930047 185.725053a51.248635 51.248635 0 0 0 72.568068 0 51.248635 51.248635 0 0 0 0-72.978056z" p-id="1561"></path><path d="M616.479587 615.969233a50.428657 50.428657 0 0 0-61.498362-5.534852 174.655348 174.655348 0 0 1-177.525271 3.484907 49.403684 49.403684 0 0 0-58.833433 6.76482l-3.074918 2.869923a49.403684 49.403684 0 0 0 8.609771 78.10292 277.767601 277.767601 0 0 0 286.992355-5.739847 49.403684 49.403684 0 0 0 8.404776-76.667958z" p-id="1562"></path></svg></a><input type="text" class="search-input" id="search-input" placeholder="站内搜索"></form><div id="search-result"></div><div class="search-no-result">没有找到内容！</div></div>
 
 
-<widget class="widget-wrapper post-list"><div class="widget-header dis-select"><span class="name">最近更新</span></div><div class="widget-body fs14"><a class="item title" href="/posts/1812881063/"><span class="title">PetaLinux安装与使用-SD卡制作-离线编译</span></a><a class="item title" href="/posts/2690508721/"><span class="title">Tandem Processor论文解读</span></a><a class="item title" href="/posts/1128674413/"><span class="title">NEAL(Network-Aware Locality Scheduling)论文简要解读</span></a><a class="item title" href="/posts/618860/"><span class="title">STARNUMA论文解读</span></a><a class="item title" href="/posts/855715585/"><span class="title">PYNQ教程二:使用AXI总线实现PS与PL交互</span></a><a class="item title" href="/posts/1649035944/"><span class="title">PYNQ教程一:GPIO的使用</span></a><a class="item title" href="/posts/1552645455/"><span class="title">LSTM反向传播推导及C++代码实现</span></a></div></widget>
+
+<widget class="widget-wrapper recent post-list"><div class="widget-header dis-select"><span class="name">最近更新</span></div><div class="widget-body fs14"><a class="item title" href="/posts/1684246453/"><span class="title">PetaLinux驱动学习——Pinctrl和GPIO子系统</span></a><a class="item title" href="/posts/1812881063/"><span class="title">PetaLinux安装与使用-SD卡制作-离线编译</span></a><a class="item title" href="/posts/2690508721/"><span class="title">Tandem Processor论文解读</span></a><a class="item title" href="/posts/618860/"><span class="title">STARNUMA论文解读</span></a><a class="item title" href="/posts/1128674413/"><span class="title">NEAL(Network-Aware Locality Scheduling)论文简要解读</span></a><a class="item title" href="/posts/855715585/"><span class="title">PYNQ教程二:使用AXI总线实现PS与PL交互</span></a><a class="item title" href="/posts/1649035944/"><span class="title">PYNQ教程一:GPIO的使用</span></a><a class="item title" href="/posts/1552645455/"><span class="title">LSTM反向传播推导及C++代码实现</span></a></div></widget>
 </div>
 
 </div></aside><div class="l_main" id="main">
@@ -70,7 +68,7 @@
   <div class="content">
     <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a>
 <span class="sep"></span><a class="cap breadcrumb" href="/">文章</a><span class="sep"></span><a class="cap breadcrumb-link" href="/categories/PetaLinux/">PetaLinux</a></div>
-<div class="flex-row" id="post-meta"><span class="text created">发布于：<time datetime="2025-08-31T13:50:17.714Z">2025-08-31</time></span><span class="sep updated"></span><span class="text updated">更新于：<time datetime="2025-09-17T15:00:02.671Z">2025-09-17</time></span></div></div></div>
+<div class="flex-row" id="post-meta"><span class="text created">发布于：<time datetime="2025-09-25T01:15:15.175Z">2025-09-25</time></span><span class="sep updated"></span><span class="text updated">更新于：<time datetime="2025-10-20T02:49:35.538Z">2025-10-20</time></span></div></div></div>
     
     <div class="bottom only-title">
       
@@ -85,123 +83,128 @@
 
 <span id="more"></span>
 
-<h2 id="一、安装虚拟机"><a href="#一、安装虚拟机" class="headerlink" title="一、安装虚拟机"></a>一、安装虚拟机</h2><p>查看文档<a target="_blank" rel="noopener" href="https://docs.amd.com/r/2023.1-English/ug1144-petalinux-tools-reference-guide/Installation-Requirements">UG1144</a>，确定所要安装的petalinux版本对应的虚拟机版本，这里我安装的是Ubuntu20.04.6（虽然显示不支持，但实际上没什么问题）。</p>
-<div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905165001027.png" data-fancybox="true"/></div></div>
+<h2 id="1-安装虚拟机"><a href="#1-安装虚拟机" class="headerlink" title="1. 安装虚拟机"></a>1. 安装虚拟机</h2><p>查看文档<a target="_blank" rel="noopener" href="https://docs.amd.com/r/2023.1-English/ug1144-petalinux-tools-reference-guide/Installation-Requirements">UG1144</a>，确定所要安装的petalinux版本对应的虚拟机版本，这里我安装的是Ubuntu20.04.6（虽然显示不支持，但实际上没什么问题）。</p>
+<div class="tag-plugin image"><div class="image-bg" style="aspect-ratio:799/158;"><img class="lazy" src="https://webp.raiset.top/PetaLinux/image-20250905165001027.png" data-src="https://webp.raiset.top/PetaLinux/image-20250905165001027.png" data-fancybox="true"onerror="this.src=&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2rem' height='2rem' viewBox='0 0 24 24'%3E%3C!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --%3E%3Cpath fill='%23F44336' d='M22 12.698c-.002 1.47-.013 2.718-.096 3.743c-.097 1.19-.296 2.184-.74 3.009a4.2 4.2 0 0 1-.73.983c-.833.833-1.893 1.21-3.237 1.39C15.884 22 14.2 22 12.053 22h-.106c-2.148 0-3.83 0-5.144-.177c-1.343-.18-2.404-.557-3.236-1.39c-.738-.738-1.12-1.656-1.322-2.795c-.2-1.12-.236-2.512-.243-4.241Q1.999 12.737 2 12v-.054c0-2.148 0-3.83.177-5.144c.18-1.343.557-2.404 1.39-3.236s1.893-1.21 3.236-1.39c1.168-.157 2.67-.175 4.499-.177a.697.697 0 1 1 0 1.396c-1.855.002-3.234.018-4.313.163c-1.189.16-1.906.464-2.436.994S3.72 5.8 3.56 6.99C3.397 8.2 3.395 9.788 3.395 12v.784l.932-.814a2.14 2.14 0 0 1 2.922.097l3.99 3.99a1.86 1.86 0 0 0 2.385.207l.278-.195a2.79 2.79 0 0 1 3.471.209l2.633 2.37c.265-.557.423-1.288.507-2.32c.079-.972.09-2.152.091-3.63a.698.698 0 0 1 1.396 0' opacity='.5'/%3E%3Cpath fill='%23F44336' fill-rule='evenodd' d='M17.5 11c-2.121 0-3.182 0-3.841-.659S13 8.621 13 6.5s0-3.182.659-3.841S15.379 2 17.5 2s3.182 0 3.841.659S22 4.379 22 6.5s0 3.182-.659 3.841S19.621 11 17.5 11m-1.47-7.03a.75.75 0 1 0-1.06 1.06l1.47 1.47l-1.47 1.47a.75.75 0 0 0 1.06 1.06l1.47-1.47l1.47 1.47a.75.75 0 1 0 1.06-1.06L18.56 6.5l1.47-1.47a.75.75 0 0 0-1.06-1.06L17.5 5.44z' clip-rule='evenodd'/%3E%3C/svg%3E&quot;"/><div class="lazy-icon" style="background-image:url(https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd);"></div></div></div>
 
 <p>Ubuntu配置中硬盘可以给大一点，后面如果要离线编译的话用得上。</p>
-<div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905165021303.png" data-fancybox="true" style="width:400px;"/></div></div>
+<div class="tag-plugin image"><div class="image-bg" style="aspect-ratio:491/326;width:400px;"><img class="lazy" src="https://webp.raiset.top/PetaLinux/image-20250905165021303.png" data-src="https://webp.raiset.top/PetaLinux/image-20250905165021303.png" data-fancybox="true"onerror="this.src=&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2rem' height='2rem' viewBox='0 0 24 24'%3E%3C!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --%3E%3Cpath fill='%23F44336' d='M22 12.698c-.002 1.47-.013 2.718-.096 3.743c-.097 1.19-.296 2.184-.74 3.009a4.2 4.2 0 0 1-.73.983c-.833.833-1.893 1.21-3.237 1.39C15.884 22 14.2 22 12.053 22h-.106c-2.148 0-3.83 0-5.144-.177c-1.343-.18-2.404-.557-3.236-1.39c-.738-.738-1.12-1.656-1.322-2.795c-.2-1.12-.236-2.512-.243-4.241Q1.999 12.737 2 12v-.054c0-2.148 0-3.83.177-5.144c.18-1.343.557-2.404 1.39-3.236s1.893-1.21 3.236-1.39c1.168-.157 2.67-.175 4.499-.177a.697.697 0 1 1 0 1.396c-1.855.002-3.234.018-4.313.163c-1.189.16-1.906.464-2.436.994S3.72 5.8 3.56 6.99C3.397 8.2 3.395 9.788 3.395 12v.784l.932-.814a2.14 2.14 0 0 1 2.922.097l3.99 3.99a1.86 1.86 0 0 0 2.385.207l.278-.195a2.79 2.79 0 0 1 3.471.209l2.633 2.37c.265-.557.423-1.288.507-2.32c.079-.972.09-2.152.091-3.63a.698.698 0 0 1 1.396 0' opacity='.5'/%3E%3Cpath fill='%23F44336' fill-rule='evenodd' d='M17.5 11c-2.121 0-3.182 0-3.841-.659S13 8.621 13 6.5s0-3.182.659-3.841S15.379 2 17.5 2s3.182 0 3.841.659S22 4.379 22 6.5s0 3.182-.659 3.841S19.621 11 17.5 11m-1.47-7.03a.75.75 0 1 0-1.06 1.06l1.47 1.47l-1.47 1.47a.75.75 0 0 0 1.06 1.06l1.47-1.47l1.47 1.47a.75.75 0 1 0 1.06-1.06L18.56 6.5l1.47-1.47a.75.75 0 0 0-1.06-1.06L17.5 5.44z' clip-rule='evenodd'/%3E%3C/svg%3E&quot;"/><div class="lazy-icon" style="background-image:url(https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd);"></div></div></div>
 
 <p>安装虚拟机后可以切换镜像源，方便后面下载库文件。</p>
-<h2 id="二、下载petalinux"><a href="#二、下载petalinux" class="headerlink" title="二、下载petalinux"></a>二、下载petalinux</h2><p>进入<a target="_blank" rel="noopener" href="https://china.xilinx.com/support/download/index.html/content/xilinx/zh/downloadNav/embedded-design-tools/archive.html">官网下载页面</a>：</p>
-<div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905165056693.png" data-fancybox="true" style="width:400px;"/></div></div>
+<h2 id="2-下载petalinux"><a href="#2-下载petalinux" class="headerlink" title="2. 下载petalinux"></a>2. 下载petalinux</h2><p>进入<a target="_blank" rel="noopener" href="https://china.xilinx.com/support/download/index.html/content/xilinx/zh/downloadNav/embedded-design-tools/archive.html">官网下载页面</a>：</p>
+<div class="tag-plugin image"><div class="image-bg" style="aspect-ratio:712/463;width:400px;"><img class="lazy" src="https://webp.raiset.top/PetaLinux/image-20250905165056693.png" data-src="https://webp.raiset.top/PetaLinux/image-20250905165056693.png" data-fancybox="true"onerror="this.src=&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2rem' height='2rem' viewBox='0 0 24 24'%3E%3C!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --%3E%3Cpath fill='%23F44336' d='M22 12.698c-.002 1.47-.013 2.718-.096 3.743c-.097 1.19-.296 2.184-.74 3.009a4.2 4.2 0 0 1-.73.983c-.833.833-1.893 1.21-3.237 1.39C15.884 22 14.2 22 12.053 22h-.106c-2.148 0-3.83 0-5.144-.177c-1.343-.18-2.404-.557-3.236-1.39c-.738-.738-1.12-1.656-1.322-2.795c-.2-1.12-.236-2.512-.243-4.241Q1.999 12.737 2 12v-.054c0-2.148 0-3.83.177-5.144c.18-1.343.557-2.404 1.39-3.236s1.893-1.21 3.236-1.39c1.168-.157 2.67-.175 4.499-.177a.697.697 0 1 1 0 1.396c-1.855.002-3.234.018-4.313.163c-1.189.16-1.906.464-2.436.994S3.72 5.8 3.56 6.99C3.397 8.2 3.395 9.788 3.395 12v.784l.932-.814a2.14 2.14 0 0 1 2.922.097l3.99 3.99a1.86 1.86 0 0 0 2.385.207l.278-.195a2.79 2.79 0 0 1 3.471.209l2.633 2.37c.265-.557.423-1.288.507-2.32c.079-.972.09-2.152.091-3.63a.698.698 0 0 1 1.396 0' opacity='.5'/%3E%3Cpath fill='%23F44336' fill-rule='evenodd' d='M17.5 11c-2.121 0-3.182 0-3.841-.659S13 8.621 13 6.5s0-3.182.659-3.841S15.379 2 17.5 2s3.182 0 3.841.659S22 4.379 22 6.5s0 3.182-.659 3.841S19.621 11 17.5 11m-1.47-7.03a.75.75 0 1 0-1.06 1.06l1.47 1.47l-1.47 1.47a.75.75 0 0 0 1.06 1.06l1.47-1.47l1.47 1.47a.75.75 0 1 0 1.06-1.06L18.56 6.5l1.47-1.47a.75.75 0 0 0-1.06-1.06L17.5 5.44z' clip-rule='evenodd'/%3E%3C/svg%3E&quot;"/><div class="lazy-icon" style="background-image:url(https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd);"></div></div></div>
 
-<h2 id="三、安装Petalinux"><a href="#三、安装Petalinux" class="headerlink" title="三、安装Petalinux"></a>三、安装Petalinux</h2><h3 id="1-安装必要的库文件"><a href="#1-安装必要的库文件" class="headerlink" title="1. 安装必要的库文件"></a>1. 安装必要的库文件</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install tofrodos gawk xvfb git libncurses5-dev tftpd zlib1g-dev zlib1g-dev:i386 libssl-dev flex bison chrpath socat autoconf libtool texinfo gcc-multilib libsdl1.2-dev libglib2.0-dev screen pax xterm build-essential libtinfo5 libncurses5 tftpd-hpa -y</span><br></pre></td></tr></table></figure>
+<h2 id="3-安装Petalinux"><a href="#3-安装Petalinux" class="headerlink" title="3. 安装Petalinux"></a>3. 安装Petalinux</h2><h3 id="3-1-安装必要的库文件"><a href="#3-1-安装必要的库文件" class="headerlink" title="3.1 安装必要的库文件"></a>3.1 安装必要的库文件</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install tofrodos gawk xvfb git libncurses5-dev tftpd zlib1g-dev zlib1g-dev:i386 libssl-dev flex bison chrpath socat autoconf libtool texinfo gcc-multilib libsdl1.2-dev libglib2.0-dev screen pax xterm build-essential libtinfo5 libncurses5 tftpd-hpa -y</span><br></pre></td></tr></table></figure>
 
-<h3 id="2-将petalinux安装包复制到虚拟机中"><a href="#2-将petalinux安装包复制到虚拟机中" class="headerlink" title="2. 将petalinux安装包复制到虚拟机中"></a>2. 将petalinux安装包复制到虚拟机中</h3><div class="tag-plugin colorful note" color="cyan"><div class="title">💡传输方法</div><div class="body"><p>可以使用scp命令复制，前提是虚拟机需要先安装并启动SSH服务（sudo apt install openssh-server 和 sudo systemctl start ssh）。</p></div></div>
+<h3 id="3-2-将petalinux安装包复制到虚拟机中"><a href="#3-2-将petalinux安装包复制到虚拟机中" class="headerlink" title="3.2 将petalinux安装包复制到虚拟机中"></a>3.2 将petalinux安装包复制到虚拟机中</h3><div class="tag-plugin colorful note" color="cyan"><div class="title">💡传输方法</div><div class="body"><p>可以使用scp命令复制，前提是虚拟机需要先安装并启动SSH服务（sudo apt install openssh-server 和 sudo systemctl start ssh）。</p></div></div>
 
-<div class="tag-plugin colorful note" color="blue"><div class="title"><strong>SCP传输语法</strong></div><div class="body"><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scp 需要复制的文件 虚拟机用户名@虚拟机ip地址:文件保存的地址</span><br></pre></td></tr></table></figure><p><strong>示例：</strong></p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scp petalinux-v2023.1-05012318-installer.run raiset@192.168.80.130:~/Downloads</span><br></pre></td></tr></table></figure></div></div>
+<div class="tag-plugin colorful note" color="blue"><div class="title"><strong><p>SCP传输语法</p>
+</strong></div><div class="body"><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scp 需要复制的文件 虚拟机用户名@虚拟机ip地址:文件保存的地址</span><br></pre></td></tr></table></figure><p><strong>示例：</strong></p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scp petalinux-v2023.1-05012318-installer.run raiset@192.168.80.130:~/Downloads</span><br></pre></td></tr></table></figure></div></div>
 
-<h3 id="3-创建Petalinux文件夹并给予权限"><a href="#3-创建Petalinux文件夹并给予权限" class="headerlink" title="3. 创建Petalinux文件夹并给予权限"></a>3. 创建Petalinux文件夹并给予权限</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sudo <span class="built_in">mkdir</span> -p /opt/pkg/petalinux</span><br><span class="line">sudo <span class="built_in">chown</span> raiset(虚拟机用户名) /opt/pkg/</span><br><span class="line">sudo <span class="built_in">chgrp</span> raiset /opt/pkg/</span><br><span class="line">sudo <span class="built_in">chown</span> raiset /opt/pkg/petalinux/</span><br><span class="line">sudo <span class="built_in">chgrp</span> raiset /opt/pkg/petalinux/</span><br></pre></td></tr></table></figure>
+<h3 id="3-3-创建Petalinux文件夹并给予权限"><a href="#3-3-创建Petalinux文件夹并给予权限" class="headerlink" title="3.3 创建Petalinux文件夹并给予权限"></a>3.3 创建Petalinux文件夹并给予权限</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sudo <span class="built_in">mkdir</span> -p /opt/pkg/petalinux</span><br><span class="line">sudo <span class="built_in">chown</span> raiset(虚拟机用户名) /opt/pkg/</span><br><span class="line">sudo <span class="built_in">chgrp</span> raiset /opt/pkg/</span><br><span class="line">sudo <span class="built_in">chown</span> raiset /opt/pkg/petalinux/</span><br><span class="line">sudo <span class="built_in">chgrp</span> raiset /opt/pkg/petalinux/</span><br></pre></td></tr></table></figure>
 
-<div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905165129746.png" data-fancybox="true" style="width:500px;"/></div></div>
+<div class="tag-plugin image"><div class="image-bg" style="aspect-ratio:793/110;width:500px;"><img class="lazy" src="https://webp.raiset.top/PetaLinux/image-20250905165129746.png" data-src="https://webp.raiset.top/PetaLinux/image-20250905165129746.png" data-fancybox="true"onerror="this.src=&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2rem' height='2rem' viewBox='0 0 24 24'%3E%3C!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --%3E%3Cpath fill='%23F44336' d='M22 12.698c-.002 1.47-.013 2.718-.096 3.743c-.097 1.19-.296 2.184-.74 3.009a4.2 4.2 0 0 1-.73.983c-.833.833-1.893 1.21-3.237 1.39C15.884 22 14.2 22 12.053 22h-.106c-2.148 0-3.83 0-5.144-.177c-1.343-.18-2.404-.557-3.236-1.39c-.738-.738-1.12-1.656-1.322-2.795c-.2-1.12-.236-2.512-.243-4.241Q1.999 12.737 2 12v-.054c0-2.148 0-3.83.177-5.144c.18-1.343.557-2.404 1.39-3.236s1.893-1.21 3.236-1.39c1.168-.157 2.67-.175 4.499-.177a.697.697 0 1 1 0 1.396c-1.855.002-3.234.018-4.313.163c-1.189.16-1.906.464-2.436.994S3.72 5.8 3.56 6.99C3.397 8.2 3.395 9.788 3.395 12v.784l.932-.814a2.14 2.14 0 0 1 2.922.097l3.99 3.99a1.86 1.86 0 0 0 2.385.207l.278-.195a2.79 2.79 0 0 1 3.471.209l2.633 2.37c.265-.557.423-1.288.507-2.32c.079-.972.09-2.152.091-3.63a.698.698 0 0 1 1.396 0' opacity='.5'/%3E%3Cpath fill='%23F44336' fill-rule='evenodd' d='M17.5 11c-2.121 0-3.182 0-3.841-.659S13 8.621 13 6.5s0-3.182.659-3.841S15.379 2 17.5 2s3.182 0 3.841.659S22 4.379 22 6.5s0 3.182-.659 3.841S19.621 11 17.5 11m-1.47-7.03a.75.75 0 1 0-1.06 1.06l1.47 1.47l-1.47 1.47a.75.75 0 0 0 1.06 1.06l1.47-1.47l1.47 1.47a.75.75 0 1 0 1.06-1.06L18.56 6.5l1.47-1.47a.75.75 0 0 0-1.06-1.06L17.5 5.44z' clip-rule='evenodd'/%3E%3C/svg%3E&quot;"/><div class="lazy-icon" style="background-image:url(https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd);"></div></div></div>
 
-<h3 id="4-开始安装"><a href="#4-开始安装" class="headerlink" title="4. 开始安装"></a>4. 开始安装</h3><div class="tag-plugin timeline"><div class="timenode" index="0"><div class="header">第一步：修改权限</div><div class="body fs14"><p>为安装文件添加执行权限：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo <span class="built_in">chmod</span> 777 petalinux-v2023.1-05012318-installer.run</span><br></pre></td></tr></table></figure></div></div><div class="timenode" index="1"><div class="header">第二步：启动安装程序</div><div class="body fs14"><p>指定安装路径为刚才创建的文件夹：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./petalinux-v2023.1-05012318-installer.run -d /opt/pkg/petalinux/</span><br></pre></td></tr></table></figure><div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905165143505.png" data-fancybox="true"/></div></div></div></div><div class="timenode" index="2"><div class="header">第三步：跳过许可协议</div><div class="body fs14"><p>输入 <code>q</code> ，回车，然后跳出一大段文字：</p><div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905165212053.png" data-fancybox="true"/></div></div>再次输入 `q` 退出协议页面，输入 `y` 同意协议：<div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905165223906.png" data-fancybox="true"/></div></div></div></div><div class="timenode" index="3"><div class="header">第四步：开始安装</div><div class="body fs14"><p>依此类推，直到开始安装：</p><div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905165237985.png" data-fancybox="true"/></div></div></div></div></div>
+<h3 id="3-4-开始安装"><a href="#3-4-开始安装" class="headerlink" title="3.4 开始安装"></a>3.4 开始安装</h3><div class="tag-plugin timeline"><div class="timenode" index="0"><div class="header"><span>第一步：修改权限</span></div><div class="body fs14"><p>为安装文件添加执行权限：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo <span class="built_in">chmod</span> 777 petalinux-v2023.1-05012318-installer.run</span><br></pre></td></tr></table></figure></div></div><div class="timenode" index="1"><div class="header"><span>第二步：启动安装程序</span></div><div class="body fs14"><p>指定安装路径为刚才创建的文件夹：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./petalinux-v2023.1-05012318-installer.run -d /opt/pkg/petalinux/</span><br></pre></td></tr></table></figure><div class="tag-plugin image"><div class="image-bg" style="aspect-ratio:797/259;"><img class="lazy" src="https://webp.raiset.top/PetaLinux/image-20250905165143505.png" data-src="https://webp.raiset.top/PetaLinux/image-20250905165143505.png" data-fancybox="true"onerror="this.src=&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2rem' height='2rem' viewBox='0 0 24 24'%3E%3C!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --%3E%3Cpath fill='%23F44336' d='M22 12.698c-.002 1.47-.013 2.718-.096 3.743c-.097 1.19-.296 2.184-.74 3.009a4.2 4.2 0 0 1-.73.983c-.833.833-1.893 1.21-3.237 1.39C15.884 22 14.2 22 12.053 22h-.106c-2.148 0-3.83 0-5.144-.177c-1.343-.18-2.404-.557-3.236-1.39c-.738-.738-1.12-1.656-1.322-2.795c-.2-1.12-.236-2.512-.243-4.241Q1.999 12.737 2 12v-.054c0-2.148 0-3.83.177-5.144c.18-1.343.557-2.404 1.39-3.236s1.893-1.21 3.236-1.39c1.168-.157 2.67-.175 4.499-.177a.697.697 0 1 1 0 1.396c-1.855.002-3.234.018-4.313.163c-1.189.16-1.906.464-2.436.994S3.72 5.8 3.56 6.99C3.397 8.2 3.395 9.788 3.395 12v.784l.932-.814a2.14 2.14 0 0 1 2.922.097l3.99 3.99a1.86 1.86 0 0 0 2.385.207l.278-.195a2.79 2.79 0 0 1 3.471.209l2.633 2.37c.265-.557.423-1.288.507-2.32c.079-.972.09-2.152.091-3.63a.698.698 0 0 1 1.396 0' opacity='.5'/%3E%3Cpath fill='%23F44336' fill-rule='evenodd' d='M17.5 11c-2.121 0-3.182 0-3.841-.659S13 8.621 13 6.5s0-3.182.659-3.841S15.379 2 17.5 2s3.182 0 3.841.659S22 4.379 22 6.5s0 3.182-.659 3.841S19.621 11 17.5 11m-1.47-7.03a.75.75 0 1 0-1.06 1.06l1.47 1.47l-1.47 1.47a.75.75 0 0 0 1.06 1.06l1.47-1.47l1.47 1.47a.75.75 0 1 0 1.06-1.06L18.56 6.5l1.47-1.47a.75.75 0 0 0-1.06-1.06L17.5 5.44z' clip-rule='evenodd'/%3E%3C/svg%3E&quot;"/><div class="lazy-icon" style="background-image:url(https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd);"></div></div></div></div></div><div class="timenode" index="2"><div class="header"><span>第三步：跳过许可协议</span></div><div class="body fs14"><p>输入 <code>q</code> ，回车，然后跳出一大段文字：</p><div class="tag-plugin image"><div class="image-bg" style="aspect-ratio:799/243;"><img class="lazy" src="https://webp.raiset.top/PetaLinux/image-20250905165212053.png" data-src="https://webp.raiset.top/PetaLinux/image-20250905165212053.png" data-fancybox="true"onerror="this.src=&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2rem' height='2rem' viewBox='0 0 24 24'%3E%3C!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --%3E%3Cpath fill='%23F44336' d='M22 12.698c-.002 1.47-.013 2.718-.096 3.743c-.097 1.19-.296 2.184-.74 3.009a4.2 4.2 0 0 1-.73.983c-.833.833-1.893 1.21-3.237 1.39C15.884 22 14.2 22 12.053 22h-.106c-2.148 0-3.83 0-5.144-.177c-1.343-.18-2.404-.557-3.236-1.39c-.738-.738-1.12-1.656-1.322-2.795c-.2-1.12-.236-2.512-.243-4.241Q1.999 12.737 2 12v-.054c0-2.148 0-3.83.177-5.144c.18-1.343.557-2.404 1.39-3.236s1.893-1.21 3.236-1.39c1.168-.157 2.67-.175 4.499-.177a.697.697 0 1 1 0 1.396c-1.855.002-3.234.018-4.313.163c-1.189.16-1.906.464-2.436.994S3.72 5.8 3.56 6.99C3.397 8.2 3.395 9.788 3.395 12v.784l.932-.814a2.14 2.14 0 0 1 2.922.097l3.99 3.99a1.86 1.86 0 0 0 2.385.207l.278-.195a2.79 2.79 0 0 1 3.471.209l2.633 2.37c.265-.557.423-1.288.507-2.32c.079-.972.09-2.152.091-3.63a.698.698 0 0 1 1.396 0' opacity='.5'/%3E%3Cpath fill='%23F44336' fill-rule='evenodd' d='M17.5 11c-2.121 0-3.182 0-3.841-.659S13 8.621 13 6.5s0-3.182.659-3.841S15.379 2 17.5 2s3.182 0 3.841.659S22 4.379 22 6.5s0 3.182-.659 3.841S19.621 11 17.5 11m-1.47-7.03a.75.75 0 1 0-1.06 1.06l1.47 1.47l-1.47 1.47a.75.75 0 0 0 1.06 1.06l1.47-1.47l1.47 1.47a.75.75 0 1 0 1.06-1.06L18.56 6.5l1.47-1.47a.75.75 0 0 0-1.06-1.06L17.5 5.44z' clip-rule='evenodd'/%3E%3C/svg%3E&quot;"/><div class="lazy-icon" style="background-image:url(https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd);"></div></div></div>再次输入 `q` 退出协议页面，输入 `y` 同意协议：<div class="tag-plugin image"><div class="image-bg" style="aspect-ratio:798/107;"><img class="lazy" src="https://webp.raiset.top/PetaLinux/image-20250905165223906.png" data-src="https://webp.raiset.top/PetaLinux/image-20250905165223906.png" data-fancybox="true"onerror="this.src=&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2rem' height='2rem' viewBox='0 0 24 24'%3E%3C!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --%3E%3Cpath fill='%23F44336' d='M22 12.698c-.002 1.47-.013 2.718-.096 3.743c-.097 1.19-.296 2.184-.74 3.009a4.2 4.2 0 0 1-.73.983c-.833.833-1.893 1.21-3.237 1.39C15.884 22 14.2 22 12.053 22h-.106c-2.148 0-3.83 0-5.144-.177c-1.343-.18-2.404-.557-3.236-1.39c-.738-.738-1.12-1.656-1.322-2.795c-.2-1.12-.236-2.512-.243-4.241Q1.999 12.737 2 12v-.054c0-2.148 0-3.83.177-5.144c.18-1.343.557-2.404 1.39-3.236s1.893-1.21 3.236-1.39c1.168-.157 2.67-.175 4.499-.177a.697.697 0 1 1 0 1.396c-1.855.002-3.234.018-4.313.163c-1.189.16-1.906.464-2.436.994S3.72 5.8 3.56 6.99C3.397 8.2 3.395 9.788 3.395 12v.784l.932-.814a2.14 2.14 0 0 1 2.922.097l3.99 3.99a1.86 1.86 0 0 0 2.385.207l.278-.195a2.79 2.79 0 0 1 3.471.209l2.633 2.37c.265-.557.423-1.288.507-2.32c.079-.972.09-2.152.091-3.63a.698.698 0 0 1 1.396 0' opacity='.5'/%3E%3Cpath fill='%23F44336' fill-rule='evenodd' d='M17.5 11c-2.121 0-3.182 0-3.841-.659S13 8.621 13 6.5s0-3.182.659-3.841S15.379 2 17.5 2s3.182 0 3.841.659S22 4.379 22 6.5s0 3.182-.659 3.841S19.621 11 17.5 11m-1.47-7.03a.75.75 0 1 0-1.06 1.06l1.47 1.47l-1.47 1.47a.75.75 0 0 0 1.06 1.06l1.47-1.47l1.47 1.47a.75.75 0 1 0 1.06-1.06L18.56 6.5l1.47-1.47a.75.75 0 0 0-1.06-1.06L17.5 5.44z' clip-rule='evenodd'/%3E%3C/svg%3E&quot;"/><div class="lazy-icon" style="background-image:url(https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd);"></div></div></div></div></div><div class="timenode" index="3"><div class="header"><span>第四步：开始安装</span></div><div class="body fs14"><p>依此类推，直到开始安装：</p><div class="tag-plugin image"><div class="image-bg" style="aspect-ratio:798/96;"><img class="lazy" src="https://webp.raiset.top/PetaLinux/image-20250905165237985.png" data-src="https://webp.raiset.top/PetaLinux/image-20250905165237985.png" data-fancybox="true"onerror="this.src=&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2rem' height='2rem' viewBox='0 0 24 24'%3E%3C!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --%3E%3Cpath fill='%23F44336' d='M22 12.698c-.002 1.47-.013 2.718-.096 3.743c-.097 1.19-.296 2.184-.74 3.009a4.2 4.2 0 0 1-.73.983c-.833.833-1.893 1.21-3.237 1.39C15.884 22 14.2 22 12.053 22h-.106c-2.148 0-3.83 0-5.144-.177c-1.343-.18-2.404-.557-3.236-1.39c-.738-.738-1.12-1.656-1.322-2.795c-.2-1.12-.236-2.512-.243-4.241Q1.999 12.737 2 12v-.054c0-2.148 0-3.83.177-5.144c.18-1.343.557-2.404 1.39-3.236s1.893-1.21 3.236-1.39c1.168-.157 2.67-.175 4.499-.177a.697.697 0 1 1 0 1.396c-1.855.002-3.234.018-4.313.163c-1.189.16-1.906.464-2.436.994S3.72 5.8 3.56 6.99C3.397 8.2 3.395 9.788 3.395 12v.784l.932-.814a2.14 2.14 0 0 1 2.922.097l3.99 3.99a1.86 1.86 0 0 0 2.385.207l.278-.195a2.79 2.79 0 0 1 3.471.209l2.633 2.37c.265-.557.423-1.288.507-2.32c.079-.972.09-2.152.091-3.63a.698.698 0 0 1 1.396 0' opacity='.5'/%3E%3Cpath fill='%23F44336' fill-rule='evenodd' d='M17.5 11c-2.121 0-3.182 0-3.841-.659S13 8.621 13 6.5s0-3.182.659-3.841S15.379 2 17.5 2s3.182 0 3.841.659S22 4.379 22 6.5s0 3.182-.659 3.841S19.621 11 17.5 11m-1.47-7.03a.75.75 0 1 0-1.06 1.06l1.47 1.47l-1.47 1.47a.75.75 0 0 0 1.06 1.06l1.47-1.47l1.47 1.47a.75.75 0 1 0 1.06-1.06L18.56 6.5l1.47-1.47a.75.75 0 0 0-1.06-1.06L17.5 5.44z' clip-rule='evenodd'/%3E%3C/svg%3E&quot;"/><div class="lazy-icon" style="background-image:url(https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd);"></div></div></div></div></div></div>
 
-<h2 id="四、PetaLinux使用"><a href="#四、PetaLinux使用" class="headerlink" title="四、PetaLinux使用"></a>四、PetaLinux使用</h2><div class="tag-plugin colorful note" color="warning"><div class="title">注意</div><div class="body"><p>使用PetaLinux前，需要根据板卡的用户手册，在Vivado的PS IP核配置中，将SD卡、以太网、串口打开，并正确配置Bank 0和Bank 1的电平，然后生成xsa文件。</p></div></div>
+<h2 id="4-PetaLinux使用"><a href="#4-PetaLinux使用" class="headerlink" title="4. PetaLinux使用"></a>4. PetaLinux使用</h2><div class="tag-plugin colorful note" color="warning"><div class="title">注意</div><div class="body"><p>使用PetaLinux前，需要根据板卡的用户手册，在Vivado的PS IP核配置中，将SD卡、以太网、串口打开，并正确配置Bank 0和Bank 1的电平，然后生成xsa文件。</p></div></div>
 
-<div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250915164202789.png" data-fancybox="true" style="width:600px;"/></div></div>
+<div class="tag-plugin image"><div class="image-bg" style="aspect-ratio:800/391;width:600px;"><img class="lazy" src="https://webp.raiset.top/PetaLinux/image-20250915164202789.png" data-src="https://webp.raiset.top/PetaLinux/image-20250915164202789.png" data-fancybox="true"onerror="this.src=&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2rem' height='2rem' viewBox='0 0 24 24'%3E%3C!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --%3E%3Cpath fill='%23F44336' d='M22 12.698c-.002 1.47-.013 2.718-.096 3.743c-.097 1.19-.296 2.184-.74 3.009a4.2 4.2 0 0 1-.73.983c-.833.833-1.893 1.21-3.237 1.39C15.884 22 14.2 22 12.053 22h-.106c-2.148 0-3.83 0-5.144-.177c-1.343-.18-2.404-.557-3.236-1.39c-.738-.738-1.12-1.656-1.322-2.795c-.2-1.12-.236-2.512-.243-4.241Q1.999 12.737 2 12v-.054c0-2.148 0-3.83.177-5.144c.18-1.343.557-2.404 1.39-3.236s1.893-1.21 3.236-1.39c1.168-.157 2.67-.175 4.499-.177a.697.697 0 1 1 0 1.396c-1.855.002-3.234.018-4.313.163c-1.189.16-1.906.464-2.436.994S3.72 5.8 3.56 6.99C3.397 8.2 3.395 9.788 3.395 12v.784l.932-.814a2.14 2.14 0 0 1 2.922.097l3.99 3.99a1.86 1.86 0 0 0 2.385.207l.278-.195a2.79 2.79 0 0 1 3.471.209l2.633 2.37c.265-.557.423-1.288.507-2.32c.079-.972.09-2.152.091-3.63a.698.698 0 0 1 1.396 0' opacity='.5'/%3E%3Cpath fill='%23F44336' fill-rule='evenodd' d='M17.5 11c-2.121 0-3.182 0-3.841-.659S13 8.621 13 6.5s0-3.182.659-3.841S15.379 2 17.5 2s3.182 0 3.841.659S22 4.379 22 6.5s0 3.182-.659 3.841S19.621 11 17.5 11m-1.47-7.03a.75.75 0 1 0-1.06 1.06l1.47 1.47l-1.47 1.47a.75.75 0 0 0 1.06 1.06l1.47-1.47l1.47 1.47a.75.75 0 1 0 1.06-1.06L18.56 6.5l1.47-1.47a.75.75 0 0 0-1.06-1.06L17.5 5.44z' clip-rule='evenodd'/%3E%3C/svg%3E&quot;"/><div class="lazy-icon" style="background-image:url(https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd);"></div></div></div>
 
-<h3 id="1-配置环境变量"><a href="#1-配置环境变量" class="headerlink" title="1. 配置环境变量"></a>1. 配置环境变量</h3><div class="tag-plugin colorful note" color="warning"><div class="body"><p>每次打开一个Terminal都需要执行此命令，否则无法运行PetaLinux相关指令！</p></div></div>
+<h3 id="4-1-配置环境变量"><a href="#4-1-配置环境变量" class="headerlink" title="4.1 配置环境变量"></a>4.1 配置环境变量</h3><div class="tag-plugin colorful note" color="warning"><div class="body"><p>每次打开一个Terminal都需要执行此命令，否则无法运行PetaLinux相关指令！</p></div></div>
 
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">source</span> /opt/pkg/petalinux/settings.sh</span><br></pre></td></tr></table></figure>
 
-<h3 id="2-创建工作目录并给予权限"><a href="#2-创建工作目录并给予权限" class="headerlink" title="2. 创建工作目录并给予权限"></a>2. 创建工作目录并给予权限</h3><p>创建一个目录，在该目录下可创建多个PetaLinux工程。</p>
+<h3 id="4-2-创建工作目录并给予权限"><a href="#4-2-创建工作目录并给予权限" class="headerlink" title="4.2 创建工作目录并给予权限"></a>4.2 创建工作目录并给予权限</h3><p>创建一个目录，在该目录下可创建多个PetaLinux工程。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo <span class="built_in">mkdir</span> peta_prj</span><br><span class="line">sudo <span class="built_in">chmod</span> 777 peta_prj/</span><br><span class="line"><span class="built_in">cd</span> peta_prj</span><br></pre></td></tr></table></figure>
 
-<h3 id="3-创建PetaLinux工程"><a href="#3-创建PetaLinux工程" class="headerlink" title="3. 创建PetaLinux工程"></a>3. 创建PetaLinux工程</h3><div class="tag-plugin colorful note" color="blue"><div class="title"><strong>命令格式</strong></div><div class="body"><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">petalinux-create --<span class="built_in">type</span> project --template &lt;PLATFORM&gt; --name &lt;PROJECT_NAME&gt;</span><br></pre></td></tr></table></figure></div></div>
+<h3 id="4-3-创建PetaLinux工程"><a href="#4-3-创建PetaLinux工程" class="headerlink" title="4.3 创建PetaLinux工程"></a>4.3 创建PetaLinux工程</h3><div class="tag-plugin colorful note" color="blue"><div class="title"><strong><p>命令格式</p>
+</strong></div><div class="body"><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">petalinux-create --<span class="built_in">type</span> project --template &lt;PLATFORM&gt; --name &lt;PROJECT_NAME&gt;</span><br></pre></td></tr></table></figure></div></div>
 
 <p><strong>参数说明：</strong></p>
 <ul>
-<li><code>&lt;PLATFORM&gt;</code> - 目标平台类型<details class="tag-plugin colorful folding" color="cyan"><summary><span>支持的平台类型</span></summary><div class="body"><ul><li><code>versal</code> - Versal ACAP</li><li><code>zynqMP</code> - Zynq UltraScale+ MPSoC</li><li><code>zynq</code> - Zynq-7000 devices</li><li><code>microblaze</code> - MicroBlaze™ processor</li></ul></div></details></li>
+<li><code>&lt;PLATFORM&gt;</code> - 目标平台类型<details class="tag-plugin colorful folding" color="cyan"><summary><p>支持的平台类型</p>
+</summary><div class="body"><ul> <li><code>versal</code> - Versal ACAP</li> <li><code>zynqMP</code> - Zynq UltraScale+ MPSoC</li> <li><code>zynq</code> - Zynq-7000 devices</li> <li><code>microblaze</code> - MicroBlaze™ processor</li> </ul> </div></details></li>
 <li><code>&lt;PROJECT_NAME&gt;</code> - 工程名称</li>
 </ul>
-<div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905165334505.png" data-fancybox="true"/></div></div>
+<div class="tag-plugin image"><div class="image-bg" style="aspect-ratio:785/49;"><img class="lazy" src="https://webp.raiset.top/PetaLinux/image-20250905165334505.png" data-src="https://webp.raiset.top/PetaLinux/image-20250905165334505.png" data-fancybox="true"onerror="this.src=&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2rem' height='2rem' viewBox='0 0 24 24'%3E%3C!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --%3E%3Cpath fill='%23F44336' d='M22 12.698c-.002 1.47-.013 2.718-.096 3.743c-.097 1.19-.296 2.184-.74 3.009a4.2 4.2 0 0 1-.73.983c-.833.833-1.893 1.21-3.237 1.39C15.884 22 14.2 22 12.053 22h-.106c-2.148 0-3.83 0-5.144-.177c-1.343-.18-2.404-.557-3.236-1.39c-.738-.738-1.12-1.656-1.322-2.795c-.2-1.12-.236-2.512-.243-4.241Q1.999 12.737 2 12v-.054c0-2.148 0-3.83.177-5.144c.18-1.343.557-2.404 1.39-3.236s1.893-1.21 3.236-1.39c1.168-.157 2.67-.175 4.499-.177a.697.697 0 1 1 0 1.396c-1.855.002-3.234.018-4.313.163c-1.189.16-1.906.464-2.436.994S3.72 5.8 3.56 6.99C3.397 8.2 3.395 9.788 3.395 12v.784l.932-.814a2.14 2.14 0 0 1 2.922.097l3.99 3.99a1.86 1.86 0 0 0 2.385.207l.278-.195a2.79 2.79 0 0 1 3.471.209l2.633 2.37c.265-.557.423-1.288.507-2.32c.079-.972.09-2.152.091-3.63a.698.698 0 0 1 1.396 0' opacity='.5'/%3E%3Cpath fill='%23F44336' fill-rule='evenodd' d='M17.5 11c-2.121 0-3.182 0-3.841-.659S13 8.621 13 6.5s0-3.182.659-3.841S15.379 2 17.5 2s3.182 0 3.841.659S22 4.379 22 6.5s0 3.182-.659 3.841S19.621 11 17.5 11m-1.47-7.03a.75.75 0 1 0-1.06 1.06l1.47 1.47l-1.47 1.47a.75.75 0 0 0 1.06 1.06l1.47-1.47l1.47 1.47a.75.75 0 1 0 1.06-1.06L18.56 6.5l1.47-1.47a.75.75 0 0 0-1.06-1.06L17.5 5.44z' clip-rule='evenodd'/%3E%3C/svg%3E&quot;"/><div class="lazy-icon" style="background-image:url(https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd);"></div></div></div>
 
-<h3 id="4-配置PetaLinux（在线编译）"><a href="#4-配置PetaLinux（在线编译）" class="headerlink" title="4. 配置PetaLinux（在线编译）"></a>4. 配置PetaLinux（在线编译）</h3><h4 id="4-1-配置工程"><a href="#4-1-配置工程" class="headerlink" title="4.1 配置工程"></a>4.1 配置工程</h4><p>进入工程目录：</p>
+<h3 id="4-4-配置PetaLinux（在线编译）"><a href="#4-4-配置PetaLinux（在线编译）" class="headerlink" title="4.4 配置PetaLinux（在线编译）"></a>4.4 配置PetaLinux（在线编译）</h3><h4 id="4-4-1-配置工程"><a href="#4-4-1-配置工程" class="headerlink" title="4.4.1 配置工程"></a>4.4.1 配置工程</h4><p>进入工程目录：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> test_peta </span><br></pre></td></tr></table></figure>
 
 <p>将Vivado生成的XSA文件移动到虚拟机中</p>
-<div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905165358833.png" data-fancybox="true" style="width:300px;"/></div></div>
+<div class="tag-plugin image"><div class="image-bg" style="aspect-ratio:495/174;width:300px;"><img class="lazy" src="https://webp.raiset.top/PetaLinux/image-20250905165358833.png" data-src="https://webp.raiset.top/PetaLinux/image-20250905165358833.png" data-fancybox="true"onerror="this.src=&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2rem' height='2rem' viewBox='0 0 24 24'%3E%3C!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --%3E%3Cpath fill='%23F44336' d='M22 12.698c-.002 1.47-.013 2.718-.096 3.743c-.097 1.19-.296 2.184-.74 3.009a4.2 4.2 0 0 1-.73.983c-.833.833-1.893 1.21-3.237 1.39C15.884 22 14.2 22 12.053 22h-.106c-2.148 0-3.83 0-5.144-.177c-1.343-.18-2.404-.557-3.236-1.39c-.738-.738-1.12-1.656-1.322-2.795c-.2-1.12-.236-2.512-.243-4.241Q1.999 12.737 2 12v-.054c0-2.148 0-3.83.177-5.144c.18-1.343.557-2.404 1.39-3.236s1.893-1.21 3.236-1.39c1.168-.157 2.67-.175 4.499-.177a.697.697 0 1 1 0 1.396c-1.855.002-3.234.018-4.313.163c-1.189.16-1.906.464-2.436.994S3.72 5.8 3.56 6.99C3.397 8.2 3.395 9.788 3.395 12v.784l.932-.814a2.14 2.14 0 0 1 2.922.097l3.99 3.99a1.86 1.86 0 0 0 2.385.207l.278-.195a2.79 2.79 0 0 1 3.471.209l2.633 2.37c.265-.557.423-1.288.507-2.32c.079-.972.09-2.152.091-3.63a.698.698 0 0 1 1.396 0' opacity='.5'/%3E%3Cpath fill='%23F44336' fill-rule='evenodd' d='M17.5 11c-2.121 0-3.182 0-3.841-.659S13 8.621 13 6.5s0-3.182.659-3.841S15.379 2 17.5 2s3.182 0 3.841.659S22 4.379 22 6.5s0 3.182-.659 3.841S19.621 11 17.5 11m-1.47-7.03a.75.75 0 1 0-1.06 1.06l1.47 1.47l-1.47 1.47a.75.75 0 0 0 1.06 1.06l1.47-1.47l1.47 1.47a.75.75 0 1 0 1.06-1.06L18.56 6.5l1.47-1.47a.75.75 0 0 0-1.06-1.06L17.5 5.44z' clip-rule='evenodd'/%3E%3C/svg%3E&quot;"/><div class="lazy-icon" style="background-image:url(https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd);"></div></div></div>
 
 <p>运行 </p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">petalinux-config --get-hw-description &lt;XSA_PATH&gt;</span><br></pre></td></tr></table></figure>
 
 <p>其中 <code>&lt;XSA_PATH&gt;</code> 是XSA文件所在路径。</p>
-<div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905165437733.png" data-fancybox="true" style="width:500px;"/></div></div>
+<div class="tag-plugin image"><div class="image-bg" style="aspect-ratio:633/390;width:500px;"><img class="lazy" src="https://webp.raiset.top/PetaLinux/image-20250905165437733.png" data-src="https://webp.raiset.top/PetaLinux/image-20250905165437733.png" data-fancybox="true"onerror="this.src=&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2rem' height='2rem' viewBox='0 0 24 24'%3E%3C!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --%3E%3Cpath fill='%23F44336' d='M22 12.698c-.002 1.47-.013 2.718-.096 3.743c-.097 1.19-.296 2.184-.74 3.009a4.2 4.2 0 0 1-.73.983c-.833.833-1.893 1.21-3.237 1.39C15.884 22 14.2 22 12.053 22h-.106c-2.148 0-3.83 0-5.144-.177c-1.343-.18-2.404-.557-3.236-1.39c-.738-.738-1.12-1.656-1.322-2.795c-.2-1.12-.236-2.512-.243-4.241Q1.999 12.737 2 12v-.054c0-2.148 0-3.83.177-5.144c.18-1.343.557-2.404 1.39-3.236s1.893-1.21 3.236-1.39c1.168-.157 2.67-.175 4.499-.177a.697.697 0 1 1 0 1.396c-1.855.002-3.234.018-4.313.163c-1.189.16-1.906.464-2.436.994S3.72 5.8 3.56 6.99C3.397 8.2 3.395 9.788 3.395 12v.784l.932-.814a2.14 2.14 0 0 1 2.922.097l3.99 3.99a1.86 1.86 0 0 0 2.385.207l.278-.195a2.79 2.79 0 0 1 3.471.209l2.633 2.37c.265-.557.423-1.288.507-2.32c.079-.972.09-2.152.091-3.63a.698.698 0 0 1 1.396 0' opacity='.5'/%3E%3Cpath fill='%23F44336' fill-rule='evenodd' d='M17.5 11c-2.121 0-3.182 0-3.841-.659S13 8.621 13 6.5s0-3.182.659-3.841S15.379 2 17.5 2s3.182 0 3.841.659S22 4.379 22 6.5s0 3.182-.659 3.841S19.621 11 17.5 11m-1.47-7.03a.75.75 0 1 0-1.06 1.06l1.47 1.47l-1.47 1.47a.75.75 0 0 0 1.06 1.06l1.47-1.47l1.47 1.47a.75.75 0 1 0 1.06-1.06L18.56 6.5l1.47-1.47a.75.75 0 0 0-1.06-1.06L17.5 5.44z' clip-rule='evenodd'/%3E%3C/svg%3E&quot;"/><div class="lazy-icon" style="background-image:url(https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd);"></div></div></div>
 <div class="tag-plugin colorful note" color="cyan"><div class="body"><p>不同板子的配置可能不一样，可以参考板卡的相关手册，下面几个配置同理。</p></div></div>
 
 <p>这里需要更改根文件系统的类型，使用方向键移动到<code>Image Packaging Configuration</code>并按Enter进入，然后进入<code>Root filesystem type</code>，按空格选择<code>EXT4</code>，因为后面会将文件系统写入SD卡上，所以需要让板子从SD卡读取文件系统。</p>
-<div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250915164730110.png" data-fancybox="true" style="width:500px;"/></div></div>
+<div class="tag-plugin image"><div class="image-bg" style="aspect-ratio:664/316;width:500px;"><img class="lazy" src="https://webp.raiset.top/PetaLinux/image-20250915164730110.png" data-src="https://webp.raiset.top/PetaLinux/image-20250915164730110.png" data-fancybox="true"onerror="this.src=&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2rem' height='2rem' viewBox='0 0 24 24'%3E%3C!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --%3E%3Cpath fill='%23F44336' d='M22 12.698c-.002 1.47-.013 2.718-.096 3.743c-.097 1.19-.296 2.184-.74 3.009a4.2 4.2 0 0 1-.73.983c-.833.833-1.893 1.21-3.237 1.39C15.884 22 14.2 22 12.053 22h-.106c-2.148 0-3.83 0-5.144-.177c-1.343-.18-2.404-.557-3.236-1.39c-.738-.738-1.12-1.656-1.322-2.795c-.2-1.12-.236-2.512-.243-4.241Q1.999 12.737 2 12v-.054c0-2.148 0-3.83.177-5.144c.18-1.343.557-2.404 1.39-3.236s1.893-1.21 3.236-1.39c1.168-.157 2.67-.175 4.499-.177a.697.697 0 1 1 0 1.396c-1.855.002-3.234.018-4.313.163c-1.189.16-1.906.464-2.436.994S3.72 5.8 3.56 6.99C3.397 8.2 3.395 9.788 3.395 12v.784l.932-.814a2.14 2.14 0 0 1 2.922.097l3.99 3.99a1.86 1.86 0 0 0 2.385.207l.278-.195a2.79 2.79 0 0 1 3.471.209l2.633 2.37c.265-.557.423-1.288.507-2.32c.079-.972.09-2.152.091-3.63a.698.698 0 0 1 1.396 0' opacity='.5'/%3E%3Cpath fill='%23F44336' fill-rule='evenodd' d='M17.5 11c-2.121 0-3.182 0-3.841-.659S13 8.621 13 6.5s0-3.182.659-3.841S15.379 2 17.5 2s3.182 0 3.841.659S22 4.379 22 6.5s0 3.182-.659 3.841S19.621 11 17.5 11m-1.47-7.03a.75.75 0 1 0-1.06 1.06l1.47 1.47l-1.47 1.47a.75.75 0 0 0 1.06 1.06l1.47-1.47l1.47 1.47a.75.75 0 1 0 1.06-1.06L18.56 6.5l1.47-1.47a.75.75 0 0 0-1.06-1.06L17.5 5.44z' clip-rule='evenodd'/%3E%3C/svg%3E&quot;"/><div class="lazy-icon" style="background-image:url(https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd);"></div></div></div>
 
 <p>然后选择Exit逐层退出并保存配置：</p>
-<div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905165508753.png" data-fancybox="true"/></div></div>
+<div class="tag-plugin image"><div class="image-bg" style="aspect-ratio:797/222;"><img class="lazy" src="https://webp.raiset.top/PetaLinux/image-20250905165508753.png" data-src="https://webp.raiset.top/PetaLinux/image-20250905165508753.png" data-fancybox="true"onerror="this.src=&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2rem' height='2rem' viewBox='0 0 24 24'%3E%3C!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --%3E%3Cpath fill='%23F44336' d='M22 12.698c-.002 1.47-.013 2.718-.096 3.743c-.097 1.19-.296 2.184-.74 3.009a4.2 4.2 0 0 1-.73.983c-.833.833-1.893 1.21-3.237 1.39C15.884 22 14.2 22 12.053 22h-.106c-2.148 0-3.83 0-5.144-.177c-1.343-.18-2.404-.557-3.236-1.39c-.738-.738-1.12-1.656-1.322-2.795c-.2-1.12-.236-2.512-.243-4.241Q1.999 12.737 2 12v-.054c0-2.148 0-3.83.177-5.144c.18-1.343.557-2.404 1.39-3.236s1.893-1.21 3.236-1.39c1.168-.157 2.67-.175 4.499-.177a.697.697 0 1 1 0 1.396c-1.855.002-3.234.018-4.313.163c-1.189.16-1.906.464-2.436.994S3.72 5.8 3.56 6.99C3.397 8.2 3.395 9.788 3.395 12v.784l.932-.814a2.14 2.14 0 0 1 2.922.097l3.99 3.99a1.86 1.86 0 0 0 2.385.207l.278-.195a2.79 2.79 0 0 1 3.471.209l2.633 2.37c.265-.557.423-1.288.507-2.32c.079-.972.09-2.152.091-3.63a.698.698 0 0 1 1.396 0' opacity='.5'/%3E%3Cpath fill='%23F44336' fill-rule='evenodd' d='M17.5 11c-2.121 0-3.182 0-3.841-.659S13 8.621 13 6.5s0-3.182.659-3.841S15.379 2 17.5 2s3.182 0 3.841.659S22 4.379 22 6.5s0 3.182-.659 3.841S19.621 11 17.5 11m-1.47-7.03a.75.75 0 1 0-1.06 1.06l1.47 1.47l-1.47 1.47a.75.75 0 0 0 1.06 1.06l1.47-1.47l1.47 1.47a.75.75 0 1 0 1.06-1.06L18.56 6.5l1.47-1.47a.75.75 0 0 0-1.06-1.06L17.5 5.44z' clip-rule='evenodd'/%3E%3C/svg%3E&quot;"/><div class="lazy-icon" style="background-image:url(https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd);"></div></div></div>
 
-<h4 id="4-2-配置内核"><a href="#4-2-配置内核" class="headerlink" title="4.2 配置内核"></a>4.2 配置内核</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">petalinux-config -c kernel </span><br></pre></td></tr></table></figure>
+<h4 id="4-4-2-配置内核"><a href="#4-4-2-配置内核" class="headerlink" title="4.4.2 配置内核"></a>4.4.2 配置内核</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">petalinux-config -c kernel </span><br></pre></td></tr></table></figure>
 
 <div class="tag-plugin colorful note" color="warning"><div class="body"><p>⚠️保持虚拟机联网状态，这里会从网络下载大量文件！</p></div></div>
 
-<div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905165522826.png" data-fancybox="true" style="width:500px;"/></div></div>
+<div class="tag-plugin image"><div class="image-bg" style="aspect-ratio:545/357;width:500px;"><img class="lazy" src="https://webp.raiset.top/PetaLinux/image-20250905165522826.png" data-src="https://webp.raiset.top/PetaLinux/image-20250905165522826.png" data-fancybox="true"onerror="this.src=&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2rem' height='2rem' viewBox='0 0 24 24'%3E%3C!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --%3E%3Cpath fill='%23F44336' d='M22 12.698c-.002 1.47-.013 2.718-.096 3.743c-.097 1.19-.296 2.184-.74 3.009a4.2 4.2 0 0 1-.73.983c-.833.833-1.893 1.21-3.237 1.39C15.884 22 14.2 22 12.053 22h-.106c-2.148 0-3.83 0-5.144-.177c-1.343-.18-2.404-.557-3.236-1.39c-.738-.738-1.12-1.656-1.322-2.795c-.2-1.12-.236-2.512-.243-4.241Q1.999 12.737 2 12v-.054c0-2.148 0-3.83.177-5.144c.18-1.343.557-2.404 1.39-3.236s1.893-1.21 3.236-1.39c1.168-.157 2.67-.175 4.499-.177a.697.697 0 1 1 0 1.396c-1.855.002-3.234.018-4.313.163c-1.189.16-1.906.464-2.436.994S3.72 5.8 3.56 6.99C3.397 8.2 3.395 9.788 3.395 12v.784l.932-.814a2.14 2.14 0 0 1 2.922.097l3.99 3.99a1.86 1.86 0 0 0 2.385.207l.278-.195a2.79 2.79 0 0 1 3.471.209l2.633 2.37c.265-.557.423-1.288.507-2.32c.079-.972.09-2.152.091-3.63a.698.698 0 0 1 1.396 0' opacity='.5'/%3E%3Cpath fill='%23F44336' fill-rule='evenodd' d='M17.5 11c-2.121 0-3.182 0-3.841-.659S13 8.621 13 6.5s0-3.182.659-3.841S15.379 2 17.5 2s3.182 0 3.841.659S22 4.379 22 6.5s0 3.182-.659 3.841S19.621 11 17.5 11m-1.47-7.03a.75.75 0 1 0-1.06 1.06l1.47 1.47l-1.47 1.47a.75.75 0 0 0 1.06 1.06l1.47-1.47l1.47 1.47a.75.75 0 1 0 1.06-1.06L18.56 6.5l1.47-1.47a.75.75 0 0 0-1.06-1.06L17.5 5.44z' clip-rule='evenodd'/%3E%3C/svg%3E&quot;"/><div class="lazy-icon" style="background-image:url(https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd);"></div></div></div>
 
 <p>由于以太网的PHY芯片驱动默认没有打开，需要手动配置：</p>
 <p>依次选择<code>Device Drivers → Network device support → PHY Device support and infrastructure → Micrel Phys</code></p>
 <p>按 <code>y</code> 选中<code>Micrel Phys</code>驱动，然后选择<code>Exit</code>逐层退出并保存。</p>
-<div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905165530171.png" data-fancybox="true" style="width:500px;"/></div></div>
+<div class="tag-plugin image"><div class="image-bg" style="aspect-ratio:670/354;width:500px;"><img class="lazy" src="https://webp.raiset.top/PetaLinux/image-20250905165530171.png" data-src="https://webp.raiset.top/PetaLinux/image-20250905165530171.png" data-fancybox="true"onerror="this.src=&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2rem' height='2rem' viewBox='0 0 24 24'%3E%3C!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --%3E%3Cpath fill='%23F44336' d='M22 12.698c-.002 1.47-.013 2.718-.096 3.743c-.097 1.19-.296 2.184-.74 3.009a4.2 4.2 0 0 1-.73.983c-.833.833-1.893 1.21-3.237 1.39C15.884 22 14.2 22 12.053 22h-.106c-2.148 0-3.83 0-5.144-.177c-1.343-.18-2.404-.557-3.236-1.39c-.738-.738-1.12-1.656-1.322-2.795c-.2-1.12-.236-2.512-.243-4.241Q1.999 12.737 2 12v-.054c0-2.148 0-3.83.177-5.144c.18-1.343.557-2.404 1.39-3.236s1.893-1.21 3.236-1.39c1.168-.157 2.67-.175 4.499-.177a.697.697 0 1 1 0 1.396c-1.855.002-3.234.018-4.313.163c-1.189.16-1.906.464-2.436.994S3.72 5.8 3.56 6.99C3.397 8.2 3.395 9.788 3.395 12v.784l.932-.814a2.14 2.14 0 0 1 2.922.097l3.99 3.99a1.86 1.86 0 0 0 2.385.207l.278-.195a2.79 2.79 0 0 1 3.471.209l2.633 2.37c.265-.557.423-1.288.507-2.32c.079-.972.09-2.152.091-3.63a.698.698 0 0 1 1.396 0' opacity='.5'/%3E%3Cpath fill='%23F44336' fill-rule='evenodd' d='M17.5 11c-2.121 0-3.182 0-3.841-.659S13 8.621 13 6.5s0-3.182.659-3.841S15.379 2 17.5 2s3.182 0 3.841.659S22 4.379 22 6.5s0 3.182-.659 3.841S19.621 11 17.5 11m-1.47-7.03a.75.75 0 1 0-1.06 1.06l1.47 1.47l-1.47 1.47a.75.75 0 0 0 1.06 1.06l1.47-1.47l1.47 1.47a.75.75 0 1 0 1.06-1.06L18.56 6.5l1.47-1.47a.75.75 0 0 0-1.06-1.06L17.5 5.44z' clip-rule='evenodd'/%3E%3C/svg%3E&quot;"/><div class="lazy-icon" style="background-image:url(https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd);"></div></div></div>
 
-<h4 id="4-3-配置根文件系统"><a href="#4-3-配置根文件系统" class="headerlink" title="4.3 配置根文件系统"></a>4.3 配置根文件系统</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">petalinux-config -c rootfs</span><br></pre></td></tr></table></figure>
+<h4 id="4-4-3-配置根文件系统"><a href="#4-4-3-配置根文件系统" class="headerlink" title="4.4.3 配置根文件系统"></a>4.4.3 配置根文件系统</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">petalinux-config -c rootfs</span><br></pre></td></tr></table></figure>
 
-<div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905165546722.png" data-fancybox="true" style="width:500px;"/></div></div>
+<div class="tag-plugin image"><div class="image-bg" style="aspect-ratio:558/314;width:500px;"><img class="lazy" src="https://webp.raiset.top/PetaLinux/image-20250905165546722.png" data-src="https://webp.raiset.top/PetaLinux/image-20250905165546722.png" data-fancybox="true"onerror="this.src=&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2rem' height='2rem' viewBox='0 0 24 24'%3E%3C!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --%3E%3Cpath fill='%23F44336' d='M22 12.698c-.002 1.47-.013 2.718-.096 3.743c-.097 1.19-.296 2.184-.74 3.009a4.2 4.2 0 0 1-.73.983c-.833.833-1.893 1.21-3.237 1.39C15.884 22 14.2 22 12.053 22h-.106c-2.148 0-3.83 0-5.144-.177c-1.343-.18-2.404-.557-3.236-1.39c-.738-.738-1.12-1.656-1.322-2.795c-.2-1.12-.236-2.512-.243-4.241Q1.999 12.737 2 12v-.054c0-2.148 0-3.83.177-5.144c.18-1.343.557-2.404 1.39-3.236s1.893-1.21 3.236-1.39c1.168-.157 2.67-.175 4.499-.177a.697.697 0 1 1 0 1.396c-1.855.002-3.234.018-4.313.163c-1.189.16-1.906.464-2.436.994S3.72 5.8 3.56 6.99C3.397 8.2 3.395 9.788 3.395 12v.784l.932-.814a2.14 2.14 0 0 1 2.922.097l3.99 3.99a1.86 1.86 0 0 0 2.385.207l.278-.195a2.79 2.79 0 0 1 3.471.209l2.633 2.37c.265-.557.423-1.288.507-2.32c.079-.972.09-2.152.091-3.63a.698.698 0 0 1 1.396 0' opacity='.5'/%3E%3Cpath fill='%23F44336' fill-rule='evenodd' d='M17.5 11c-2.121 0-3.182 0-3.841-.659S13 8.621 13 6.5s0-3.182.659-3.841S15.379 2 17.5 2s3.182 0 3.841.659S22 4.379 22 6.5s0 3.182-.659 3.841S19.621 11 17.5 11m-1.47-7.03a.75.75 0 1 0-1.06 1.06l1.47 1.47l-1.47 1.47a.75.75 0 0 0 1.06 1.06l1.47-1.47l1.47 1.47a.75.75 0 1 0 1.06-1.06L18.56 6.5l1.47-1.47a.75.75 0 0 0-1.06-1.06L17.5 5.44z' clip-rule='evenodd'/%3E%3C/svg%3E&quot;"/><div class="lazy-icon" style="background-image:url(https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd);"></div></div></div>
 
 <p>根文件系统配置一般保持默认即可，直接退出。</p>
-<h3 id="5-编译"><a href="#5-编译" class="headerlink" title="5. 编译"></a>5. 编译</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">petalinux-build</span><br></pre></td></tr></table></figure>
+<h3 id="4-5-编译"><a href="#4-5-编译" class="headerlink" title="4.5 编译"></a>4.5 编译</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">petalinux-build</span><br></pre></td></tr></table></figure>
 
 <div class="tag-plugin colorful note" color="warning"><div class="body"><p>⚠️编译过程较长，会从网络下载大量依赖文件。</p></div></div>
 
-<details class="tag-plugin colorful folding" color="red"><summary><span>常见问题解决：cracklib分支问题</span></summary><div class="body"><p><strong>错误现象：</strong> 编译过程中出现以下错误信息：</p><div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905165559970.png" data-fancybox="true"/></div></div><p><strong>解决方案：</strong> GitHub上的cracklib主分支已从master改为main，需要修改配置文件：</p><p><strong>文件路径：</strong> <code>[projectdir]/components/yocto/layers/poky/meta/recipes-extended/cracklib/cracklib_2.9.8.bb</code></p><p><strong>修改内容：</strong> 将分支信息从master改为main：</p><div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905165632730.png" data-fancybox="true"/></div></div></div></details>
+<details class="tag-plugin colorful folding" color="red"><summary><p>常见问题解决：cracklib分支问题</p>
+</summary><div class="body"><p><strong>错误现象：</strong> 编译过程中出现以下错误信息：</p> <div class="tag-plugin image"><div class="image-bg" style="aspect-ratio:797/103;"><img class="lazy" src="https://webp.raiset.top/PetaLinux/image-20250905165559970.png" data-src="https://webp.raiset.top/PetaLinux/image-20250905165559970.png" data-fancybox="true"onerror="this.src=&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2rem' height='2rem' viewBox='0 0 24 24'%3E%3C!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --%3E%3Cpath fill='%23F44336' d='M22 12.698c-.002 1.47-.013 2.718-.096 3.743c-.097 1.19-.296 2.184-.74 3.009a4.2 4.2 0 0 1-.73.983c-.833.833-1.893 1.21-3.237 1.39C15.884 22 14.2 22 12.053 22h-.106c-2.148 0-3.83 0-5.144-.177c-1.343-.18-2.404-.557-3.236-1.39c-.738-.738-1.12-1.656-1.322-2.795c-.2-1.12-.236-2.512-.243-4.241Q1.999 12.737 2 12v-.054c0-2.148 0-3.83.177-5.144c.18-1.343.557-2.404 1.39-3.236s1.893-1.21 3.236-1.39c1.168-.157 2.67-.175 4.499-.177a.697.697 0 1 1 0 1.396c-1.855.002-3.234.018-4.313.163c-1.189.16-1.906.464-2.436.994S3.72 5.8 3.56 6.99C3.397 8.2 3.395 9.788 3.395 12v.784l.932-.814a2.14 2.14 0 0 1 2.922.097l3.99 3.99a1.86 1.86 0 0 0 2.385.207l.278-.195a2.79 2.79 0 0 1 3.471.209l2.633 2.37c.265-.557.423-1.288.507-2.32c.079-.972.09-2.152.091-3.63a.698.698 0 0 1 1.396 0' opacity='.5'/%3E%3Cpath fill='%23F44336' fill-rule='evenodd' d='M17.5 11c-2.121 0-3.182 0-3.841-.659S13 8.621 13 6.5s0-3.182.659-3.841S15.379 2 17.5 2s3.182 0 3.841.659S22 4.379 22 6.5s0 3.182-.659 3.841S19.621 11 17.5 11m-1.47-7.03a.75.75 0 1 0-1.06 1.06l1.47 1.47l-1.47 1.47a.75.75 0 0 0 1.06 1.06l1.47-1.47l1.47 1.47a.75.75 0 1 0 1.06-1.06L18.56 6.5l1.47-1.47a.75.75 0 0 0-1.06-1.06L17.5 5.44z' clip-rule='evenodd'/%3E%3C/svg%3E&quot;"/><div class="lazy-icon" style="background-image:url(https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd);"></div></div></div>  <p><strong>解决方案：</strong> GitHub上的cracklib主分支已从master改为main，需要修改配置文件：</p> <p><strong>文件路径：</strong> <code>[projectdir]/components/yocto/layers/poky/meta/recipes-extended/cracklib/cracklib_2.9.8.bb</code></p> <p><strong>修改内容：</strong> 将分支信息从master改为main：</p> <div class="tag-plugin image"><div class="image-bg" style="aspect-ratio:798/36;"><img class="lazy" src="https://webp.raiset.top/PetaLinux/image-20250905165632730.png" data-src="https://webp.raiset.top/PetaLinux/image-20250905165632730.png" data-fancybox="true"onerror="this.src=&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2rem' height='2rem' viewBox='0 0 24 24'%3E%3C!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --%3E%3Cpath fill='%23F44336' d='M22 12.698c-.002 1.47-.013 2.718-.096 3.743c-.097 1.19-.296 2.184-.74 3.009a4.2 4.2 0 0 1-.73.983c-.833.833-1.893 1.21-3.237 1.39C15.884 22 14.2 22 12.053 22h-.106c-2.148 0-3.83 0-5.144-.177c-1.343-.18-2.404-.557-3.236-1.39c-.738-.738-1.12-1.656-1.322-2.795c-.2-1.12-.236-2.512-.243-4.241Q1.999 12.737 2 12v-.054c0-2.148 0-3.83.177-5.144c.18-1.343.557-2.404 1.39-3.236s1.893-1.21 3.236-1.39c1.168-.157 2.67-.175 4.499-.177a.697.697 0 1 1 0 1.396c-1.855.002-3.234.018-4.313.163c-1.189.16-1.906.464-2.436.994S3.72 5.8 3.56 6.99C3.397 8.2 3.395 9.788 3.395 12v.784l.932-.814a2.14 2.14 0 0 1 2.922.097l3.99 3.99a1.86 1.86 0 0 0 2.385.207l.278-.195a2.79 2.79 0 0 1 3.471.209l2.633 2.37c.265-.557.423-1.288.507-2.32c.079-.972.09-2.152.091-3.63a.698.698 0 0 1 1.396 0' opacity='.5'/%3E%3Cpath fill='%23F44336' fill-rule='evenodd' d='M17.5 11c-2.121 0-3.182 0-3.841-.659S13 8.621 13 6.5s0-3.182.659-3.841S15.379 2 17.5 2s3.182 0 3.841.659S22 4.379 22 6.5s0 3.182-.659 3.841S19.621 11 17.5 11m-1.47-7.03a.75.75 0 1 0-1.06 1.06l1.47 1.47l-1.47 1.47a.75.75 0 0 0 1.06 1.06l1.47-1.47l1.47 1.47a.75.75 0 1 0 1.06-1.06L18.56 6.5l1.47-1.47a.75.75 0 0 0-1.06-1.06L17.5 5.44z' clip-rule='evenodd'/%3E%3C/svg%3E&quot;"/><div class="lazy-icon" style="background-image:url(https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd);"></div></div></div></div></details>
 
 <div class="tag-plugin colorful note" color="cyan"><div class="body"><p>有时如果编译不成功，可以多运行几次petalinux-build命令。</p></div></div>
 
 <p>出现以下信息代表编译成功：</p>
-<div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905165642606.png" data-fancybox="true" style="width:400px;"/></div></div>
+<div class="tag-plugin image"><div class="image-bg" style="aspect-ratio:796/90;width:400px;"><img class="lazy" src="https://webp.raiset.top/PetaLinux/image-20250905165642606.png" data-src="https://webp.raiset.top/PetaLinux/image-20250905165642606.png" data-fancybox="true"onerror="this.src=&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2rem' height='2rem' viewBox='0 0 24 24'%3E%3C!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --%3E%3Cpath fill='%23F44336' d='M22 12.698c-.002 1.47-.013 2.718-.096 3.743c-.097 1.19-.296 2.184-.74 3.009a4.2 4.2 0 0 1-.73.983c-.833.833-1.893 1.21-3.237 1.39C15.884 22 14.2 22 12.053 22h-.106c-2.148 0-3.83 0-5.144-.177c-1.343-.18-2.404-.557-3.236-1.39c-.738-.738-1.12-1.656-1.322-2.795c-.2-1.12-.236-2.512-.243-4.241Q1.999 12.737 2 12v-.054c0-2.148 0-3.83.177-5.144c.18-1.343.557-2.404 1.39-3.236s1.893-1.21 3.236-1.39c1.168-.157 2.67-.175 4.499-.177a.697.697 0 1 1 0 1.396c-1.855.002-3.234.018-4.313.163c-1.189.16-1.906.464-2.436.994S3.72 5.8 3.56 6.99C3.397 8.2 3.395 9.788 3.395 12v.784l.932-.814a2.14 2.14 0 0 1 2.922.097l3.99 3.99a1.86 1.86 0 0 0 2.385.207l.278-.195a2.79 2.79 0 0 1 3.471.209l2.633 2.37c.265-.557.423-1.288.507-2.32c.079-.972.09-2.152.091-3.63a.698.698 0 0 1 1.396 0' opacity='.5'/%3E%3Cpath fill='%23F44336' fill-rule='evenodd' d='M17.5 11c-2.121 0-3.182 0-3.841-.659S13 8.621 13 6.5s0-3.182.659-3.841S15.379 2 17.5 2s3.182 0 3.841.659S22 4.379 22 6.5s0 3.182-.659 3.841S19.621 11 17.5 11m-1.47-7.03a.75.75 0 1 0-1.06 1.06l1.47 1.47l-1.47 1.47a.75.75 0 0 0 1.06 1.06l1.47-1.47l1.47 1.47a.75.75 0 1 0 1.06-1.06L18.56 6.5l1.47-1.47a.75.75 0 0 0-1.06-1.06L17.5 5.44z' clip-rule='evenodd'/%3E%3C/svg%3E&quot;"/><div class="lazy-icon" style="background-image:url(https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd);"></div></div></div>
 
-<h3 id="6-打包"><a href="#6-打包" class="headerlink" title="6. 打包"></a>6. 打包</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">petalinux-package --boot --u-boot --fsbl --fpga --force</span><br></pre></td></tr></table></figure>
+<h3 id="4-6-打包"><a href="#4-6-打包" class="headerlink" title="4.6 打包"></a>4.6 打包</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">petalinux-package --boot --u-boot --fsbl --fpga --force</span><br></pre></td></tr></table></figure>
 
-<details class="tag-plugin colorful folding" color="blue"><summary><span>参数详解</span></summary><div class="body"><p><strong>--fsbl</strong></p><ul><li>指定FSBL镜像文件位置</li><li>默认路径：<code>images/linux/zynq_fsbl.elf</code></li></ul><p><strong>--fpga</strong>  </p><ul><li>指定bitstream文件位置</li><li>默认路径：<code>images/linux/system.bit</code></li><li>注意：如果XSA文件中不包含bit文件，不应添加此参数</li></ul><p><strong>--u-boot</strong></p><ul><li>指定U-Boot镜像位置  </li><li>默认路径：<code>images/linux/u-boot.elf</code></li></ul><p><strong>--force</strong></p><ul><li>强制覆盖已存在的文件</li></ul></div></details>
+<details class="tag-plugin colorful folding" color="blue"><summary><p>参数详解</p>
+</summary><div class="body"><p><strong>--fsbl</strong></p> <ul> <li>指定FSBL镜像文件位置</li> <li>默认路径：<code>images/linux/zynq_fsbl.elf</code></li> </ul> <p><strong>--fpga</strong>  </p> <ul> <li>指定bitstream文件位置</li> <li>默认路径：<code>images/linux/system.bit</code></li> <li>注意：如果XSA文件中不包含bit文件，不应添加此参数</li> </ul> <p><strong>--u-boot</strong></p> <ul> <li>指定U-Boot镜像位置  </li> <li>默认路径：<code>images/linux/u-boot.elf</code></li> </ul> <p><strong>--force</strong></p> <ul> <li>强制覆盖已存在的文件</li> </ul> </div></details>
 
-<h2 id="五、制作SD卡"><a href="#五、制作SD卡" class="headerlink" title="五、制作SD卡"></a>五、制作SD卡</h2><div class="tag-plugin colorful note" color="blue"><div class="title">参考网站：</div><div class="body"><p><a target="_blank" rel="noopener" href="https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/18842385/How+to+format+SD+card+for+SD+boot">How to format SD card for SD boot</a></p></div></div>
+<h2 id="5-制作SD卡"><a href="#5-制作SD卡" class="headerlink" title="5. 制作SD卡"></a>5. 制作SD卡</h2><div class="tag-plugin colorful note" color="blue"><div class="title">参考网站：</div><div class="body"><p><a target="_blank" rel="noopener" href="https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/18842385/How+to+format+SD+card+for+SD+boot">How to format SD card for SD boot</a></p></div></div>
 
-<h3 id="1-准备工作"><a href="#1-准备工作" class="headerlink" title="1. 准备工作"></a>1. 准备工作</h3><ul>
+<h3 id="5-1-准备工作"><a href="#5-1-准备工作" class="headerlink" title="5.1 准备工作"></a>5.1 准备工作</h3><ul>
 <li>一张空闲的SD卡</li>
 <li>读卡器</li>
 <li>将SD卡通过读卡器连接至虚拟机</li>
 </ul>
-<h3 id="2-查看SD卡设备"><a href="#2-查看SD卡设备" class="headerlink" title="2. 查看SD卡设备"></a>2. 查看SD卡设备</h3><p>打开Disks工具，查看SD卡设备名称：</p>
-<div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905165711890.png" data-fancybox="true" style="width:500px;"/></div></div>
+<h3 id="5-2-查看SD卡设备"><a href="#5-2-查看SD卡设备" class="headerlink" title="5.2 查看SD卡设备"></a>5.2 查看SD卡设备</h3><p>打开Disks工具，查看SD卡设备名称：</p>
+<div class="tag-plugin image"><div class="image-bg" style="aspect-ratio:750/416;width:500px;"><img class="lazy" src="https://webp.raiset.top/PetaLinux/image-20250905165711890.png" data-src="https://webp.raiset.top/PetaLinux/image-20250905165711890.png" data-fancybox="true"onerror="this.src=&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2rem' height='2rem' viewBox='0 0 24 24'%3E%3C!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --%3E%3Cpath fill='%23F44336' d='M22 12.698c-.002 1.47-.013 2.718-.096 3.743c-.097 1.19-.296 2.184-.74 3.009a4.2 4.2 0 0 1-.73.983c-.833.833-1.893 1.21-3.237 1.39C15.884 22 14.2 22 12.053 22h-.106c-2.148 0-3.83 0-5.144-.177c-1.343-.18-2.404-.557-3.236-1.39c-.738-.738-1.12-1.656-1.322-2.795c-.2-1.12-.236-2.512-.243-4.241Q1.999 12.737 2 12v-.054c0-2.148 0-3.83.177-5.144c.18-1.343.557-2.404 1.39-3.236s1.893-1.21 3.236-1.39c1.168-.157 2.67-.175 4.499-.177a.697.697 0 1 1 0 1.396c-1.855.002-3.234.018-4.313.163c-1.189.16-1.906.464-2.436.994S3.72 5.8 3.56 6.99C3.397 8.2 3.395 9.788 3.395 12v.784l.932-.814a2.14 2.14 0 0 1 2.922.097l3.99 3.99a1.86 1.86 0 0 0 2.385.207l.278-.195a2.79 2.79 0 0 1 3.471.209l2.633 2.37c.265-.557.423-1.288.507-2.32c.079-.972.09-2.152.091-3.63a.698.698 0 0 1 1.396 0' opacity='.5'/%3E%3Cpath fill='%23F44336' fill-rule='evenodd' d='M17.5 11c-2.121 0-3.182 0-3.841-.659S13 8.621 13 6.5s0-3.182.659-3.841S15.379 2 17.5 2s3.182 0 3.841.659S22 4.379 22 6.5s0 3.182-.659 3.841S19.621 11 17.5 11m-1.47-7.03a.75.75 0 1 0-1.06 1.06l1.47 1.47l-1.47 1.47a.75.75 0 0 0 1.06 1.06l1.47-1.47l1.47 1.47a.75.75 0 1 0 1.06-1.06L18.56 6.5l1.47-1.47a.75.75 0 0 0-1.06-1.06L17.5 5.44z' clip-rule='evenodd'/%3E%3C/svg%3E&quot;"/><div class="lazy-icon" style="background-image:url(https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd);"></div></div></div>
 
 <div class="tag-plugin colorful note" color="warning"><div class="body"><p>本例中SD卡设备被识别为&#x2F;dev&#x2F;sdb，请根据实际情况调整后续命令中的设备名称！</p></div></div>
 
-<h3 id="3-SD卡分区操作"><a href="#3-SD卡分区操作" class="headerlink" title="3. SD卡分区操作"></a>3. SD卡分区操作</h3><h4 id="3-1-进入分区工具"><a href="#3-1-进入分区工具" class="headerlink" title="3.1 进入分区工具"></a>3.1 进入分区工具</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo fdisk /dev/sdb</span><br></pre></td></tr></table></figure>
+<h3 id="5-3-SD卡分区操作"><a href="#5-3-SD卡分区操作" class="headerlink" title="5.3 SD卡分区操作"></a>5.3 SD卡分区操作</h3><h4 id="5-3-1-进入分区工具"><a href="#5-3-1-进入分区工具" class="headerlink" title="5.3.1 进入分区工具"></a>5.3.1 进入分区工具</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo fdisk /dev/sdb</span><br></pre></td></tr></table></figure>
 
-<div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905165746660.png" data-fancybox="true" style="width:500px;"/></div></div>
+<div class="tag-plugin image"><div class="image-bg" style="aspect-ratio:649/158;width:500px;"><img class="lazy" src="https://webp.raiset.top/PetaLinux/image-20250905165746660.png" data-src="https://webp.raiset.top/PetaLinux/image-20250905165746660.png" data-fancybox="true"onerror="this.src=&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2rem' height='2rem' viewBox='0 0 24 24'%3E%3C!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --%3E%3Cpath fill='%23F44336' d='M22 12.698c-.002 1.47-.013 2.718-.096 3.743c-.097 1.19-.296 2.184-.74 3.009a4.2 4.2 0 0 1-.73.983c-.833.833-1.893 1.21-3.237 1.39C15.884 22 14.2 22 12.053 22h-.106c-2.148 0-3.83 0-5.144-.177c-1.343-.18-2.404-.557-3.236-1.39c-.738-.738-1.12-1.656-1.322-2.795c-.2-1.12-.236-2.512-.243-4.241Q1.999 12.737 2 12v-.054c0-2.148 0-3.83.177-5.144c.18-1.343.557-2.404 1.39-3.236s1.893-1.21 3.236-1.39c1.168-.157 2.67-.175 4.499-.177a.697.697 0 1 1 0 1.396c-1.855.002-3.234.018-4.313.163c-1.189.16-1.906.464-2.436.994S3.72 5.8 3.56 6.99C3.397 8.2 3.395 9.788 3.395 12v.784l.932-.814a2.14 2.14 0 0 1 2.922.097l3.99 3.99a1.86 1.86 0 0 0 2.385.207l.278-.195a2.79 2.79 0 0 1 3.471.209l2.633 2.37c.265-.557.423-1.288.507-2.32c.079-.972.09-2.152.091-3.63a.698.698 0 0 1 1.396 0' opacity='.5'/%3E%3Cpath fill='%23F44336' fill-rule='evenodd' d='M17.5 11c-2.121 0-3.182 0-3.841-.659S13 8.621 13 6.5s0-3.182.659-3.841S15.379 2 17.5 2s3.182 0 3.841.659S22 4.379 22 6.5s0 3.182-.659 3.841S19.621 11 17.5 11m-1.47-7.03a.75.75 0 1 0-1.06 1.06l1.47 1.47l-1.47 1.47a.75.75 0 0 0 1.06 1.06l1.47-1.47l1.47 1.47a.75.75 0 1 0 1.06-1.06L18.56 6.5l1.47-1.47a.75.75 0 0 0-1.06-1.06L17.5 5.44z' clip-rule='evenodd'/%3E%3C/svg%3E&quot;"/><div class="lazy-icon" style="background-image:url(https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd);"></div></div></div>
 
-<h4 id="3-2-查看现有分区"><a href="#3-2-查看现有分区" class="headerlink" title="3.2 查看现有分区"></a>3.2 查看现有分区</h4><p>输入 <code>p</code> 并回车查看当前分区状态：</p>
-<div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905181316680.png" data-fancybox="true" style="width:500px;"/></div></div>
+<h4 id="5-3-2-查看现有分区"><a href="#5-3-2-查看现有分区" class="headerlink" title="5.3.2 查看现有分区"></a>5.3.2 查看现有分区</h4><p>输入 <code>p</code> 并回车查看当前分区状态：</p>
+<div class="tag-plugin image"><div class="image-bg" style="aspect-ratio:729/304;width:500px;"><img class="lazy" src="https://webp.raiset.top/PetaLinux/image-20250905181316680.png" data-src="https://webp.raiset.top/PetaLinux/image-20250905181316680.png" data-fancybox="true"onerror="this.src=&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2rem' height='2rem' viewBox='0 0 24 24'%3E%3C!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --%3E%3Cpath fill='%23F44336' d='M22 12.698c-.002 1.47-.013 2.718-.096 3.743c-.097 1.19-.296 2.184-.74 3.009a4.2 4.2 0 0 1-.73.983c-.833.833-1.893 1.21-3.237 1.39C15.884 22 14.2 22 12.053 22h-.106c-2.148 0-3.83 0-5.144-.177c-1.343-.18-2.404-.557-3.236-1.39c-.738-.738-1.12-1.656-1.322-2.795c-.2-1.12-.236-2.512-.243-4.241Q1.999 12.737 2 12v-.054c0-2.148 0-3.83.177-5.144c.18-1.343.557-2.404 1.39-3.236s1.893-1.21 3.236-1.39c1.168-.157 2.67-.175 4.499-.177a.697.697 0 1 1 0 1.396c-1.855.002-3.234.018-4.313.163c-1.189.16-1.906.464-2.436.994S3.72 5.8 3.56 6.99C3.397 8.2 3.395 9.788 3.395 12v.784l.932-.814a2.14 2.14 0 0 1 2.922.097l3.99 3.99a1.86 1.86 0 0 0 2.385.207l.278-.195a2.79 2.79 0 0 1 3.471.209l2.633 2.37c.265-.557.423-1.288.507-2.32c.079-.972.09-2.152.091-3.63a.698.698 0 0 1 1.396 0' opacity='.5'/%3E%3Cpath fill='%23F44336' fill-rule='evenodd' d='M17.5 11c-2.121 0-3.182 0-3.841-.659S13 8.621 13 6.5s0-3.182.659-3.841S15.379 2 17.5 2s3.182 0 3.841.659S22 4.379 22 6.5s0 3.182-.659 3.841S19.621 11 17.5 11m-1.47-7.03a.75.75 0 1 0-1.06 1.06l1.47 1.47l-1.47 1.47a.75.75 0 0 0 1.06 1.06l1.47-1.47l1.47 1.47a.75.75 0 1 0 1.06-1.06L18.56 6.5l1.47-1.47a.75.75 0 0 0-1.06-1.06L17.5 5.44z' clip-rule='evenodd'/%3E%3C/svg%3E&quot;"/><div class="lazy-icon" style="background-image:url(https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd);"></div></div></div>
 
 <p>如果存在已有分区，需要先删除。输入 <code>d</code> 删除现有分区，然后选择要删除的分区编号：</p>
-<div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905181332484.png" data-fancybox="true" style="width:300px;"/></div></div>
+<div class="tag-plugin image"><div class="image-bg" style="aspect-ratio:545/230;width:300px;"><img class="lazy" src="https://webp.raiset.top/PetaLinux/image-20250905181332484.png" data-src="https://webp.raiset.top/PetaLinux/image-20250905181332484.png" data-fancybox="true"onerror="this.src=&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2rem' height='2rem' viewBox='0 0 24 24'%3E%3C!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --%3E%3Cpath fill='%23F44336' d='M22 12.698c-.002 1.47-.013 2.718-.096 3.743c-.097 1.19-.296 2.184-.74 3.009a4.2 4.2 0 0 1-.73.983c-.833.833-1.893 1.21-3.237 1.39C15.884 22 14.2 22 12.053 22h-.106c-2.148 0-3.83 0-5.144-.177c-1.343-.18-2.404-.557-3.236-1.39c-.738-.738-1.12-1.656-1.322-2.795c-.2-1.12-.236-2.512-.243-4.241Q1.999 12.737 2 12v-.054c0-2.148 0-3.83.177-5.144c.18-1.343.557-2.404 1.39-3.236s1.893-1.21 3.236-1.39c1.168-.157 2.67-.175 4.499-.177a.697.697 0 1 1 0 1.396c-1.855.002-3.234.018-4.313.163c-1.189.16-1.906.464-2.436.994S3.72 5.8 3.56 6.99C3.397 8.2 3.395 9.788 3.395 12v.784l.932-.814a2.14 2.14 0 0 1 2.922.097l3.99 3.99a1.86 1.86 0 0 0 2.385.207l.278-.195a2.79 2.79 0 0 1 3.471.209l2.633 2.37c.265-.557.423-1.288.507-2.32c.079-.972.09-2.152.091-3.63a.698.698 0 0 1 1.396 0' opacity='.5'/%3E%3Cpath fill='%23F44336' fill-rule='evenodd' d='M17.5 11c-2.121 0-3.182 0-3.841-.659S13 8.621 13 6.5s0-3.182.659-3.841S15.379 2 17.5 2s3.182 0 3.841.659S22 4.379 22 6.5s0 3.182-.659 3.841S19.621 11 17.5 11m-1.47-7.03a.75.75 0 1 0-1.06 1.06l1.47 1.47l-1.47 1.47a.75.75 0 0 0 1.06 1.06l1.47-1.47l1.47 1.47a.75.75 0 1 0 1.06-1.06L18.56 6.5l1.47-1.47a.75.75 0 0 0-1.06-1.06L17.5 5.44z' clip-rule='evenodd'/%3E%3C/svg%3E&quot;"/><div class="lazy-icon" style="background-image:url(https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd);"></div></div></div>
 
-<h4 id="3-3-SD卡分区创建"><a href="#3-3-SD卡分区创建" class="headerlink" title="3.3 SD卡分区创建"></a>3.3 SD卡分区创建</h4><div class="tag-plugin timeline"><div class="timenode" index="0"><div class="header">第一步：</div><div class="body fs14"><p><strong>创建主分区：</strong></p><ol><li>输入 <code>n</code> 创建新分区</li><li>输入 <code>p</code> 设置为primary主分区</li><li>分区编号和起始扇区默认即可，直接回车</li><li>输入 <code>+1G</code> 设置分区大小为1GB</li></ol><div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905202549609.png" data-fancybox="true"/></div></div><p><strong>设置为启动分区：</strong><br>输入 <code>a</code> 将分区1设置为可启动：</p><div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905202557850.png" data-fancybox="true" style="width:400px;"/></div></div><p><strong>设置文件系统类型：</strong><br>输入 <code>t</code> 然后输入 <code>c</code> 设置为FAT32格式：</p><div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905202650117.png" data-fancybox="true" style="width:400px;"/></div></div></div></div><div class="timenode" index="1"><div class="header">第二步：</div><div class="body fs14"><p><strong>创建Root分区：</strong></p><ol><li>输入 <code>n</code> 创建第二个分区</li><li>输入 <code>p</code> 设置为primary主分区</li><li>其他设置默认即可，直接回车使用剩余所有空间</li></ol><div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905202703499.png" data-fancybox="true"/></div></div></div></div><div class="timenode" index="2"><div class="header">第三步：确认并保存</div><div class="body fs14"><p>输入 <code>p</code> 查看分区创建结果：</p><div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905202714597.png" data-fancybox="true"/></div></div><p><strong>写入分区表：</strong><br>输入 <code>w</code> 并回车将分区配置写入SD卡，写入完成后会自动退出fdisk工具。</p></div></div></div>
+<h4 id="5-3-3-SD卡分区创建"><a href="#5-3-3-SD卡分区创建" class="headerlink" title="5.3.3 SD卡分区创建"></a>5.3.3 SD卡分区创建</h4><div class="tag-plugin timeline"><div class="timenode" index="0"><div class="header"><span>第一步：</span></div><div class="body fs14"><p><strong>创建主分区：</strong></p><ol><li>输入 <code>n</code> 创建新分区</li><li>输入 <code>p</code> 设置为primary主分区</li><li>分区编号和起始扇区默认即可，直接回车</li><li>输入 <code>+1G</code> 设置分区大小为1GB</li></ol><div class="tag-plugin image"><div class="image-bg" style="aspect-ratio:796/277;"><img class="lazy" src="https://webp.raiset.top/PetaLinux/image-20250905202549609.png" data-src="https://webp.raiset.top/PetaLinux/image-20250905202549609.png" data-fancybox="true"onerror="this.src=&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2rem' height='2rem' viewBox='0 0 24 24'%3E%3C!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --%3E%3Cpath fill='%23F44336' d='M22 12.698c-.002 1.47-.013 2.718-.096 3.743c-.097 1.19-.296 2.184-.74 3.009a4.2 4.2 0 0 1-.73.983c-.833.833-1.893 1.21-3.237 1.39C15.884 22 14.2 22 12.053 22h-.106c-2.148 0-3.83 0-5.144-.177c-1.343-.18-2.404-.557-3.236-1.39c-.738-.738-1.12-1.656-1.322-2.795c-.2-1.12-.236-2.512-.243-4.241Q1.999 12.737 2 12v-.054c0-2.148 0-3.83.177-5.144c.18-1.343.557-2.404 1.39-3.236s1.893-1.21 3.236-1.39c1.168-.157 2.67-.175 4.499-.177a.697.697 0 1 1 0 1.396c-1.855.002-3.234.018-4.313.163c-1.189.16-1.906.464-2.436.994S3.72 5.8 3.56 6.99C3.397 8.2 3.395 9.788 3.395 12v.784l.932-.814a2.14 2.14 0 0 1 2.922.097l3.99 3.99a1.86 1.86 0 0 0 2.385.207l.278-.195a2.79 2.79 0 0 1 3.471.209l2.633 2.37c.265-.557.423-1.288.507-2.32c.079-.972.09-2.152.091-3.63a.698.698 0 0 1 1.396 0' opacity='.5'/%3E%3Cpath fill='%23F44336' fill-rule='evenodd' d='M17.5 11c-2.121 0-3.182 0-3.841-.659S13 8.621 13 6.5s0-3.182.659-3.841S15.379 2 17.5 2s3.182 0 3.841.659S22 4.379 22 6.5s0 3.182-.659 3.841S19.621 11 17.5 11m-1.47-7.03a.75.75 0 1 0-1.06 1.06l1.47 1.47l-1.47 1.47a.75.75 0 0 0 1.06 1.06l1.47-1.47l1.47 1.47a.75.75 0 1 0 1.06-1.06L18.56 6.5l1.47-1.47a.75.75 0 0 0-1.06-1.06L17.5 5.44z' clip-rule='evenodd'/%3E%3C/svg%3E&quot;"/><div class="lazy-icon" style="background-image:url(https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd);"></div></div></div><p><strong>设置为启动分区：</strong><br>输入 <code>a</code> 将分区1设置为可启动：</p><div class="tag-plugin image"><div class="image-bg" style="aspect-ratio:689/97;width:400px;"><img class="lazy" src="https://webp.raiset.top/PetaLinux/image-20250905202557850.png" data-src="https://webp.raiset.top/PetaLinux/image-20250905202557850.png" data-fancybox="true"onerror="this.src=&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2rem' height='2rem' viewBox='0 0 24 24'%3E%3C!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --%3E%3Cpath fill='%23F44336' d='M22 12.698c-.002 1.47-.013 2.718-.096 3.743c-.097 1.19-.296 2.184-.74 3.009a4.2 4.2 0 0 1-.73.983c-.833.833-1.893 1.21-3.237 1.39C15.884 22 14.2 22 12.053 22h-.106c-2.148 0-3.83 0-5.144-.177c-1.343-.18-2.404-.557-3.236-1.39c-.738-.738-1.12-1.656-1.322-2.795c-.2-1.12-.236-2.512-.243-4.241Q1.999 12.737 2 12v-.054c0-2.148 0-3.83.177-5.144c.18-1.343.557-2.404 1.39-3.236s1.893-1.21 3.236-1.39c1.168-.157 2.67-.175 4.499-.177a.697.697 0 1 1 0 1.396c-1.855.002-3.234.018-4.313.163c-1.189.16-1.906.464-2.436.994S3.72 5.8 3.56 6.99C3.397 8.2 3.395 9.788 3.395 12v.784l.932-.814a2.14 2.14 0 0 1 2.922.097l3.99 3.99a1.86 1.86 0 0 0 2.385.207l.278-.195a2.79 2.79 0 0 1 3.471.209l2.633 2.37c.265-.557.423-1.288.507-2.32c.079-.972.09-2.152.091-3.63a.698.698 0 0 1 1.396 0' opacity='.5'/%3E%3Cpath fill='%23F44336' fill-rule='evenodd' d='M17.5 11c-2.121 0-3.182 0-3.841-.659S13 8.621 13 6.5s0-3.182.659-3.841S15.379 2 17.5 2s3.182 0 3.841.659S22 4.379 22 6.5s0 3.182-.659 3.841S19.621 11 17.5 11m-1.47-7.03a.75.75 0 1 0-1.06 1.06l1.47 1.47l-1.47 1.47a.75.75 0 0 0 1.06 1.06l1.47-1.47l1.47 1.47a.75.75 0 1 0 1.06-1.06L18.56 6.5l1.47-1.47a.75.75 0 0 0-1.06-1.06L17.5 5.44z' clip-rule='evenodd'/%3E%3C/svg%3E&quot;"/><div class="lazy-icon" style="background-image:url(https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd);"></div></div></div><p><strong>设置文件系统类型：</strong><br>输入 <code>t</code> 然后输入 <code>c</code> 设置为FAT32格式：</p><div class="tag-plugin image"><div class="image-bg" style="aspect-ratio:799/140;width:400px;"><img class="lazy" src="https://webp.raiset.top/PetaLinux/image-20250905202650117.png" data-src="https://webp.raiset.top/PetaLinux/image-20250905202650117.png" data-fancybox="true"onerror="this.src=&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2rem' height='2rem' viewBox='0 0 24 24'%3E%3C!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --%3E%3Cpath fill='%23F44336' d='M22 12.698c-.002 1.47-.013 2.718-.096 3.743c-.097 1.19-.296 2.184-.74 3.009a4.2 4.2 0 0 1-.73.983c-.833.833-1.893 1.21-3.237 1.39C15.884 22 14.2 22 12.053 22h-.106c-2.148 0-3.83 0-5.144-.177c-1.343-.18-2.404-.557-3.236-1.39c-.738-.738-1.12-1.656-1.322-2.795c-.2-1.12-.236-2.512-.243-4.241Q1.999 12.737 2 12v-.054c0-2.148 0-3.83.177-5.144c.18-1.343.557-2.404 1.39-3.236s1.893-1.21 3.236-1.39c1.168-.157 2.67-.175 4.499-.177a.697.697 0 1 1 0 1.396c-1.855.002-3.234.018-4.313.163c-1.189.16-1.906.464-2.436.994S3.72 5.8 3.56 6.99C3.397 8.2 3.395 9.788 3.395 12v.784l.932-.814a2.14 2.14 0 0 1 2.922.097l3.99 3.99a1.86 1.86 0 0 0 2.385.207l.278-.195a2.79 2.79 0 0 1 3.471.209l2.633 2.37c.265-.557.423-1.288.507-2.32c.079-.972.09-2.152.091-3.63a.698.698 0 0 1 1.396 0' opacity='.5'/%3E%3Cpath fill='%23F44336' fill-rule='evenodd' d='M17.5 11c-2.121 0-3.182 0-3.841-.659S13 8.621 13 6.5s0-3.182.659-3.841S15.379 2 17.5 2s3.182 0 3.841.659S22 4.379 22 6.5s0 3.182-.659 3.841S19.621 11 17.5 11m-1.47-7.03a.75.75 0 1 0-1.06 1.06l1.47 1.47l-1.47 1.47a.75.75 0 0 0 1.06 1.06l1.47-1.47l1.47 1.47a.75.75 0 1 0 1.06-1.06L18.56 6.5l1.47-1.47a.75.75 0 0 0-1.06-1.06L17.5 5.44z' clip-rule='evenodd'/%3E%3C/svg%3E&quot;"/><div class="lazy-icon" style="background-image:url(https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd);"></div></div></div></div></div><div class="timenode" index="1"><div class="header"><span>第二步：</span></div><div class="body fs14"><p><strong>创建Root分区：</strong></p><ol><li>输入 <code>n</code> 创建第二个分区</li><li>输入 <code>p</code> 设置为primary主分区</li><li>其他设置默认即可，直接回车使用剩余所有空间</li></ol><div class="tag-plugin image"><div class="image-bg" style="aspect-ratio:798/288;"><img class="lazy" src="https://webp.raiset.top/PetaLinux/image-20250905202703499.png" data-src="https://webp.raiset.top/PetaLinux/image-20250905202703499.png" data-fancybox="true"onerror="this.src=&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2rem' height='2rem' viewBox='0 0 24 24'%3E%3C!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --%3E%3Cpath fill='%23F44336' d='M22 12.698c-.002 1.47-.013 2.718-.096 3.743c-.097 1.19-.296 2.184-.74 3.009a4.2 4.2 0 0 1-.73.983c-.833.833-1.893 1.21-3.237 1.39C15.884 22 14.2 22 12.053 22h-.106c-2.148 0-3.83 0-5.144-.177c-1.343-.18-2.404-.557-3.236-1.39c-.738-.738-1.12-1.656-1.322-2.795c-.2-1.12-.236-2.512-.243-4.241Q1.999 12.737 2 12v-.054c0-2.148 0-3.83.177-5.144c.18-1.343.557-2.404 1.39-3.236s1.893-1.21 3.236-1.39c1.168-.157 2.67-.175 4.499-.177a.697.697 0 1 1 0 1.396c-1.855.002-3.234.018-4.313.163c-1.189.16-1.906.464-2.436.994S3.72 5.8 3.56 6.99C3.397 8.2 3.395 9.788 3.395 12v.784l.932-.814a2.14 2.14 0 0 1 2.922.097l3.99 3.99a1.86 1.86 0 0 0 2.385.207l.278-.195a2.79 2.79 0 0 1 3.471.209l2.633 2.37c.265-.557.423-1.288.507-2.32c.079-.972.09-2.152.091-3.63a.698.698 0 0 1 1.396 0' opacity='.5'/%3E%3Cpath fill='%23F44336' fill-rule='evenodd' d='M17.5 11c-2.121 0-3.182 0-3.841-.659S13 8.621 13 6.5s0-3.182.659-3.841S15.379 2 17.5 2s3.182 0 3.841.659S22 4.379 22 6.5s0 3.182-.659 3.841S19.621 11 17.5 11m-1.47-7.03a.75.75 0 1 0-1.06 1.06l1.47 1.47l-1.47 1.47a.75.75 0 0 0 1.06 1.06l1.47-1.47l1.47 1.47a.75.75 0 1 0 1.06-1.06L18.56 6.5l1.47-1.47a.75.75 0 0 0-1.06-1.06L17.5 5.44z' clip-rule='evenodd'/%3E%3C/svg%3E&quot;"/><div class="lazy-icon" style="background-image:url(https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd);"></div></div></div></div></div><div class="timenode" index="2"><div class="header"><span>第三步：确认并保存</span></div><div class="body fs14"><p>输入 <code>p</code> 查看分区创建结果：</p><div class="tag-plugin image"><div class="image-bg" style="aspect-ratio:798/296;"><img class="lazy" src="https://webp.raiset.top/PetaLinux/image-20250905202714597.png" data-src="https://webp.raiset.top/PetaLinux/image-20250905202714597.png" data-fancybox="true"onerror="this.src=&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2rem' height='2rem' viewBox='0 0 24 24'%3E%3C!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --%3E%3Cpath fill='%23F44336' d='M22 12.698c-.002 1.47-.013 2.718-.096 3.743c-.097 1.19-.296 2.184-.74 3.009a4.2 4.2 0 0 1-.73.983c-.833.833-1.893 1.21-3.237 1.39C15.884 22 14.2 22 12.053 22h-.106c-2.148 0-3.83 0-5.144-.177c-1.343-.18-2.404-.557-3.236-1.39c-.738-.738-1.12-1.656-1.322-2.795c-.2-1.12-.236-2.512-.243-4.241Q1.999 12.737 2 12v-.054c0-2.148 0-3.83.177-5.144c.18-1.343.557-2.404 1.39-3.236s1.893-1.21 3.236-1.39c1.168-.157 2.67-.175 4.499-.177a.697.697 0 1 1 0 1.396c-1.855.002-3.234.018-4.313.163c-1.189.16-1.906.464-2.436.994S3.72 5.8 3.56 6.99C3.397 8.2 3.395 9.788 3.395 12v.784l.932-.814a2.14 2.14 0 0 1 2.922.097l3.99 3.99a1.86 1.86 0 0 0 2.385.207l.278-.195a2.79 2.79 0 0 1 3.471.209l2.633 2.37c.265-.557.423-1.288.507-2.32c.079-.972.09-2.152.091-3.63a.698.698 0 0 1 1.396 0' opacity='.5'/%3E%3Cpath fill='%23F44336' fill-rule='evenodd' d='M17.5 11c-2.121 0-3.182 0-3.841-.659S13 8.621 13 6.5s0-3.182.659-3.841S15.379 2 17.5 2s3.182 0 3.841.659S22 4.379 22 6.5s0 3.182-.659 3.841S19.621 11 17.5 11m-1.47-7.03a.75.75 0 1 0-1.06 1.06l1.47 1.47l-1.47 1.47a.75.75 0 0 0 1.06 1.06l1.47-1.47l1.47 1.47a.75.75 0 1 0 1.06-1.06L18.56 6.5l1.47-1.47a.75.75 0 0 0-1.06-1.06L17.5 5.44z' clip-rule='evenodd'/%3E%3C/svg%3E&quot;"/><div class="lazy-icon" style="background-image:url(https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd);"></div></div></div><p><strong>写入分区表：</strong><br>输入 <code>w</code> 并回车将分区配置写入SD卡，写入完成后会自动退出fdisk工具。</p></div></div></div>
 
-<h4 id="3-4-格式化分区"><a href="#3-4-格式化分区" class="headerlink" title="3.4 格式化分区"></a>3.4 格式化分区</h4><p>取消挂载：</p>
+<h4 id="5-3-4-格式化分区"><a href="#5-3-4-格式化分区" class="headerlink" title="5.3.4 格式化分区"></a>5.3.4 格式化分区</h4><p>取消挂载：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo umount /dev/sdb1</span><br><span class="line">sudo umount /dev/sdb2</span><br></pre></td></tr></table></figure>
 
 <p>格式化Boot分区为FAT32格式：</p>
@@ -213,76 +216,78 @@
 <p>重新插拔SD卡后，使用以下命令验证格式化结果：：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lsblk -f</span><br></pre></td></tr></table></figure>
 
-<div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905202728371.png" data-fancybox="true" style="width:600px;"/></div></div>
+<div class="tag-plugin image"><div class="image-bg" style="aspect-ratio:798/312;width:600px;"><img class="lazy" src="https://webp.raiset.top/PetaLinux/image-20250905202728371.png" data-src="https://webp.raiset.top/PetaLinux/image-20250905202728371.png" data-fancybox="true"onerror="this.src=&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2rem' height='2rem' viewBox='0 0 24 24'%3E%3C!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --%3E%3Cpath fill='%23F44336' d='M22 12.698c-.002 1.47-.013 2.718-.096 3.743c-.097 1.19-.296 2.184-.74 3.009a4.2 4.2 0 0 1-.73.983c-.833.833-1.893 1.21-3.237 1.39C15.884 22 14.2 22 12.053 22h-.106c-2.148 0-3.83 0-5.144-.177c-1.343-.18-2.404-.557-3.236-1.39c-.738-.738-1.12-1.656-1.322-2.795c-.2-1.12-.236-2.512-.243-4.241Q1.999 12.737 2 12v-.054c0-2.148 0-3.83.177-5.144c.18-1.343.557-2.404 1.39-3.236s1.893-1.21 3.236-1.39c1.168-.157 2.67-.175 4.499-.177a.697.697 0 1 1 0 1.396c-1.855.002-3.234.018-4.313.163c-1.189.16-1.906.464-2.436.994S3.72 5.8 3.56 6.99C3.397 8.2 3.395 9.788 3.395 12v.784l.932-.814a2.14 2.14 0 0 1 2.922.097l3.99 3.99a1.86 1.86 0 0 0 2.385.207l.278-.195a2.79 2.79 0 0 1 3.471.209l2.633 2.37c.265-.557.423-1.288.507-2.32c.079-.972.09-2.152.091-3.63a.698.698 0 0 1 1.396 0' opacity='.5'/%3E%3Cpath fill='%23F44336' fill-rule='evenodd' d='M17.5 11c-2.121 0-3.182 0-3.841-.659S13 8.621 13 6.5s0-3.182.659-3.841S15.379 2 17.5 2s3.182 0 3.841.659S22 4.379 22 6.5s0 3.182-.659 3.841S19.621 11 17.5 11m-1.47-7.03a.75.75 0 1 0-1.06 1.06l1.47 1.47l-1.47 1.47a.75.75 0 0 0 1.06 1.06l1.47-1.47l1.47 1.47a.75.75 0 1 0 1.06-1.06L18.56 6.5l1.47-1.47a.75.75 0 0 0-1.06-1.06L17.5 5.44z' clip-rule='evenodd'/%3E%3C/svg%3E&quot;"/><div class="lazy-icon" style="background-image:url(https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd);"></div></div></div>
 
 <div class="tag-plugin colorful note" color="cyan"><div class="title">💡替代工具</div><div class="body"><p>除了命令行方式，也可以使用图形化工具：Linux: gparted；Windows: DiskGenius。</p></div></div>
 
-<div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905202744008.png" data-fancybox="true" style="width:500px;"/></div></div>
+<div class="tag-plugin image"><div class="image-bg" style="aspect-ratio:799/281;width:500px;"><img class="lazy" src="https://webp.raiset.top/PetaLinux/image-20250905202744008.png" data-src="https://webp.raiset.top/PetaLinux/image-20250905202744008.png" data-fancybox="true"onerror="this.src=&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2rem' height='2rem' viewBox='0 0 24 24'%3E%3C!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --%3E%3Cpath fill='%23F44336' d='M22 12.698c-.002 1.47-.013 2.718-.096 3.743c-.097 1.19-.296 2.184-.74 3.009a4.2 4.2 0 0 1-.73.983c-.833.833-1.893 1.21-3.237 1.39C15.884 22 14.2 22 12.053 22h-.106c-2.148 0-3.83 0-5.144-.177c-1.343-.18-2.404-.557-3.236-1.39c-.738-.738-1.12-1.656-1.322-2.795c-.2-1.12-.236-2.512-.243-4.241Q1.999 12.737 2 12v-.054c0-2.148 0-3.83.177-5.144c.18-1.343.557-2.404 1.39-3.236s1.893-1.21 3.236-1.39c1.168-.157 2.67-.175 4.499-.177a.697.697 0 1 1 0 1.396c-1.855.002-3.234.018-4.313.163c-1.189.16-1.906.464-2.436.994S3.72 5.8 3.56 6.99C3.397 8.2 3.395 9.788 3.395 12v.784l.932-.814a2.14 2.14 0 0 1 2.922.097l3.99 3.99a1.86 1.86 0 0 0 2.385.207l.278-.195a2.79 2.79 0 0 1 3.471.209l2.633 2.37c.265-.557.423-1.288.507-2.32c.079-.972.09-2.152.091-3.63a.698.698 0 0 1 1.396 0' opacity='.5'/%3E%3Cpath fill='%23F44336' fill-rule='evenodd' d='M17.5 11c-2.121 0-3.182 0-3.841-.659S13 8.621 13 6.5s0-3.182.659-3.841S15.379 2 17.5 2s3.182 0 3.841.659S22 4.379 22 6.5s0 3.182-.659 3.841S19.621 11 17.5 11m-1.47-7.03a.75.75 0 1 0-1.06 1.06l1.47 1.47l-1.47 1.47a.75.75 0 0 0 1.06 1.06l1.47-1.47l1.47 1.47a.75.75 0 1 0 1.06-1.06L18.56 6.5l1.47-1.47a.75.75 0 0 0-1.06-1.06L17.5 5.44z' clip-rule='evenodd'/%3E%3C/svg%3E&quot;"/><div class="lazy-icon" style="background-image:url(https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd);"></div></div></div>
 
-<h3 id="4-写入系统文件"><a href="#4-写入系统文件" class="headerlink" title="4. 写入系统文件"></a>4. 写入系统文件</h3><h4 id="4-1-拷贝Boot文件"><a href="#4-1-拷贝Boot文件" class="headerlink" title="4.1 拷贝Boot文件"></a>4.1 拷贝Boot文件</h4><p>进入<code>工程目录/images/linux</code>，将以下文件拷贝到Boot分区：</p>
+<h3 id="5-4-写入系统文件"><a href="#5-4-写入系统文件" class="headerlink" title="5.4 写入系统文件"></a>5.4 写入系统文件</h3><h4 id="5-4-1-拷贝Boot文件"><a href="#5-4-1-拷贝Boot文件" class="headerlink" title="5.4.1 拷贝Boot文件"></a>5.4.1 拷贝Boot文件</h4><p>进入<code>工程目录/images/linux</code>，将以下文件拷贝到Boot分区：</p>
 <ul>
 <li><code>boot.scr</code></li>
 <li><code>BOOT.BIN</code> </li>
 <li><code>image.ub</code></li>
 </ul>
-<div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905202753452.png" data-fancybox="true" style="width:500px;"/></div></div>
+<div class="tag-plugin image"><div class="image-bg" style="aspect-ratio:796/185;width:500px;"><img class="lazy" src="https://webp.raiset.top/PetaLinux/image-20250905202753452.png" data-src="https://webp.raiset.top/PetaLinux/image-20250905202753452.png" data-fancybox="true"onerror="this.src=&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2rem' height='2rem' viewBox='0 0 24 24'%3E%3C!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --%3E%3Cpath fill='%23F44336' d='M22 12.698c-.002 1.47-.013 2.718-.096 3.743c-.097 1.19-.296 2.184-.74 3.009a4.2 4.2 0 0 1-.73.983c-.833.833-1.893 1.21-3.237 1.39C15.884 22 14.2 22 12.053 22h-.106c-2.148 0-3.83 0-5.144-.177c-1.343-.18-2.404-.557-3.236-1.39c-.738-.738-1.12-1.656-1.322-2.795c-.2-1.12-.236-2.512-.243-4.241Q1.999 12.737 2 12v-.054c0-2.148 0-3.83.177-5.144c.18-1.343.557-2.404 1.39-3.236s1.893-1.21 3.236-1.39c1.168-.157 2.67-.175 4.499-.177a.697.697 0 1 1 0 1.396c-1.855.002-3.234.018-4.313.163c-1.189.16-1.906.464-2.436.994S3.72 5.8 3.56 6.99C3.397 8.2 3.395 9.788 3.395 12v.784l.932-.814a2.14 2.14 0 0 1 2.922.097l3.99 3.99a1.86 1.86 0 0 0 2.385.207l.278-.195a2.79 2.79 0 0 1 3.471.209l2.633 2.37c.265-.557.423-1.288.507-2.32c.079-.972.09-2.152.091-3.63a.698.698 0 0 1 1.396 0' opacity='.5'/%3E%3Cpath fill='%23F44336' fill-rule='evenodd' d='M17.5 11c-2.121 0-3.182 0-3.841-.659S13 8.621 13 6.5s0-3.182.659-3.841S15.379 2 17.5 2s3.182 0 3.841.659S22 4.379 22 6.5s0 3.182-.659 3.841S19.621 11 17.5 11m-1.47-7.03a.75.75 0 1 0-1.06 1.06l1.47 1.47l-1.47 1.47a.75.75 0 0 0 1.06 1.06l1.47-1.47l1.47 1.47a.75.75 0 1 0 1.06-1.06L18.56 6.5l1.47-1.47a.75.75 0 0 0-1.06-1.06L17.5 5.44z' clip-rule='evenodd'/%3E%3C/svg%3E&quot;"/><div class="lazy-icon" style="background-image:url(https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd);"></div></div></div>
 
-<h4 id="4-2-写入Root文件系统"><a href="#4-2-写入Root文件系统" class="headerlink" title="4.2 写入Root文件系统"></a>4.2 写入Root文件系统</h4><div class="tag-plugin colorful note" color="cyan"><div class="title">💡写入方式对比</div><div class="body"><p>dd命令：直接写入ext4镜像文件，完整性好； 解压方式：将rootfs.tar.gz解压到挂载点，速度较快。</p></div></div>
+<h4 id="5-4-2-写入Root文件系统"><a href="#5-4-2-写入Root文件系统" class="headerlink" title="5.4.2 写入Root文件系统"></a>5.4.2 写入Root文件系统</h4><div class="tag-plugin colorful note" color="cyan"><div class="title">💡写入方式对比</div><div class="body"><p>dd命令：直接写入ext4镜像文件，完整性好；<br> 解压方式：将rootfs.tar.gz解压到挂载点，速度较快。<br> 通常使用解压方式好一点。</p></div></div>
 
-<div class="tag-plugin tabs"id="tab_1"><div class="nav-tabs"><div class="tab active"><a href="#tab_1-1">dd命令写入</a></div><div class="tab"><a href="#tab_1-2">解压方式</a></div></div><div class="tab-content"><div class="tab-pane active" id="tab_1-1"><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo <span class="built_in">dd</span> <span class="keyword">if</span>=rootfs.ext4 of=/dev/sdb2</span><br></pre></td></tr></table></figure>
+<div class="tag-plugin tabs"id="tab_1"><div class="nav-tabs"><div class="tab active"><a href="#tab_1-1">解压方式</a></div><div class="tab"><a href="#tab_1-2">dd命令写入</a></div></div><div class="tab-content"><div class="tab-pane active" id="tab_1-1"><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo tar -zxf rootfs.tar.gz -C /media/raiset/root</span><br></pre></td></tr></table></figure>
+<p>挂载的位置可以从上面<code>lsblk -f</code>命令输出的结果中看到。</p></div><div class="tab-pane" id="tab_1-2"><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo <span class="built_in">dd</span> <span class="keyword">if</span>=rootfs.ext4 of=/dev/sdb2</span><br></pre></td></tr></table></figure>
 <p>等待写入完成</p>
-<div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905202801239.png" data-fancybox="true"/></div></div></div><div class="tab-pane" id="tab_1-2"><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo tar -zxf rootfs.tar.gz -C /media/raiset/root</span><br></pre></td></tr></table></figure>
-<p>挂载的位置可以从上面<code>lsblk -f</code>命令输出的结果中看到。</p></div></div></div>
+<div class="tag-plugin image"><div class="image-bg" style="aspect-ratio:800/86;"><img class="lazy" src="https://webp.raiset.top/PetaLinux/image-20250905202801239.png" data-src="https://webp.raiset.top/PetaLinux/image-20250905202801239.png" data-fancybox="true"onerror="this.src=&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2rem' height='2rem' viewBox='0 0 24 24'%3E%3C!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --%3E%3Cpath fill='%23F44336' d='M22 12.698c-.002 1.47-.013 2.718-.096 3.743c-.097 1.19-.296 2.184-.74 3.009a4.2 4.2 0 0 1-.73.983c-.833.833-1.893 1.21-3.237 1.39C15.884 22 14.2 22 12.053 22h-.106c-2.148 0-3.83 0-5.144-.177c-1.343-.18-2.404-.557-3.236-1.39c-.738-.738-1.12-1.656-1.322-2.795c-.2-1.12-.236-2.512-.243-4.241Q1.999 12.737 2 12v-.054c0-2.148 0-3.83.177-5.144c.18-1.343.557-2.404 1.39-3.236s1.893-1.21 3.236-1.39c1.168-.157 2.67-.175 4.499-.177a.697.697 0 1 1 0 1.396c-1.855.002-3.234.018-4.313.163c-1.189.16-1.906.464-2.436.994S3.72 5.8 3.56 6.99C3.397 8.2 3.395 9.788 3.395 12v.784l.932-.814a2.14 2.14 0 0 1 2.922.097l3.99 3.99a1.86 1.86 0 0 0 2.385.207l.278-.195a2.79 2.79 0 0 1 3.471.209l2.633 2.37c.265-.557.423-1.288.507-2.32c.079-.972.09-2.152.091-3.63a.698.698 0 0 1 1.396 0' opacity='.5'/%3E%3Cpath fill='%23F44336' fill-rule='evenodd' d='M17.5 11c-2.121 0-3.182 0-3.841-.659S13 8.621 13 6.5s0-3.182.659-3.841S15.379 2 17.5 2s3.182 0 3.841.659S22 4.379 22 6.5s0 3.182-.659 3.841S19.621 11 17.5 11m-1.47-7.03a.75.75 0 1 0-1.06 1.06l1.47 1.47l-1.47 1.47a.75.75 0 0 0 1.06 1.06l1.47-1.47l1.47 1.47a.75.75 0 1 0 1.06-1.06L18.56 6.5l1.47-1.47a.75.75 0 0 0-1.06-1.06L17.5 5.44z' clip-rule='evenodd'/%3E%3C/svg%3E&quot;"/><div class="lazy-icon" style="background-image:url(https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd);"></div></div></div></div></div></div>
 
-<h2 id="六、上板验证"><a href="#六、上板验证" class="headerlink" title="六、上板验证"></a>六、上板验证</h2><h3 id="1-设置SD卡启动"><a href="#1-设置SD卡启动" class="headerlink" title="1. 设置SD卡启动"></a>1. 设置SD卡启动</h3><p>将开发板设置为SD卡启动模式，具体设置方法请参考板卡用户手册，通常通过跳线帽或拨码开关来设置。</p>
-<h3 id="2-串口连接"><a href="#2-串口连接" class="headerlink" title="2. 串口连接"></a>2. 串口连接</h3><h4 id="2-1-查看端口"><a href="#2-1-查看端口" class="headerlink" title="2.1 查看端口"></a>2.1 查看端口</h4><p>打开Windows设备管理器查看串口号：</p>
-<div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905203535233.png" data-fancybox="true" style="width:400px;"/></div></div>
+<h2 id="6-上板验证"><a href="#6-上板验证" class="headerlink" title="6. 上板验证"></a>6. 上板验证</h2><h3 id="6-1-设置SD卡启动"><a href="#6-1-设置SD卡启动" class="headerlink" title="6.1 设置SD卡启动"></a>6.1 设置SD卡启动</h3><p>将开发板设置为SD卡启动模式，具体设置方法请参考板卡用户手册，通常通过跳线帽或拨码开关来设置。</p>
+<h3 id="6-2-串口连接"><a href="#6-2-串口连接" class="headerlink" title="6.2 串口连接"></a>6.2 串口连接</h3><h4 id="6-2-1-查看端口"><a href="#6-2-1-查看端口" class="headerlink" title="6.2.1 查看端口"></a>6.2.1 查看端口</h4><p>打开Windows设备管理器查看串口号：</p>
+<div class="tag-plugin image"><div class="image-bg" style="aspect-ratio:800/405;width:400px;"><img class="lazy" src="https://webp.raiset.top/PetaLinux/image-20250905203535233.png" data-src="https://webp.raiset.top/PetaLinux/image-20250905203535233.png" data-fancybox="true"onerror="this.src=&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2rem' height='2rem' viewBox='0 0 24 24'%3E%3C!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --%3E%3Cpath fill='%23F44336' d='M22 12.698c-.002 1.47-.013 2.718-.096 3.743c-.097 1.19-.296 2.184-.74 3.009a4.2 4.2 0 0 1-.73.983c-.833.833-1.893 1.21-3.237 1.39C15.884 22 14.2 22 12.053 22h-.106c-2.148 0-3.83 0-5.144-.177c-1.343-.18-2.404-.557-3.236-1.39c-.738-.738-1.12-1.656-1.322-2.795c-.2-1.12-.236-2.512-.243-4.241Q1.999 12.737 2 12v-.054c0-2.148 0-3.83.177-5.144c.18-1.343.557-2.404 1.39-3.236s1.893-1.21 3.236-1.39c1.168-.157 2.67-.175 4.499-.177a.697.697 0 1 1 0 1.396c-1.855.002-3.234.018-4.313.163c-1.189.16-1.906.464-2.436.994S3.72 5.8 3.56 6.99C3.397 8.2 3.395 9.788 3.395 12v.784l.932-.814a2.14 2.14 0 0 1 2.922.097l3.99 3.99a1.86 1.86 0 0 0 2.385.207l.278-.195a2.79 2.79 0 0 1 3.471.209l2.633 2.37c.265-.557.423-1.288.507-2.32c.079-.972.09-2.152.091-3.63a.698.698 0 0 1 1.396 0' opacity='.5'/%3E%3Cpath fill='%23F44336' fill-rule='evenodd' d='M17.5 11c-2.121 0-3.182 0-3.841-.659S13 8.621 13 6.5s0-3.182.659-3.841S15.379 2 17.5 2s3.182 0 3.841.659S22 4.379 22 6.5s0 3.182-.659 3.841S19.621 11 17.5 11m-1.47-7.03a.75.75 0 1 0-1.06 1.06l1.47 1.47l-1.47 1.47a.75.75 0 0 0 1.06 1.06l1.47-1.47l1.47 1.47a.75.75 0 1 0 1.06-1.06L18.56 6.5l1.47-1.47a.75.75 0 0 0-1.06-1.06L17.5 5.44z' clip-rule='evenodd'/%3E%3C/svg%3E&quot;"/><div class="lazy-icon" style="background-image:url(https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd);"></div></div></div>
 
 <div class="tag-plugin colorful note" color="cyan"><div class="body"><p>如果设备管理器中不显示串口，需要下载并安装相应的USB转串口驱动程序。</p></div></div>
 
-<h4 id="2-2-配置串口工具"><a href="#2-2-配置串口工具" class="headerlink" title="2.2 配置串口工具"></a>2.2 配置串口工具</h4><p>以Putty为例，配置连接参数：</p>
-<div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905203658436.png" data-fancybox="true" style="width:400px;"/></div></div>
+<h4 id="6-2-2-配置串口工具"><a href="#6-2-2-配置串口工具" class="headerlink" title="6.2.2 配置串口工具"></a>6.2.2 配置串口工具</h4><p>以Putty为例，配置连接参数：</p>
+<div class="tag-plugin image"><div class="image-bg" style="aspect-ratio:689/309;width:400px;"><img class="lazy" src="https://webp.raiset.top/PetaLinux/image-20250905203658436.png" data-src="https://webp.raiset.top/PetaLinux/image-20250905203658436.png" data-fancybox="true"onerror="this.src=&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2rem' height='2rem' viewBox='0 0 24 24'%3E%3C!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --%3E%3Cpath fill='%23F44336' d='M22 12.698c-.002 1.47-.013 2.718-.096 3.743c-.097 1.19-.296 2.184-.74 3.009a4.2 4.2 0 0 1-.73.983c-.833.833-1.893 1.21-3.237 1.39C15.884 22 14.2 22 12.053 22h-.106c-2.148 0-3.83 0-5.144-.177c-1.343-.18-2.404-.557-3.236-1.39c-.738-.738-1.12-1.656-1.322-2.795c-.2-1.12-.236-2.512-.243-4.241Q1.999 12.737 2 12v-.054c0-2.148 0-3.83.177-5.144c.18-1.343.557-2.404 1.39-3.236s1.893-1.21 3.236-1.39c1.168-.157 2.67-.175 4.499-.177a.697.697 0 1 1 0 1.396c-1.855.002-3.234.018-4.313.163c-1.189.16-1.906.464-2.436.994S3.72 5.8 3.56 6.99C3.397 8.2 3.395 9.788 3.395 12v.784l.932-.814a2.14 2.14 0 0 1 2.922.097l3.99 3.99a1.86 1.86 0 0 0 2.385.207l.278-.195a2.79 2.79 0 0 1 3.471.209l2.633 2.37c.265-.557.423-1.288.507-2.32c.079-.972.09-2.152.091-3.63a.698.698 0 0 1 1.396 0' opacity='.5'/%3E%3Cpath fill='%23F44336' fill-rule='evenodd' d='M17.5 11c-2.121 0-3.182 0-3.841-.659S13 8.621 13 6.5s0-3.182.659-3.841S15.379 2 17.5 2s3.182 0 3.841.659S22 4.379 22 6.5s0 3.182-.659 3.841S19.621 11 17.5 11m-1.47-7.03a.75.75 0 1 0-1.06 1.06l1.47 1.47l-1.47 1.47a.75.75 0 0 0 1.06 1.06l1.47-1.47l1.47 1.47a.75.75 0 1 0 1.06-1.06L18.56 6.5l1.47-1.47a.75.75 0 0 0-1.06-1.06L17.5 5.44z' clip-rule='evenodd'/%3E%3C/svg%3E&quot;"/><div class="lazy-icon" style="background-image:url(https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd);"></div></div></div>
 
-<h3 id="3-启动测试"><a href="#3-启动测试" class="headerlink" title="3. 启动测试"></a>3. 启动测试</h3><h4 id="3-1-启动过程"><a href="#3-1-启动过程" class="headerlink" title="3.1 启动过程"></a>3.1 启动过程</h4><ol>
+<h3 id="6-3-启动测试"><a href="#6-3-启动测试" class="headerlink" title="6.3 启动测试"></a>6.3 启动测试</h3><h4 id="6-3-1-启动过程"><a href="#6-3-1-启动过程" class="headerlink" title="6.3.1 启动过程"></a>6.3.1 启动过程</h4><ol>
 <li><strong>启动开发板</strong> - 插入SD卡并上电</li>
 <li><strong>打开串口工具</strong> - 连接并打开串口窗口  </li>
 <li><strong>等待启动完成</strong> - 观察启动日志输出</li>
 </ol>
-<h4 id="3-2-首次登录配置"><a href="#3-2-首次登录配置" class="headerlink" title="3.2 首次登录配置"></a>3.2 首次登录配置</h4><ol>
+<h4 id="6-3-2-首次登录配置"><a href="#6-3-2-首次登录配置" class="headerlink" title="6.3.2 首次登录配置"></a>6.3.2 首次登录配置</h4><ol>
 <li><strong>用户名：</strong> 输入 <code>petalinux</code></li>
 <li><strong>设置密码：</strong> 根据提示设置新密码</li>
 <li><strong>确认密码：</strong> 再次输入密码确认</li>
 <li><strong>登录成功：</strong> 进入PetaLinux系统命令行</li>
 </ol>
-<div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905203751755.png" data-fancybox="true"/></div></div>
+<div class="tag-plugin image"><div class="image-bg" style="aspect-ratio:793/99;"><img class="lazy" src="https://webp.raiset.top/PetaLinux/image-20250905203751755.png" data-src="https://webp.raiset.top/PetaLinux/image-20250905203751755.png" data-fancybox="true"onerror="this.src=&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2rem' height='2rem' viewBox='0 0 24 24'%3E%3C!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --%3E%3Cpath fill='%23F44336' d='M22 12.698c-.002 1.47-.013 2.718-.096 3.743c-.097 1.19-.296 2.184-.74 3.009a4.2 4.2 0 0 1-.73.983c-.833.833-1.893 1.21-3.237 1.39C15.884 22 14.2 22 12.053 22h-.106c-2.148 0-3.83 0-5.144-.177c-1.343-.18-2.404-.557-3.236-1.39c-.738-.738-1.12-1.656-1.322-2.795c-.2-1.12-.236-2.512-.243-4.241Q1.999 12.737 2 12v-.054c0-2.148 0-3.83.177-5.144c.18-1.343.557-2.404 1.39-3.236s1.893-1.21 3.236-1.39c1.168-.157 2.67-.175 4.499-.177a.697.697 0 1 1 0 1.396c-1.855.002-3.234.018-4.313.163c-1.189.16-1.906.464-2.436.994S3.72 5.8 3.56 6.99C3.397 8.2 3.395 9.788 3.395 12v.784l.932-.814a2.14 2.14 0 0 1 2.922.097l3.99 3.99a1.86 1.86 0 0 0 2.385.207l.278-.195a2.79 2.79 0 0 1 3.471.209l2.633 2.37c.265-.557.423-1.288.507-2.32c.079-.972.09-2.152.091-3.63a.698.698 0 0 1 1.396 0' opacity='.5'/%3E%3Cpath fill='%23F44336' fill-rule='evenodd' d='M17.5 11c-2.121 0-3.182 0-3.841-.659S13 8.621 13 6.5s0-3.182.659-3.841S15.379 2 17.5 2s3.182 0 3.841.659S22 4.379 22 6.5s0 3.182-.659 3.841S19.621 11 17.5 11m-1.47-7.03a.75.75 0 1 0-1.06 1.06l1.47 1.47l-1.47 1.47a.75.75 0 0 0 1.06 1.06l1.47-1.47l1.47 1.47a.75.75 0 1 0 1.06-1.06L18.56 6.5l1.47-1.47a.75.75 0 0 0-1.06-1.06L17.5 5.44z' clip-rule='evenodd'/%3E%3C/svg%3E&quot;"/><div class="lazy-icon" style="background-image:url(https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd);"></div></div></div>
 
-<h2 id="七、离线编译"><a href="#七、离线编译" class="headerlink" title="七、离线编译"></a>七、离线编译</h2><div class="tag-plugin colorful note" color="blue"><div class="body"><p>离线编译通过预先下载所需文件，避免在编译过程中联网下载，可以显著提升编译速度。</p></div></div>
+<h2 id="7-离线编译"><a href="#7-离线编译" class="headerlink" title="7. 离线编译"></a>7. 离线编译</h2><div class="tag-plugin colorful note" color="blue"><div class="body"><p>离线编译通过预先下载所需文件，避免在编译过程中联网下载，可以显著提升编译速度。</p></div></div>
 
-<h3 id="1-下载离线资源"><a href="#1-下载离线资源" class="headerlink" title="1. 下载离线资源"></a>1. 下载离线资源</h3><p>访问<a target="_blank" rel="noopener" href="https://china.xilinx.com/support/download/index.html/content/xilinx/zh/downloadNav/embedded-design-tools/archive.html">AMD&#x2F;Xilinx下载页面</a>：</p>
-<div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905203808242.png" data-fancybox="true" style="width:400px;"/></div></div>
+<h3 id="7-1-下载离线资源"><a href="#7-1-下载离线资源" class="headerlink" title="7.1 下载离线资源"></a>7.1 下载离线资源</h3><p>访问<a target="_blank" rel="noopener" href="https://china.xilinx.com/support/download/index.html/content/xilinx/zh/downloadNav/embedded-design-tools/archive.html">AMD&#x2F;Xilinx下载页面</a>：</p>
+<div class="tag-plugin image"><div class="image-bg" style="aspect-ratio:546/751;width:400px;"><img class="lazy" src="https://webp.raiset.top/PetaLinux/image-20250905203808242.png" data-src="https://webp.raiset.top/PetaLinux/image-20250905203808242.png" data-fancybox="true"onerror="this.src=&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2rem' height='2rem' viewBox='0 0 24 24'%3E%3C!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --%3E%3Cpath fill='%23F44336' d='M22 12.698c-.002 1.47-.013 2.718-.096 3.743c-.097 1.19-.296 2.184-.74 3.009a4.2 4.2 0 0 1-.73.983c-.833.833-1.893 1.21-3.237 1.39C15.884 22 14.2 22 12.053 22h-.106c-2.148 0-3.83 0-5.144-.177c-1.343-.18-2.404-.557-3.236-1.39c-.738-.738-1.12-1.656-1.322-2.795c-.2-1.12-.236-2.512-.243-4.241Q1.999 12.737 2 12v-.054c0-2.148 0-3.83.177-5.144c.18-1.343.557-2.404 1.39-3.236s1.893-1.21 3.236-1.39c1.168-.157 2.67-.175 4.499-.177a.697.697 0 1 1 0 1.396c-1.855.002-3.234.018-4.313.163c-1.189.16-1.906.464-2.436.994S3.72 5.8 3.56 6.99C3.397 8.2 3.395 9.788 3.395 12v.784l.932-.814a2.14 2.14 0 0 1 2.922.097l3.99 3.99a1.86 1.86 0 0 0 2.385.207l.278-.195a2.79 2.79 0 0 1 3.471.209l2.633 2.37c.265-.557.423-1.288.507-2.32c.079-.972.09-2.152.091-3.63a.698.698 0 0 1 1.396 0' opacity='.5'/%3E%3Cpath fill='%23F44336' fill-rule='evenodd' d='M17.5 11c-2.121 0-3.182 0-3.841-.659S13 8.621 13 6.5s0-3.182.659-3.841S15.379 2 17.5 2s3.182 0 3.841.659S22 4.379 22 6.5s0 3.182-.659 3.841S19.621 11 17.5 11m-1.47-7.03a.75.75 0 1 0-1.06 1.06l1.47 1.47l-1.47 1.47a.75.75 0 0 0 1.06 1.06l1.47-1.47l1.47 1.47a.75.75 0 1 0 1.06-1.06L18.56 6.5l1.47-1.47a.75.75 0 0 0-1.06-1.06L17.5 5.44z' clip-rule='evenodd'/%3E%3C/svg%3E&quot;"/><div class="lazy-icon" style="background-image:url(https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd);"></div></div></div>
 
 <p>根据开发板型号选择相应的文件，其中downloads文件所有平台都需要：</p>
-<div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905203827296.png" data-fancybox="true"/></div></div>
+<div class="tag-plugin image"><div class="image-bg" style="aspect-ratio:800/171;"><img class="lazy" src="https://webp.raiset.top/PetaLinux/image-20250905203827296.png" data-src="https://webp.raiset.top/PetaLinux/image-20250905203827296.png" data-fancybox="true"onerror="this.src=&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2rem' height='2rem' viewBox='0 0 24 24'%3E%3C!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --%3E%3Cpath fill='%23F44336' d='M22 12.698c-.002 1.47-.013 2.718-.096 3.743c-.097 1.19-.296 2.184-.74 3.009a4.2 4.2 0 0 1-.73.983c-.833.833-1.893 1.21-3.237 1.39C15.884 22 14.2 22 12.053 22h-.106c-2.148 0-3.83 0-5.144-.177c-1.343-.18-2.404-.557-3.236-1.39c-.738-.738-1.12-1.656-1.322-2.795c-.2-1.12-.236-2.512-.243-4.241Q1.999 12.737 2 12v-.054c0-2.148 0-3.83.177-5.144c.18-1.343.557-2.404 1.39-3.236s1.893-1.21 3.236-1.39c1.168-.157 2.67-.175 4.499-.177a.697.697 0 1 1 0 1.396c-1.855.002-3.234.018-4.313.163c-1.189.16-1.906.464-2.436.994S3.72 5.8 3.56 6.99C3.397 8.2 3.395 9.788 3.395 12v.784l.932-.814a2.14 2.14 0 0 1 2.922.097l3.99 3.99a1.86 1.86 0 0 0 2.385.207l.278-.195a2.79 2.79 0 0 1 3.471.209l2.633 2.37c.265-.557.423-1.288.507-2.32c.079-.972.09-2.152.091-3.63a.698.698 0 0 1 1.396 0' opacity='.5'/%3E%3Cpath fill='%23F44336' fill-rule='evenodd' d='M17.5 11c-2.121 0-3.182 0-3.841-.659S13 8.621 13 6.5s0-3.182.659-3.841S15.379 2 17.5 2s3.182 0 3.841.659S22 4.379 22 6.5s0 3.182-.659 3.841S19.621 11 17.5 11m-1.47-7.03a.75.75 0 1 0-1.06 1.06l1.47 1.47l-1.47 1.47a.75.75 0 0 0 1.06 1.06l1.47-1.47l1.47 1.47a.75.75 0 1 0 1.06-1.06L18.56 6.5l1.47-1.47a.75.75 0 0 0-1.06-1.06L17.5 5.44z' clip-rule='evenodd'/%3E%3C/svg%3E&quot;"/><div class="lazy-icon" style="background-image:url(https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd);"></div></div></div>
 
-<h3 id="2-解压"><a href="#2-解压" class="headerlink" title="2. 解压"></a>2. 解压</h3><p>创建两个文件夹分别用于存放sstate-cache和downloads文件。</p>
-<div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905203838780.png" data-fancybox="true" style="width:400px;"/></div></div>
+<h3 id="7-2-解压"><a href="#7-2-解压" class="headerlink" title="7.2 解压"></a>7.2 解压</h3><p>创建两个文件夹分别用于存放sstate-cache和downloads文件。</p>
+<div class="tag-plugin image"><div class="image-bg" style="aspect-ratio:605/180;width:400px;"><img class="lazy" src="https://webp.raiset.top/PetaLinux/image-20250905203838780.png" data-src="https://webp.raiset.top/PetaLinux/image-20250905203838780.png" data-fancybox="true"onerror="this.src=&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2rem' height='2rem' viewBox='0 0 24 24'%3E%3C!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --%3E%3Cpath fill='%23F44336' d='M22 12.698c-.002 1.47-.013 2.718-.096 3.743c-.097 1.19-.296 2.184-.74 3.009a4.2 4.2 0 0 1-.73.983c-.833.833-1.893 1.21-3.237 1.39C15.884 22 14.2 22 12.053 22h-.106c-2.148 0-3.83 0-5.144-.177c-1.343-.18-2.404-.557-3.236-1.39c-.738-.738-1.12-1.656-1.322-2.795c-.2-1.12-.236-2.512-.243-4.241Q1.999 12.737 2 12v-.054c0-2.148 0-3.83.177-5.144c.18-1.343.557-2.404 1.39-3.236s1.893-1.21 3.236-1.39c1.168-.157 2.67-.175 4.499-.177a.697.697 0 1 1 0 1.396c-1.855.002-3.234.018-4.313.163c-1.189.16-1.906.464-2.436.994S3.72 5.8 3.56 6.99C3.397 8.2 3.395 9.788 3.395 12v.784l.932-.814a2.14 2.14 0 0 1 2.922.097l3.99 3.99a1.86 1.86 0 0 0 2.385.207l.278-.195a2.79 2.79 0 0 1 3.471.209l2.633 2.37c.265-.557.423-1.288.507-2.32c.079-.972.09-2.152.091-3.63a.698.698 0 0 1 1.396 0' opacity='.5'/%3E%3Cpath fill='%23F44336' fill-rule='evenodd' d='M17.5 11c-2.121 0-3.182 0-3.841-.659S13 8.621 13 6.5s0-3.182.659-3.841S15.379 2 17.5 2s3.182 0 3.841.659S22 4.379 22 6.5s0 3.182-.659 3.841S19.621 11 17.5 11m-1.47-7.03a.75.75 0 1 0-1.06 1.06l1.47 1.47l-1.47 1.47a.75.75 0 0 0 1.06 1.06l1.47-1.47l1.47 1.47a.75.75 0 1 0 1.06-1.06L18.56 6.5l1.47-1.47a.75.75 0 0 0-1.06-1.06L17.5 5.44z' clip-rule='evenodd'/%3E%3C/svg%3E&quot;"/><div class="lazy-icon" style="background-image:url(https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd);"></div></div></div>
 
 <p>运行<code>tar -xvf xxx.tar.gz</code>解压文件，解压完成后删去压缩包。</p>
-<h3 id="3-配置离线编译"><a href="#3-配置离线编译" class="headerlink" title="3. 配置离线编译"></a>3. 配置离线编译</h3><div class="tag-plugin timeline"><div class="timenode" index="0"><div class="header">第一步</div><div class="body fs14"><p><strong>进入Yocto Settings菜单：</strong><br>在运行<code>petalinux-config --get-hw-description &lt;XSA_PATH&gt;</code>配置工程时，进入 “Yocto Settings” 。</p></div></div><div class="timenode" index="1"><div class="header">第二步</div><div class="body fs14"><p><strong>禁用网络并启用离线模式：</strong></p><ol><li>按 <code>n</code> 取消 “Enable Network sstate feeds”</li><li>按 <code>y</code> 选择 “Enable BB NO NETWORK”</li></ol><div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905203923417.png" data-fancybox="true"/></div></div></div></div><div class="timenode" index="2"><div class="header">第三步</div><div class="body fs14"><p><strong>配置sstate-cache路径：</strong><br>找到 <code>Local sstate feeds settings</code>选项，进入后输入sstate-cache所在路径：</p><div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905203903007.png" data-fancybox="true"/></div></div><p>注意使用绝对路径，不能使用 <code>~/</code> 简写，否则后面会报错。</p></div></div><div class="timenode" index="3"><div class="header">第四步</div><div class="body fs14"><p><strong>配置downloads路径：</strong><br>找到<code>Add pre-mirror url</code>选项，进入后输入downloads所在路径：</p><div class="tag-plugin colorful note" color="warning"><div class="body"><p>注意必须添加<code>file://</code>前缀。</p></div></div><div class="tag-plugin image"><div class="image-bg"><img src="https://webp.raiset.top/PetaLinux/image-20250905203913440.png" data-fancybox="true"/></div></div></div></div><div class="timenode" index="4"><div class="header">第五步</div><div class="body fs14"><p>后面的步骤和在线编译一样，设置Root filesystem type，而后配置内核和根文件系统，最后编译打包。</p></div></div></div>
+<h3 id="7-3-配置离线编译"><a href="#7-3-配置离线编译" class="headerlink" title="7.3 配置离线编译"></a>7.3 配置离线编译</h3><div class="tag-plugin timeline"><div class="timenode" index="0"><div class="header"><span>第一步</span></div><div class="body fs14"><p><strong>进入Yocto Settings菜单：</strong><br>在运行<code>petalinux-config --get-hw-description &lt;XSA_PATH&gt;</code>配置工程时，进入 “Yocto Settings” 。</p></div></div><div class="timenode" index="1"><div class="header"><span>第二步</span></div><div class="body fs14"><p><strong>禁用网络并启用离线模式：</strong></p><ol><li>按 <code>n</code> 取消 “Enable Network sstate feeds”</li><li>按 <code>y</code> 选择 “Enable BB NO NETWORK”</li></ol><div class="tag-plugin image"><div class="image-bg" style="aspect-ratio:598/217;"><img class="lazy" src="https://webp.raiset.top/PetaLinux/image-20250905203923417.png" data-src="https://webp.raiset.top/PetaLinux/image-20250905203923417.png" data-fancybox="true"onerror="this.src=&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2rem' height='2rem' viewBox='0 0 24 24'%3E%3C!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --%3E%3Cpath fill='%23F44336' d='M22 12.698c-.002 1.47-.013 2.718-.096 3.743c-.097 1.19-.296 2.184-.74 3.009a4.2 4.2 0 0 1-.73.983c-.833.833-1.893 1.21-3.237 1.39C15.884 22 14.2 22 12.053 22h-.106c-2.148 0-3.83 0-5.144-.177c-1.343-.18-2.404-.557-3.236-1.39c-.738-.738-1.12-1.656-1.322-2.795c-.2-1.12-.236-2.512-.243-4.241Q1.999 12.737 2 12v-.054c0-2.148 0-3.83.177-5.144c.18-1.343.557-2.404 1.39-3.236s1.893-1.21 3.236-1.39c1.168-.157 2.67-.175 4.499-.177a.697.697 0 1 1 0 1.396c-1.855.002-3.234.018-4.313.163c-1.189.16-1.906.464-2.436.994S3.72 5.8 3.56 6.99C3.397 8.2 3.395 9.788 3.395 12v.784l.932-.814a2.14 2.14 0 0 1 2.922.097l3.99 3.99a1.86 1.86 0 0 0 2.385.207l.278-.195a2.79 2.79 0 0 1 3.471.209l2.633 2.37c.265-.557.423-1.288.507-2.32c.079-.972.09-2.152.091-3.63a.698.698 0 0 1 1.396 0' opacity='.5'/%3E%3Cpath fill='%23F44336' fill-rule='evenodd' d='M17.5 11c-2.121 0-3.182 0-3.841-.659S13 8.621 13 6.5s0-3.182.659-3.841S15.379 2 17.5 2s3.182 0 3.841.659S22 4.379 22 6.5s0 3.182-.659 3.841S19.621 11 17.5 11m-1.47-7.03a.75.75 0 1 0-1.06 1.06l1.47 1.47l-1.47 1.47a.75.75 0 0 0 1.06 1.06l1.47-1.47l1.47 1.47a.75.75 0 1 0 1.06-1.06L18.56 6.5l1.47-1.47a.75.75 0 0 0-1.06-1.06L17.5 5.44z' clip-rule='evenodd'/%3E%3C/svg%3E&quot;"/><div class="lazy-icon" style="background-image:url(https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd);"></div></div></div></div></div><div class="timenode" index="2"><div class="header"><span>第三步</span></div><div class="body fs14"><p><strong>配置sstate-cache路径：</strong><br>找到 <code>Local sstate feeds settings</code>选项，进入后输入sstate-cache所在路径：</p><div class="tag-plugin image"><div class="image-bg" style="aspect-ratio:671/179;"><img class="lazy" src="https://webp.raiset.top/PetaLinux/image-20250905203903007.png" data-src="https://webp.raiset.top/PetaLinux/image-20250905203903007.png" data-fancybox="true"onerror="this.src=&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2rem' height='2rem' viewBox='0 0 24 24'%3E%3C!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --%3E%3Cpath fill='%23F44336' d='M22 12.698c-.002 1.47-.013 2.718-.096 3.743c-.097 1.19-.296 2.184-.74 3.009a4.2 4.2 0 0 1-.73.983c-.833.833-1.893 1.21-3.237 1.39C15.884 22 14.2 22 12.053 22h-.106c-2.148 0-3.83 0-5.144-.177c-1.343-.18-2.404-.557-3.236-1.39c-.738-.738-1.12-1.656-1.322-2.795c-.2-1.12-.236-2.512-.243-4.241Q1.999 12.737 2 12v-.054c0-2.148 0-3.83.177-5.144c.18-1.343.557-2.404 1.39-3.236s1.893-1.21 3.236-1.39c1.168-.157 2.67-.175 4.499-.177a.697.697 0 1 1 0 1.396c-1.855.002-3.234.018-4.313.163c-1.189.16-1.906.464-2.436.994S3.72 5.8 3.56 6.99C3.397 8.2 3.395 9.788 3.395 12v.784l.932-.814a2.14 2.14 0 0 1 2.922.097l3.99 3.99a1.86 1.86 0 0 0 2.385.207l.278-.195a2.79 2.79 0 0 1 3.471.209l2.633 2.37c.265-.557.423-1.288.507-2.32c.079-.972.09-2.152.091-3.63a.698.698 0 0 1 1.396 0' opacity='.5'/%3E%3Cpath fill='%23F44336' fill-rule='evenodd' d='M17.5 11c-2.121 0-3.182 0-3.841-.659S13 8.621 13 6.5s0-3.182.659-3.841S15.379 2 17.5 2s3.182 0 3.841.659S22 4.379 22 6.5s0 3.182-.659 3.841S19.621 11 17.5 11m-1.47-7.03a.75.75 0 1 0-1.06 1.06l1.47 1.47l-1.47 1.47a.75.75 0 0 0 1.06 1.06l1.47-1.47l1.47 1.47a.75.75 0 1 0 1.06-1.06L18.56 6.5l1.47-1.47a.75.75 0 0 0-1.06-1.06L17.5 5.44z' clip-rule='evenodd'/%3E%3C/svg%3E&quot;"/><div class="lazy-icon" style="background-image:url(https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd);"></div></div></div><p>注意使用绝对路径，不能使用 <code>~/</code> 简写，否则后面会报错。</p></div></div><div class="timenode" index="3"><div class="header"><span>第四步</span></div><div class="body fs14"><p><strong>配置downloads路径：</strong><br>找到<code>Add pre-mirror url</code>选项，进入后输入downloads所在路径：</p><p><mark class="tag-plugin colorful mark" color="warning">注意必须添加<code>file://</code>前缀。</mark></p><div class="tag-plugin image"><div class="image-bg" style="aspect-ratio:674/180;"><img class="lazy" src="https://webp.raiset.top/PetaLinux/image-20250905203913440.png" data-src="https://webp.raiset.top/PetaLinux/image-20250905203913440.png" data-fancybox="true"onerror="this.src=&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2rem' height='2rem' viewBox='0 0 24 24'%3E%3C!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --%3E%3Cpath fill='%23F44336' d='M22 12.698c-.002 1.47-.013 2.718-.096 3.743c-.097 1.19-.296 2.184-.74 3.009a4.2 4.2 0 0 1-.73.983c-.833.833-1.893 1.21-3.237 1.39C15.884 22 14.2 22 12.053 22h-.106c-2.148 0-3.83 0-5.144-.177c-1.343-.18-2.404-.557-3.236-1.39c-.738-.738-1.12-1.656-1.322-2.795c-.2-1.12-.236-2.512-.243-4.241Q1.999 12.737 2 12v-.054c0-2.148 0-3.83.177-5.144c.18-1.343.557-2.404 1.39-3.236s1.893-1.21 3.236-1.39c1.168-.157 2.67-.175 4.499-.177a.697.697 0 1 1 0 1.396c-1.855.002-3.234.018-4.313.163c-1.189.16-1.906.464-2.436.994S3.72 5.8 3.56 6.99C3.397 8.2 3.395 9.788 3.395 12v.784l.932-.814a2.14 2.14 0 0 1 2.922.097l3.99 3.99a1.86 1.86 0 0 0 2.385.207l.278-.195a2.79 2.79 0 0 1 3.471.209l2.633 2.37c.265-.557.423-1.288.507-2.32c.079-.972.09-2.152.091-3.63a.698.698 0 0 1 1.396 0' opacity='.5'/%3E%3Cpath fill='%23F44336' fill-rule='evenodd' d='M17.5 11c-2.121 0-3.182 0-3.841-.659S13 8.621 13 6.5s0-3.182.659-3.841S15.379 2 17.5 2s3.182 0 3.841.659S22 4.379 22 6.5s0 3.182-.659 3.841S19.621 11 17.5 11m-1.47-7.03a.75.75 0 1 0-1.06 1.06l1.47 1.47l-1.47 1.47a.75.75 0 0 0 1.06 1.06l1.47-1.47l1.47 1.47a.75.75 0 1 0 1.06-1.06L18.56 6.5l1.47-1.47a.75.75 0 0 0-1.06-1.06L17.5 5.44z' clip-rule='evenodd'/%3E%3C/svg%3E&quot;"/><div class="lazy-icon" style="background-image:url(https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd);"></div></div></div></div></div><div class="timenode" index="4"><div class="header"><span>第五步</span></div><div class="body fs14"><p>后面的步骤和在线编译一样，设置Root filesystem type，而后配置内核和根文件系统，最后编译打包。</p></div></div></div>
 
-<div class="tag-plugin colorful note" color="green"><div class="title">🎉总结</div><div class="body"><p>至此，您已经完成了PetaLinux的完整学习流程，希望这个教程能对您的开发工作有所帮助！</p></div></div>
-<div class="article-footer fs14">
+</article>
+<div class="article-footer">
     <section id="license">
       <div class="header"><span>许可协议</span></div>
       <div class="body"><p><a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a>欢迎评论探讨</p>
 </div>
     </section>
     
+
+
     <section id="share">
       <div class="header"><span>分享文章</span></div>
       <div class="body">
         <div class="link"><input class="copy-area" readonly="true" id="copy-link" value="https://raiset.top/posts/1812881063/" /></div>
-        <div class="social-wrap dis-select"><a class="social share-item wechat" onclick="util.toggle(&quot;qrcode-wechat&quot)"><img  src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/social/b32ef3da1162a.svg" /></a><a class="social share-item link" onclick="util.copy(&quot;copy-link&quot;, &quot;复制成功&quot;)"><img  src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/social/8411ed322ced6.svg" /></a></div>
+        <div class="social-wrap dis-select"><a class="social share-item wechat" onclick="util.toggle(&quot;qrcode-wechat&quot;)"><img  src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/social/b32ef3da1162a.svg" /></a><a class="social share-item link" onclick="util.copy(&quot;copy-link&quot;, &quot;复制成功&quot;)"><img  src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/social/8411ed322ced6.svg" /></a></div>
         
         <div class="qrcode" id="qrcode-wechat" style="opacity:0;height:0">
           <img src="https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=https://raiset.top/posts/1812881063/"/>
@@ -291,8 +296,8 @@
       </div>
     </section>
     </div>
-</article>
-<div class="related-wrap" id="read-next"><section class="body"><div class="item" id="prev"></div><div class="item" id="next"><div class="note">较早文章</div><a href="/posts/2690508721/">Tandem Processor论文解读</a></div></section></div>
+
+<div class="related-wrap" id="read-next"><section class="body"><div class="item" id="prev"><div class="note">较新文章</div><a href="/posts/1684246453/">PetaLinux驱动学习——Pinctrl和GPIO子系统</a></div><div class="item" id="next"><div class="note">较早文章</div><a href="/posts/1128674413/">NEAL(Network-Aware Locality Scheduling)论文简要解读</a></div></section></div>
 
 
 
@@ -311,22 +316,19 @@
 
 
 
-<footer class="page-footer footnote"><hr><div class="text"><p>本站由 <a href="/">雨夕</a> 使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.28.1">Stellar 1.28.1</a> 主题创建。<br>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
+<footer class="page-footer footnote"><hr><div class="text"><center>
+<script defer src="https://events.vercount.one/js"></script>    
+Site Total Visits: <span id="vercount_value_site_pv">Loading</span><br>
+Site Total Visitors: <span id="vercount_value_site_uv">Loading</span>
+</center>
 </div></footer>
-
-<center>
-  <script defer src="https://cn.vercount.one/js"></script>
-  Site Total Visits <span id="vercount_value_site_pv">Loading</span><br>
-  Site Total Visitors <span id="vercount_value_site_uv">Loading</span>
-</center><div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
+<div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
 <div class="widgets">
 
 
 
-<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">本文目录</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%AE%89%E8%A3%85%E8%99%9A%E6%8B%9F%E6%9C%BA"><span class="toc-text">一、安装虚拟机</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E4%B8%8B%E8%BD%BDpetalinux"><span class="toc-text">二、下载petalinux</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%AE%89%E8%A3%85Petalinux"><span class="toc-text">三、安装Petalinux</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%AE%89%E8%A3%85%E5%BF%85%E8%A6%81%E7%9A%84%E5%BA%93%E6%96%87%E4%BB%B6"><span class="toc-text">1. 安装必要的库文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%B0%86petalinux%E5%AE%89%E8%A3%85%E5%8C%85%E5%A4%8D%E5%88%B6%E5%88%B0%E8%99%9A%E6%8B%9F%E6%9C%BA%E4%B8%AD"><span class="toc-text">2. 将petalinux安装包复制到虚拟机中</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%88%9B%E5%BB%BAPetalinux%E6%96%87%E4%BB%B6%E5%A4%B9%E5%B9%B6%E7%BB%99%E4%BA%88%E6%9D%83%E9%99%90"><span class="toc-text">3. 创建Petalinux文件夹并给予权限</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E5%BC%80%E5%A7%8B%E5%AE%89%E8%A3%85"><span class="toc-text">4. 开始安装</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81PetaLinux%E4%BD%BF%E7%94%A8"><span class="toc-text">四、PetaLinux使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="toc-text">1. 配置环境变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%88%9B%E5%BB%BA%E5%B7%A5%E4%BD%9C%E7%9B%AE%E5%BD%95%E5%B9%B6%E7%BB%99%E4%BA%88%E6%9D%83%E9%99%90"><span class="toc-text">2. 创建工作目录并给予权限</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%88%9B%E5%BB%BAPetaLinux%E5%B7%A5%E7%A8%8B"><span class="toc-text">3. 创建PetaLinux工程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E9%85%8D%E7%BD%AEPetaLinux%EF%BC%88%E5%9C%A8%E7%BA%BF%E7%BC%96%E8%AF%91%EF%BC%89"><span class="toc-text">4. 配置PetaLinux（在线编译）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-1-%E9%85%8D%E7%BD%AE%E5%B7%A5%E7%A8%8B"><span class="toc-text">4.1 配置工程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-2-%E9%85%8D%E7%BD%AE%E5%86%85%E6%A0%B8"><span class="toc-text">4.2 配置内核</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-3-%E9%85%8D%E7%BD%AE%E6%A0%B9%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="toc-text">4.3 配置根文件系统</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E7%BC%96%E8%AF%91"><span class="toc-text">5. 编译</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-%E6%89%93%E5%8C%85"><span class="toc-text">6. 打包</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E5%88%B6%E4%BD%9CSD%E5%8D%A1"><span class="toc-text">五、制作SD卡</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C"><span class="toc-text">1. 准备工作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E6%9F%A5%E7%9C%8BSD%E5%8D%A1%E8%AE%BE%E5%A4%87"><span class="toc-text">2. 查看SD卡设备</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-SD%E5%8D%A1%E5%88%86%E5%8C%BA%E6%93%8D%E4%BD%9C"><span class="toc-text">3. SD卡分区操作</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-%E8%BF%9B%E5%85%A5%E5%88%86%E5%8C%BA%E5%B7%A5%E5%85%B7"><span class="toc-text">3.1 进入分区工具</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-%E6%9F%A5%E7%9C%8B%E7%8E%B0%E6%9C%89%E5%88%86%E5%8C%BA"><span class="toc-text">3.2 查看现有分区</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-SD%E5%8D%A1%E5%88%86%E5%8C%BA%E5%88%9B%E5%BB%BA"><span class="toc-text">3.3 SD卡分区创建</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-4-%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%88%86%E5%8C%BA"><span class="toc-text">3.4 格式化分区</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E5%86%99%E5%85%A5%E7%B3%BB%E7%BB%9F%E6%96%87%E4%BB%B6"><span class="toc-text">4. 写入系统文件</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-1-%E6%8B%B7%E8%B4%9DBoot%E6%96%87%E4%BB%B6"><span class="toc-text">4.1 拷贝Boot文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-2-%E5%86%99%E5%85%A5Root%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="toc-text">4.2 写入Root文件系统</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E4%B8%8A%E6%9D%BF%E9%AA%8C%E8%AF%81"><span class="toc-text">六、上板验证</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E8%AE%BE%E7%BD%AESD%E5%8D%A1%E5%90%AF%E5%8A%A8"><span class="toc-text">1. 设置SD卡启动</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E4%B8%B2%E5%8F%A3%E8%BF%9E%E6%8E%A5"><span class="toc-text">2. 串口连接</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-%E6%9F%A5%E7%9C%8B%E7%AB%AF%E5%8F%A3"><span class="toc-text">2.1 查看端口</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-%E9%85%8D%E7%BD%AE%E4%B8%B2%E5%8F%A3%E5%B7%A5%E5%85%B7"><span class="toc-text">2.2 配置串口工具</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%90%AF%E5%8A%A8%E6%B5%8B%E8%AF%95"><span class="toc-text">3. 启动测试</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B"><span class="toc-text">3.1 启动过程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-%E9%A6%96%E6%AC%A1%E7%99%BB%E5%BD%95%E9%85%8D%E7%BD%AE"><span class="toc-text">3.2 首次登录配置</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%83%E3%80%81%E7%A6%BB%E7%BA%BF%E7%BC%96%E8%AF%91"><span class="toc-text">七、离线编译</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E4%B8%8B%E8%BD%BD%E7%A6%BB%E7%BA%BF%E8%B5%84%E6%BA%90"><span class="toc-text">1. 下载离线资源</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E8%A7%A3%E5%8E%8B"><span class="toc-text">2. 解压</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E9%85%8D%E7%BD%AE%E7%A6%BB%E7%BA%BF%E7%BC%96%E8%AF%91"><span class="toc-text">3. 配置离线编译</span></a></li></ol></li></ol></div><div class="widget-footer">
-
-<a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 12c0-4.714 0-7.071 1.464-8.536C4.93 2 7.286 2 12 2c4.714 0 7.071 0 8.535 1.464C22 4.93 22 7.286 22 12c0 4.714 0 7.071-1.465 8.535C19.072 22 16.714 22 12 22s-7.071 0-8.536-1.465C2 19.072 2 16.714 2 12Z"/><path stroke-linecap="round" stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/></g></svg><span>回到顶部</span></a><a class="buttom" onclick="util.scrollComment()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M10.46 1.25h3.08c1.603 0 2.86 0 3.864.095c1.023.098 1.861.3 2.6.752a5.75 5.75 0 0 1 1.899 1.899c.452.738.654 1.577.752 2.6c.095 1.004.095 2.261.095 3.865v1.067c0 1.141 0 2.036-.05 2.759c-.05.735-.153 1.347-.388 1.913a5.75 5.75 0 0 1-3.112 3.112c-.805.334-1.721.408-2.977.43a10.81 10.81 0 0 0-.929.036c-.198.022-.275.054-.32.08c-.047.028-.112.078-.224.232c-.121.166-.258.396-.476.764l-.542.916c-.773 1.307-2.69 1.307-3.464 0l-.542-.916a10.605 10.605 0 0 0-.476-.764c-.112-.154-.177-.204-.224-.232c-.045-.026-.122-.058-.32-.08c-.212-.023-.49-.03-.93-.037c-1.255-.021-2.171-.095-2.976-.429A5.75 5.75 0 0 1 1.688 16.2c-.235-.566-.338-1.178-.389-1.913c-.049-.723-.049-1.618-.049-2.76v-1.066c0-1.604 0-2.86.095-3.865c.098-1.023.3-1.862.752-2.6a5.75 5.75 0 0 1 1.899-1.899c.738-.452 1.577-.654 2.6-.752C7.6 1.25 8.857 1.25 10.461 1.25M6.739 2.839c-.914.087-1.495.253-1.959.537A4.25 4.25 0 0 0 3.376 4.78c-.284.464-.45 1.045-.537 1.96c-.088.924-.089 2.11-.089 3.761v1c0 1.175 0 2.019.046 2.685c.045.659.131 1.089.278 1.441a4.25 4.25 0 0 0 2.3 2.3c.515.214 1.173.294 2.429.316h.031c.398.007.747.013 1.037.045c.311.035.616.104.909.274c.29.17.5.395.682.645c.169.232.342.525.538.856l.559.944a.52.52 0 0 0 .882 0l.559-.944c.196-.331.37-.624.538-.856c.182-.25.392-.476.682-.645c.293-.17.598-.24.909-.274c.29-.032.639-.038 1.037-.045h.032c1.255-.022 1.913-.102 2.428-.316a4.25 4.25 0 0 0 2.3-2.3c.147-.352.233-.782.278-1.441c.046-.666.046-1.51.046-2.685v-1c0-1.651 0-2.837-.089-3.762c-.087-.914-.253-1.495-.537-1.959a4.25 4.25 0 0 0-1.403-1.403c-.464-.284-1.045-.45-1.96-.537c-.924-.088-2.11-.089-3.761-.089h-3c-1.651 0-2.837 0-3.762.089" clip-rule="evenodd"/><path fill="currentColor" d="M9 11a1 1 0 1 1-2 0a1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0a1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0a1 1 0 0 1 2 0"/></svg><span>参与讨论</span></a></div></widget>
-</div></aside><div class='float-panel blur'>
+<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">本文目录</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%AE%89%E8%A3%85%E8%99%9A%E6%8B%9F%E6%9C%BA"><span class="toc-text">1. 安装虚拟机</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E4%B8%8B%E8%BD%BDpetalinux"><span class="toc-text">2. 下载petalinux</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%AE%89%E8%A3%85Petalinux"><span class="toc-text">3. 安装Petalinux</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E5%AE%89%E8%A3%85%E5%BF%85%E8%A6%81%E7%9A%84%E5%BA%93%E6%96%87%E4%BB%B6"><span class="toc-text">3.1 安装必要的库文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E5%B0%86petalinux%E5%AE%89%E8%A3%85%E5%8C%85%E5%A4%8D%E5%88%B6%E5%88%B0%E8%99%9A%E6%8B%9F%E6%9C%BA%E4%B8%AD"><span class="toc-text">3.2 将petalinux安装包复制到虚拟机中</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%E5%88%9B%E5%BB%BAPetalinux%E6%96%87%E4%BB%B6%E5%A4%B9%E5%B9%B6%E7%BB%99%E4%BA%88%E6%9D%83%E9%99%90"><span class="toc-text">3.3 创建Petalinux文件夹并给予权限</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-%E5%BC%80%E5%A7%8B%E5%AE%89%E8%A3%85"><span class="toc-text">3.4 开始安装</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-PetaLinux%E4%BD%BF%E7%94%A8"><span class="toc-text">4. PetaLinux使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="toc-text">4.1 配置环境变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-%E5%88%9B%E5%BB%BA%E5%B7%A5%E4%BD%9C%E7%9B%AE%E5%BD%95%E5%B9%B6%E7%BB%99%E4%BA%88%E6%9D%83%E9%99%90"><span class="toc-text">4.2 创建工作目录并给予权限</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-%E5%88%9B%E5%BB%BAPetaLinux%E5%B7%A5%E7%A8%8B"><span class="toc-text">4.3 创建PetaLinux工程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-4-%E9%85%8D%E7%BD%AEPetaLinux%EF%BC%88%E5%9C%A8%E7%BA%BF%E7%BC%96%E8%AF%91%EF%BC%89"><span class="toc-text">4.4 配置PetaLinux（在线编译）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-4-1-%E9%85%8D%E7%BD%AE%E5%B7%A5%E7%A8%8B"><span class="toc-text">4.4.1 配置工程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-4-2-%E9%85%8D%E7%BD%AE%E5%86%85%E6%A0%B8"><span class="toc-text">4.4.2 配置内核</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-4-3-%E9%85%8D%E7%BD%AE%E6%A0%B9%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="toc-text">4.4.3 配置根文件系统</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-5-%E7%BC%96%E8%AF%91"><span class="toc-text">4.5 编译</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-6-%E6%89%93%E5%8C%85"><span class="toc-text">4.6 打包</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E5%88%B6%E4%BD%9CSD%E5%8D%A1"><span class="toc-text">5. 制作SD卡</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C"><span class="toc-text">5.1 准备工作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2-%E6%9F%A5%E7%9C%8BSD%E5%8D%A1%E8%AE%BE%E5%A4%87"><span class="toc-text">5.2 查看SD卡设备</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3-SD%E5%8D%A1%E5%88%86%E5%8C%BA%E6%93%8D%E4%BD%9C"><span class="toc-text">5.3 SD卡分区操作</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#5-3-1-%E8%BF%9B%E5%85%A5%E5%88%86%E5%8C%BA%E5%B7%A5%E5%85%B7"><span class="toc-text">5.3.1 进入分区工具</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-3-2-%E6%9F%A5%E7%9C%8B%E7%8E%B0%E6%9C%89%E5%88%86%E5%8C%BA"><span class="toc-text">5.3.2 查看现有分区</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-3-3-SD%E5%8D%A1%E5%88%86%E5%8C%BA%E5%88%9B%E5%BB%BA"><span class="toc-text">5.3.3 SD卡分区创建</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-3-4-%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%88%86%E5%8C%BA"><span class="toc-text">5.3.4 格式化分区</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-4-%E5%86%99%E5%85%A5%E7%B3%BB%E7%BB%9F%E6%96%87%E4%BB%B6"><span class="toc-text">5.4 写入系统文件</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#5-4-1-%E6%8B%B7%E8%B4%9DBoot%E6%96%87%E4%BB%B6"><span class="toc-text">5.4.1 拷贝Boot文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-4-2-%E5%86%99%E5%85%A5Root%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="toc-text">5.4.2 写入Root文件系统</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E4%B8%8A%E6%9D%BF%E9%AA%8C%E8%AF%81"><span class="toc-text">6. 上板验证</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-1-%E8%AE%BE%E7%BD%AESD%E5%8D%A1%E5%90%AF%E5%8A%A8"><span class="toc-text">6.1 设置SD卡启动</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-2-%E4%B8%B2%E5%8F%A3%E8%BF%9E%E6%8E%A5"><span class="toc-text">6.2 串口连接</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#6-2-1-%E6%9F%A5%E7%9C%8B%E7%AB%AF%E5%8F%A3"><span class="toc-text">6.2.1 查看端口</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-2-2-%E9%85%8D%E7%BD%AE%E4%B8%B2%E5%8F%A3%E5%B7%A5%E5%85%B7"><span class="toc-text">6.2.2 配置串口工具</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-3-%E5%90%AF%E5%8A%A8%E6%B5%8B%E8%AF%95"><span class="toc-text">6.3 启动测试</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#6-3-1-%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B"><span class="toc-text">6.3.1 启动过程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-3-2-%E9%A6%96%E6%AC%A1%E7%99%BB%E5%BD%95%E9%85%8D%E7%BD%AE"><span class="toc-text">6.3.2 首次登录配置</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-%E7%A6%BB%E7%BA%BF%E7%BC%96%E8%AF%91"><span class="toc-text">7. 离线编译</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#7-1-%E4%B8%8B%E8%BD%BD%E7%A6%BB%E7%BA%BF%E8%B5%84%E6%BA%90"><span class="toc-text">7.1 下载离线资源</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-2-%E8%A7%A3%E5%8E%8B"><span class="toc-text">7.2 解压</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-3-%E9%85%8D%E7%BD%AE%E7%A6%BB%E7%BA%BF%E7%BC%96%E8%AF%91"><span class="toc-text">7.3 配置离线编译</span></a></li></ol></li></ol></div><div class="widget-footer"><a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/><path d="M7 3.338A9.95 9.95 0 0 1 12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12c0-1.821.487-3.53 1.338-5"/></g></svg><span>回到顶部</span></a><a class="buttom" onclick="util.scrollComment()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5" d="M8 10.5h8M8 14h5.5M17 3.338A9.95 9.95 0 0 0 12 2C6.477 2 2 6.477 2 12c0 1.6.376 3.112 1.043 4.453c.178.356.237.763.134 1.148l-.595 2.226a1.3 1.3 0 0 0 1.591 1.592l2.226-.596a1.63 1.63 0 0 1 1.149.133A9.96 9.96 0 0 0 12 22c5.523 0 10-4.477 10-10c0-1.821-.487-3.53-1.338-5"/></svg><span>参与讨论</span></a></div></widget>
+</div></aside><div class='float-panel'>
   <button type='button' style='display:none' class='laptop-only rightbar-toggle mobile' onclick='sidebar.rightbar()'>
     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
   </button>
@@ -335,7 +337,10 @@
   </button>
 </div>
 </div><div class="scripts">
+
+
 <script type="text/javascript">
+  window.canonical = {"originalHost":null,"officialHosts":["localhost"],"encoded":""};
   const ctx = {
     date_suffix: {
       just: `刚刚`,
@@ -344,6 +349,9 @@
       day: `天前`,
     },
     root : `/`,
+    tag_plugins: {
+      chat: Object.assign({"api":"https://siteinfo.listentothewind.cn/api/v1"}),
+    }
   };
 
   // required plugins (only load if needs)
@@ -351,23 +359,66 @@
     ctx.search = {};
     ctx.search.service = `local_search`;
     if (ctx.search.service == 'local_search') {
-      let service_obj = Object.assign({}, `{"field":"all","path":"/search.json","content":true,"sort":"-date"}`);
+      let service_obj = Object.assign({}, `{"field":"all","path":"/search.json","content":true,"skip_search":null,"sort":"-date"}`);
       ctx.search[ctx.search.service] = service_obj;
     }
   }
   const def = {
     avatar: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/3442075.svg`,
     cover: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/cover/76b86c0226ffd.svg`,
+    loading: `https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd`,
   };
   const deps = {
-    jquery: `https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js`,
-    marked: `https://cdnjs.cloudflare.com/ajax/libs/marked/15.0.6/marked.min.js`
+    jquery: `https://gcore.jsdelivr.net/npm/jquery@3.7/dist/jquery.min.js`,
+    marked: `https://gcore.jsdelivr.net/npm/marked@13.0/lib/marked.umd.min.js`,
+    lazyload: `/%5Bobject%20Object%5D`
   }
   
 
 </script>
 
 <script type="text/javascript">
+  
+  function RunItem() {
+    this.list = []; // 存放回调函数
+    this.start = () => {
+      for (var i = 0; i < this.list.length; i++) {
+        this.list[i].run();
+      }
+    };
+    this.push = (fn, name, setRequestAnimationFrame = true) => {
+      let myfn = fn
+      if (setRequestAnimationFrame) {
+        myfn = () => {
+          utils.requestAnimationFrame(fn)
+        }
+      }
+      var f = new Item(myfn, name);
+      this.list.push(f);
+    };
+    this.remove = (name) => {
+      for (let index = 0; index < this.list.length; index++) {
+        const e = this.list[index];
+        if (e.name == name) {
+          this.list.splice(index, 1);
+        }
+      }
+    }
+    // 构造一个可以run的对象
+    function Item(fn, name) {
+      // 函数名称
+      this.name = name || fn.name;
+      // run方法
+      this.run = () => {
+        try {
+          fn()
+        } catch (error) {
+          console.log(error);
+        }
+      };
+    }
+  }
+
   const utils = {
     // 懒加载 css https://github.com/filamentgroup/loadCSS
     css: (href, before, media, attributes) => {
@@ -430,7 +481,7 @@
 
     js: (src, opt) => new Promise((resolve, reject) => {
       var script = document.createElement('script');
-      if (src.startsWith('/')){
+      if (src.startsWith('/')) {
         src = ctx.root + src.substring(1);
       }
       script.src = src;
@@ -443,7 +494,7 @@
         script.async = true
       }
       script.onerror = reject
-      script.onload = script.onreadystatechange = function() {
+      script.onload = script.onreadystatechange = function () {
         const loadState = this.readyState
         if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
         script.onload = script.onreadystatechange = null
@@ -459,7 +510,7 @@
         fn()
       }
     },
-    
+
     onLoading: (el) => {
       if (el) {
         $(el).append('<div class="loading-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" stroke-opacity=".3" d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="1.3s" values="60;0"/></path><path stroke-dasharray="15" stroke-dashoffset="15" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0"/><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/></path></g></svg></div>');
@@ -478,54 +529,105 @@
       }
     },
     request: (el, url, callback, onFailure) => {
-      let retryTimes = 3;
-      utils.onLoading(el);
-      function req() {
-        return new Promise((resolve, reject) => {
-          let status = 0; // 0 等待 1 完成 2 超时
-          let timer = setTimeout(() => {
-            if (status === 0) {
-              status = 2;
-              timer = null;
+      const maxRetry = 3;
+      let retryCount = 0;
+
+      return new Promise((resolve, reject) => {
+        const load = () => {
+          utils.onLoading?.(el);
+
+          let timedOut = false;
+          const timeout = setTimeout(() => {
+            timedOut = true;
+            console.warn('[request] 超时:', url);
+
+            if (++retryCount >= maxRetry) {
+              utils.onLoadFailure?.(el);
+              onFailure?.();
               reject('请求超时');
-              if (retryTimes == 0) {
-                onFailure();
-              }
+            } else {
+              setTimeout(load, 1000);
             }
           }, 5000);
-          fetch(url).then(function(response) {
-            if (status !== 2) {
-              clearTimeout(timer);
-              resolve(response);
-              timer = null;
-              status = 1;
-            }
-            if (response.ok) {
-              return response.json();
-            }
-            throw new Error('Network response was not ok.');
-          }).then(function(data) {
-            retryTimes = 0;
-            utils.onLoadSuccess(el);
+
+          fetch(url).then(resp => {
+            if (timedOut) return;
+            clearTimeout(timeout);
+
+            if (!resp.ok) throw new Error('响应失败');
+            return resp;
+          }).then(data => {
+            if (timedOut) return;
+            utils.onLoadSuccess?.(el);
             callback(data);
-          }).catch(function(error) {
-            if (retryTimes > 0) {
-              retryTimes -= 1;
-              setTimeout(() => {
-                req();
-              }, 5000);
+            resolve(data);
+          }).catch(err => {
+            clearTimeout(timeout);
+            console.warn('[request] 错误:', err);
+
+            if (++retryCount >= maxRetry) {
+              utils.onLoadFailure?.(el);
+              onFailure?.();
+              reject(err);
             } else {
-              utils.onLoadFailure(el);
-              onFailure();
+              setTimeout(load, 1000);
             }
           });
-        });
-      }
-      req();
-    },
-  };
-</script>
+        };
 
+        load();
+      });
+    },
+    requestWithoutLoading: (url, options = {}, maxRetry = 2, timeout = 5000) => {
+      return new Promise((resolve, reject) => {
+        let retryCount = 0;
+
+        const tryRequest = () => {
+          let timedOut = false;
+          const timer = setTimeout(() => {
+            timedOut = true;
+            if (++retryCount > maxRetry) reject('timeout');
+            else tryRequest();
+          }, timeout);
+
+          fetch(url, options)
+            .then(resp => {
+              clearTimeout(timer);
+              if (!resp.ok) throw new Error('bad response');
+              resolve(resp);
+            })
+            .catch(err => {
+              clearTimeout(timer);
+              if (++retryCount > maxRetry) reject(err);
+              else setTimeout(tryRequest, 500);
+            });
+        };
+
+        tryRequest();
+      });
+    },
+    /********************** requestAnimationFrame ********************************/
+    // 1、requestAnimationFrame 会把每一帧中的所有 DOM 操作集中起来，在一次重绘或回流中就完成，并且重绘或回流的时间间隔紧紧跟随浏览器的刷新频率，一般来说，这个频率为每秒60帧。
+    // 2、在隐藏或不可见的元素中，requestAnimationFrame 将不会进行重绘或回流，这当然就意味着更少的的 cpu，gpu 和内存使用量。
+    requestAnimationFrame: (fn) => {
+      if (!window.requestAnimationFrame) {
+        window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame;
+      }
+      window.requestAnimationFrame(fn)
+    },
+    dark: {},
+  };
+
+  // utils.dark.mode 当前模式 dark or light
+  // utils.dark.toggle() 暗黑模式触发器
+  // utils.dark.push(callBack[,"callBackName"]) 传入触发器回调函数
+  utils.dark.method = {
+    toggle: new RunItem(),
+  };
+  utils.dark = Object.assign(utils.dark, {
+    push: utils.dark.method.toggle.push,
+  });
+</script>
 <script>
   const sidebar = {
     leftbar: () => {
@@ -551,38 +653,197 @@
     }
   }
 </script>
+<script type="text/javascript">
+  (() => {
+    const tagSwitchers = document.querySelectorAll('.tag-subtree.parent-tag > a > .tag-switcher-wrapper')
+    for (const tagSwitcher of tagSwitchers) {
+      tagSwitcher.addEventListener('click', (e) => {
+        const parent = e.target.closest('.tag-subtree.parent-tag')
+        parent.classList.toggle('expanded')
+        e.preventDefault()
+      })
+    }
+
+    // Get active tag from query string, then activate it.
+    const urlParams = new URLSearchParams(window.location.search)
+    const activeTag = urlParams.get('tag')
+    if (activeTag) {
+      let tag = document.querySelector(`.tag-subtree[data-tag="${activeTag}"]`)
+      if (tag) {
+        tag.querySelector('a').classList.add('active')
+        
+        while (tag) {
+          tag.classList.add('expanded')
+          tag = tag.parentElement.closest('.tag-subtree.parent-tag')
+        }
+      }
+    }
+  })()
+</script>
+
+<script async src="https://gcore.jsdelivr.net/npm/vanilla-lazyload@19.1/dist/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazy",
+    callback_loaded: (el) => {
+      el.classList.add('loaded');
+      const wrapper = el.closest('.lazy-box');
+      const icon = wrapper?.querySelector('.lazy-icon');
+      if (icon) icon.remove();
+    }
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    window.lazyLoadInstance?.update();
+  });
+
+  window.wrapLazyloadImages = (container) => {
+    if (typeof container === 'string') {
+      container = document.querySelector(container);
+    }
+    if (!container) return;
+    
+    const images = container.querySelectorAll('img');
+    images.forEach((img) => {
+      if (img.classList.contains('lazy')) return;
+
+      const src = img.getAttribute('src');
+      if (!src) return;
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'lazy-box';
+
+      const newImg = img.cloneNode();
+      newImg.removeAttribute('src');
+      newImg.setAttribute('data-src', src);
+      newImg.classList.add('lazy');
+
+      const icon = document.createElement('div');
+      icon.className = 'lazy-icon';
+      if (def.loading) {
+        icon.style.backgroundImage = `url("${def.loading}")`;
+      }
+
+      wrapper.appendChild(newImg);
+      wrapper.appendChild(icon);
+
+      img.replaceWith(wrapper);
+    });
+
+    // 通知 LazyLoad 更新
+    if (window.lazyLoadInstance?.update) {
+      window.lazyLoadInstance.update();
+    }
+  }
+  
+</script>
 
 <!-- required -->
-<script src="/js/main.js?v=1.28.1" async></script>
+<script src="/js/main.js?v=1.33.1" defer></script>
+
+<script type="text/javascript">
+  const applyTheme = (theme) => {
+    if (theme === 'auto') {
+      document.documentElement.removeAttribute('data-theme')
+    } else {
+      document.documentElement.setAttribute('data-theme', theme)
+    }
+
+    // applyThemeToGiscus(theme)
+  }
+
+  // FIXME: 这会导致无法使用 preferred_color_scheme 以外的主题
+  const applyThemeToGiscus = (theme) => {
+    // theme = theme === 'auto' ? 'preferred_color_scheme' : theme
+    const cmt = document.getElementById('giscus')
+    if (cmt) {
+      // This works before giscus load.
+      cmt.setAttribute('data-theme', theme)
+    }
+
+    const iframe = document.querySelector('#comments > section.giscus > iframe')
+    if (iframe) {
+      // This works after giscus loaded.
+      const src = iframe.src
+      const newSrc = src.replace(/theme=[\w]+/, `theme=${theme}`)
+      iframe.src = newSrc
+    }
+  }
+
+  const switchTheme = () => {
+    // light -> dark -> auto -> light -> ...
+    const currentTheme = document.documentElement.getAttribute('data-theme')
+    let newTheme;
+    switch (currentTheme) {
+      case 'light':
+        newTheme = 'dark'
+        break
+      case 'dark':
+        newTheme = 'auto'
+        break
+      default:
+        newTheme = 'light'
+    }
+    applyTheme(newTheme)
+    window.localStorage.setItem('Stellar.theme', newTheme)
+    utils.dark.mode = newTheme === 'auto' ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light") : newTheme;
+    utils.dark.method.toggle.start();
+
+    const messages = {
+      light: `切换到浅色模式`,
+      dark: `切换到深色模式`,
+      auto: `切换到跟随系统配色`,
+    }
+    hud?.toast?.(messages[newTheme])
+  }
+
+  (() => {
+    // Apply user's preferred theme, if any.
+    const theme = window.localStorage.getItem('Stellar.theme')
+    if (theme !== null) {
+      applyTheme(theme)
+    } else {
+      utils.dark.mode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+    utils.dark.method.toggle.start();
+  })()
+</script>
+
 
 <!-- optional -->
 
-  <script>
-    function load_twikoo() {
-        if (!document.querySelectorAll("#twikoo_container")[0]) return;
-        utils.js('https://gcore.jsdelivr.net/npm/twikoo@1.6.8/dist/twikoo.all.min.js', {defer: true}).then(function () {
-            const el = document.getElementById("twikoo_container");
-            var path = el.getAttribute('comment_id');
-            if (!path) {
-                path = decodeURI(window.location.pathname);
-            }
-            twikoo.init(Object.assign({"js":"https://gcore.jsdelivr.net/npm/twikoo@1.6.8/dist/twikoo.all.min.js","envId":"https://yuxi17.netlify.app/.netlify/functions/twikoo"}, {
-                el: '#twikoo_container',
-                path: path,
-            }));
-        });
-    }
+  <script type="module">
+  const el = document.getElementById('twikoo_container');
+  util.viewportLazyload(el, load_twikoo, false);
 
-    window.addEventListener('DOMContentLoaded', (event) => {
-        load_twikoo();
+  function load_twikoo() {
+    if (!el) return;
+    utils.js('https://gcore.jsdelivr.net/npm/twikoo@1.6/dist/twikoo.all.min.js', {defer: true}).then(function () {
+      const path = el.getAttribute('comment_id') ?? decodeURI(window.location.pathname);
+      twikoo.init(Object.assign({"js":"https://gcore.jsdelivr.net/npm/twikoo@1.6/dist/twikoo.all.min.js","envId":"https://yuxi17.netlify.app/.netlify/functions/twikoo"}, {
+        el: '#twikoo_container',
+        path: path,
+      }));
     });
+  }
 </script>
 
 
 
 <script defer>
   window.addEventListener('DOMContentLoaded', (event) => {
-    ctx.services = Object.assign({}, JSON.parse(`{"mdrender":{"js":"/js/services/mdrender.js"},"siteinfo":{"js":"/js/services/siteinfo.js","api":null},"ghinfo":{"js":"/js/services/ghinfo.js"},"sites":{"js":"/js/services/sites.js"},"friends":{"js":"/js/services/friends.js"},"timeline":{"js":"/js/services/timeline.js"},"fcircle":{"js":"/js/services/fcircle.js"},"weibo":{"js":"/js/services/weibo.js"},"memos":{"js":"/js/services/memos.js"}}`));
+    ctx.services = Object.assign({}, JSON.parse(`{"mdrender":{"js":"/js/services/mdrender.js"},"siteinfo":{"js":"/js/services/siteinfo.js","api":null},"ghinfo":{"js":"/js/services/ghinfo.js"},"rating":{"js":"/js/services/rating.js","api":"https://star-vote.xaox.cc/api/rating"},"vote":{"js":"/js/services/vote.js","api":"https://star-vote.xaox.cc/api/vote"},"sites":{"js":"/js/services/sites.js"},"friends":{"js":"/js/services/friends.js"},"friends_and_posts":{"js":"/js/services/friends_and_posts.js"},"timeline":{"js":"/js/services/timeline.js"},"fcircle":{"js":"/js/services/fcircle.js"},"weibo":{"js":"/js/services/weibo.js"},"memos":{"js":"/js/services/memos.js"},"voice":{"js":"/js/plugins/voice.js"},"video":{"js":"/js/plugins/video.js"},"download-file":{"js":"/js/plugins/download-file.js"},"twikoo":{"js":"/js/services/twikoo_latest_comment.js"},"waline":{"js":"/js/services/waline_latest_comment.js"},"artalk":{"js":"/js/services/artalk_latest_comment.js"},"giscus":{"js":"/js/services/giscus_latest_comment.js"},"contributors":{"edit_this_page":{"_posts/":null,"wiki/stellar/":"https://github.com/xaoxuu/hexo-theme-stellar-docs/blob/main/"},"js":"/js/services/contributors.js"}}`));
     for (let id of Object.keys(ctx.services)) {
       const js = ctx.services[id].js;
       if (id == 'siteinfo') {
@@ -590,6 +851,27 @@
         if (ctx.cardlinks?.length > 0) {
           utils.js(js, { defer: true }).then(function () {
             setCardLink(ctx.cardlinks);
+          });
+        }
+      } else if (id == 'voice') {
+        ctx.voiceAudios = document.querySelectorAll('.voice>audio');
+        if (ctx.voiceAudios?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            createVoiceDom(ctx.voiceAudios);
+          });
+        }
+      } else if (id == 'video') {
+        ctx.videos = document.querySelectorAll('.video>video');
+        if (ctx.videos?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            videoEvents(ctx.videos);
+          });
+        }
+      } else if (id == 'download-file') {
+        ctx.files = document.querySelectorAll('.file');
+        if (ctx.files?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            downloadFileEvent(ctx.files);
           });
         }
       } else {
@@ -607,6 +889,76 @@
         }
       }
     }
+
+    // chat iphone time
+    let phoneTimes = document.querySelectorAll('.chat .status-bar .time');
+
+    if (phoneTimes.length > 0) {
+      NowTime();
+      var date = new Date();
+      var sec = date.getSeconds();
+      var firstAdjustInterval = setInterval(firstAdjustTime, 1000 * (60 - sec));
+    }
+
+    function firstAdjustTime() {
+      NowTime();
+      clearInterval(firstAdjustInterval);
+      setInterval(NowTime, 1000 * 60);
+    }
+
+    function NowTime() {
+      for (let i = 0; i < phoneTimes.length; ++i) {
+        var timeSpan = phoneTimes[i];
+        var date = new Date();
+        var hour = date.getHours();
+        var min = date.getMinutes();
+        timeSpan.innerHTML = check(hour) + ":" + check(min);
+      }
+    };
+
+    function check(val) {
+      if (val < 10) {
+        return ("0" + val);
+      }
+      return (val);
+    }
+
+    // chat quote
+    const chat_quote_obverser = new IntersectionObserver((entries, observer) => {
+      entries.filter((entry) => { return entry.isIntersecting }).sort((a, b) => a.intersectionRect.y !== b.intersectionRect.y ? a.intersectionRect.y - b.intersectionRect.y : a.intersectionRect.x - b.intersectionRect.x).forEach((entry, index) => {
+          observer.unobserve(entry.target);
+          setTimeout(() => {
+            entry.target.classList.add('quote-blink');
+            setTimeout(() => {
+              entry.target.classList.remove('quote-blink');
+            }, 1000);
+          }, Math.max(100, 16) * (index + 1));
+        });
+    });
+
+    var chatQuotes = document.querySelectorAll(".chat .talk .quote");
+    chatQuotes.forEach((quote) => {
+      quote.addEventListener('click', function () {
+        var chatCellDom = document.getElementById("quote-" + quote.getAttribute("quotedCellTag"));
+        if (chatCellDom) {
+          var chatDiv = chatCellDom.parentElement;
+          var mid = chatDiv.clientHeight / 2;
+          var offsetTop = chatCellDom.offsetTop;
+          if (offsetTop > mid - chatCellDom.clientHeight / 2) {
+            chatDiv.scrollTo({
+              top: chatCellDom.offsetTop - mid + chatCellDom.clientHeight / 2,
+              behavior: "smooth"
+            });
+          } else {
+            chatDiv.scrollTo({
+              top: 0,
+              behavior: "smooth"
+            });
+          }
+          chat_quote_obverser.observe(chatCellDom);
+        }
+      });
+    });
   });
 </script>
 
@@ -625,20 +977,24 @@
     hoverDelay: 25
   };
 </script>
-<script defer src="https://cdnjs.cloudflare.com/ajax/libs/flying-pages/2.1.2/flying-pages.min.js"></script><script>
+<script defer src="https://gcore.jsdelivr.net/npm/flying-pages@2/flying-pages.min.js"></script><script>
   ctx.fancybox = {
     selector: `.timenode p>img`,
-    css: `https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css`,
-    js: `https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js`
+    css: `https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css`,
+    js: `https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js`
   };
-  var selector = '[data-fancybox]:not(.error)';
+  var selector = '[data-fancybox]:not(.error), .with-fancybox .atk-content img:not([atk-emoticon])';
   if (ctx.fancybox.selector) {
     selector += `, ${ctx.fancybox.selector}`
   }
   var needFancybox = document.querySelectorAll(selector).length !== 0;
   if (!needFancybox) {
-    const els = document.getElementsByClassName('ds-memos');
-    if (els != undefined && els.length > 0) {
+    const memos = document.getElementsByClassName('ds-memos');
+    if (memos != undefined && memos.length > 0) {
+      needFancybox = true;
+    }
+    const fancybox = document.getElementsByClassName('with-fancybox');
+    if (fancybox != undefined && fancybox.length > 0) {
       needFancybox = true;
     }
   }
@@ -661,8 +1017,8 @@
   window.addEventListener('DOMContentLoaded', (event) => {
     const swiper_api = document.getElementById('swiper-api');
     if (swiper_api != undefined) {
-      utils.css(`https://unpkg.com/swiper@10.3.1/swiper-bundle.min.css`);
-      utils.js(`https://unpkg.com/swiper@10.3.1/swiper-bundle.min.js`, { defer: true }).then(function () {
+      utils.css(`https://unpkg.com/swiper@10.3/swiper-bundle.min.css`);
+      utils.js(`https://unpkg.com/swiper@10.3/swiper-bundle.min.js`, { defer: true }).then(function () {
         const effect = swiper_api.getAttribute('effect') || '';
         var swiper = new Swiper('.swiper#swiper-api', {
           slidesPerView: 'auto',
