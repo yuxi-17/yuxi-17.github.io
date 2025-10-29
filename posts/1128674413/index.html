@@ -23,7 +23,7 @@
   <meta name="description" content="Network-Aware Locality Scheduling是一种借助元启发式算法的共流（Coflow）调度方法，原文链接：
 论文链接https://ieeexplore.ieee.org/abstract/document/9329172">
   
-  <meta name="keywords" content="Network-Aware Locality Scheduling,NEAL,Coflow调度">
+  <meta name="keywords" content="NEAL,Coflow">
 
   <!-- feed -->
   
@@ -37,7 +37,7 @@
 
   
 
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"雨夕","sameAs":[],"image":"https://webp.raiset.top/basic/avatar.jpg"},"dateCreated":"2025-09-25T09:15:15+08:00","dateModified":"2025-10-17T17:34:53+08:00","datePublished":"2025-09-25T09:15:15+08:00","description":"Network-Aware Locality Scheduling是一种借助元启发式算法的共流（Coflow）调度方法，原文链接：\n论文链接https://ieeexplore.ieee.org/abstract/document/9329172","headline":"NEAL(Network-Aware Locality Scheduling)论文简要解读","mainEntityOfPage":{"@type":"WebPage","@id":"https://raiset.top/posts/1128674413/"},"publisher":{"@type":"Organization","name":"雨夕","sameAs":[],"image":"https://webp.raiset.top/basic/avatar.jpg","logo":{"@type":"ImageObject","url":"https://webp.raiset.top/basic/avatar.jpg"}},"url":"https://raiset.top/posts/1128674413/","keywords":"Network-Aware Locality Scheduling,NEAL,Coflow调度","image":[]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"雨夕","sameAs":[],"image":"https://webp.raiset.top/basic/avatar.jpg"},"dateCreated":"2025-09-25T09:15:15+08:00","dateModified":"2025-10-21T09:45:18+08:00","datePublished":"2025-09-25T09:15:15+08:00","description":"Network-Aware Locality Scheduling是一种借助元启发式算法的共流（Coflow）调度方法，原文链接：\n论文链接https://ieeexplore.ieee.org/abstract/document/9329172","headline":"NEAL(Network-Aware Locality Scheduling)论文简要解读","mainEntityOfPage":{"@type":"WebPage","@id":"https://raiset.top/posts/1128674413/"},"publisher":{"@type":"Organization","name":"雨夕","sameAs":[],"image":"https://webp.raiset.top/basic/avatar.jpg","logo":{"@type":"ImageObject","url":"https://webp.raiset.top/basic/avatar.jpg"}},"url":"https://raiset.top/posts/1128674413/","keywords":"NEAL, Coflow","image":[]}</script>
   <link rel="stylesheet" href="https://cdn.staticfile.net/lxgw-wenkai-screen-webfont/1.6.0/lxgwwenkaiscreen.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="/css/mouse.css"><meta name="baidu-site-verification" content="codeva-mJBYqPRgrt" />
 </head>
 <body><div class="sitebg"><div class="siteblur"></div></div>
@@ -56,7 +56,7 @@
 
 
 
-<widget class="widget-wrapper recent post-list"><div class="widget-header dis-select"><span class="name">最近更新</span></div><div class="widget-body fs14"><a class="item title" href="/posts/1684246453/"><span class="title">PetaLinux驱动学习——Pinctrl和GPIO子系统</span></a><a class="item title" href="/posts/1812881063/"><span class="title">PetaLinux安装与使用-SD卡制作-离线编译</span></a><a class="item title" href="/posts/2690508721/"><span class="title">Tandem Processor论文解读</span></a><a class="item title" href="/posts/618860/"><span class="title">STARNUMA论文解读</span></a><a class="item title" href="/posts/1128674413/"><span class="title">NEAL(Network-Aware Locality Scheduling)论文简要解读</span></a><a class="item title" href="/posts/855715585/"><span class="title">PYNQ教程二:使用AXI总线实现PS与PL交互</span></a><a class="item title" href="/posts/1649035944/"><span class="title">PYNQ教程一:GPIO的使用</span></a><a class="item title" href="/posts/1552645455/"><span class="title">LSTM反向传播推导及C++代码实现</span></a></div></widget>
+<widget class="widget-wrapper recent post-list"><div class="widget-header dis-select"><span class="name">最近更新</span></div><div class="widget-body fs14"><a class="item title" href="/posts/652128759/"><span class="title">PetaLinux-QSPI Flash启动</span></a><a class="item title" href="/posts/1684246453/"><span class="title">PetaLinux驱动学习-Pinctrl和GPIO子系统</span></a><a class="item title" href="/posts/1812881063/"><span class="title">PetaLinux安装与使用-SD卡制作-离线编译</span></a><a class="item title" href="/posts/1128674413/"><span class="title">NEAL(Network-Aware Locality Scheduling)论文简要解读</span></a><a class="item title" href="/posts/2690508721/"><span class="title">Tandem Processor论文解读</span></a><a class="item title" href="/posts/618860/"><span class="title">STARNUMA论文解读</span></a><a class="item title" href="/posts/855715585/"><span class="title">PYNQ教程二:使用AXI总线实现PS与PL交互</span></a><a class="item title" href="/posts/1649035944/"><span class="title">PYNQ教程一:GPIO的使用</span></a><a class="item title" href="/posts/1552645455/"><span class="title">LSTM反向传播推导及C++代码实现</span></a></div></widget>
 </div>
 
 </div></aside><div class="l_main" id="main">
@@ -69,7 +69,7 @@
   <div class="content">
     <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a>
 <span class="sep"></span><a class="cap breadcrumb" href="/">文章</a><span class="sep"></span><a class="cap breadcrumb-link" href="/categories/%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/">论文解读</a></div>
-<div class="flex-row" id="post-meta"><span class="text created">发布于：<time datetime="2025-09-25T01:15:15.169Z">2025-09-25</time></span><span class="sep updated"></span><span class="text updated">更新于：<time datetime="2025-10-17T09:34:53.615Z">2025-10-17</time></span></div></div></div>
+<div class="flex-row" id="post-meta"><span class="text created">发布于：<time datetime="2025-09-25T01:15:15.169Z">2025-09-25</time></span><span class="sep updated"></span><span class="text updated">更新于：<time datetime="2025-10-21T01:45:18.087Z">2025-10-21</time></span></div></div></div>
     
     <div class="bottom only-title">
       

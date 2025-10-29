@@ -108,56 +108,6 @@ div.sub {
     auto;
 }
 
-/* p {
-  cursor: url(/cur/text.cur),
-    auto;
-}
-
-h1.text.title {
-  cursor: url(/cur/text.cur),
-    auto;
-}
-
-h2:hover {
-  cursor: url(/cur/text.cur),
-    auto;
-}
-
-h3:hover {
-  cursor: url(/cur/text.cur),
-    auto;
-}
-
-h4:hover {
-  cursor: url(/cur/text.cur),
-    auto;
-}
-
-details {
-  cursor: url(/cur/text.cur),
-    auto;
-}
-
-input:hover{
-  cursor: url(/cur/text.cur),
-    auto;
-}
-
-div.title {
-  cursor: url(/cur/text.cur),
-    auto;
-}
-
-span.line {
-  cursor: url(/cur/text.cur),
-    auto;
-}
-
-code {
-  cursor: url(/cur/text.cur),
-    auto;
-} */
-
 /* 文本内容通用样式 */
 p, span.line, span.text, li, td, th, blockquote,
 .post-content, .article-content, .content,
@@ -175,6 +125,14 @@ h1:hover, h2:hover, h3:hover, h4:hover, h5:hover, h6:hover {
 code, pre, .highlight {
   cursor: url(/cur/text.cur),
     auto;
+}
+
+.tag-plugin.colorful.mark {
+  cursor: url(/cur/text.cur), auto !important;
+}
+
+div.title {
+  cursor: url(/cur/text.cur), auto !important;
 }
 
 /*鼠标样式END*/
