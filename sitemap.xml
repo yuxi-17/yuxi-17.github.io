@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://raiset.top/about</loc>
+    
+    <lastmod>2025-11-25</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://raiset.top/posts/652128759/</loc>
     
     <lastmod>2025-10-29</lastmod>
@@ -91,19 +100,10 @@
     <priority>0.6</priority>
   </url>
   
-  <url>
-    <loc>https://raiset.top/about</loc>
-    
-    <lastmod>2025-02-07</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
 
   <url>
     <loc>https://raiset.top/</loc>
-    <lastmod>2025-11-05</lastmod>
+    <lastmod>2025-11-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -111,63 +111,63 @@
   
   <url>
     <loc>https://raiset.top/tags/PYNQ/</loc>
-    <lastmod>2025-11-05</lastmod>
+    <lastmod>2025-11-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://raiset.top/tags/LSTM%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD/</loc>
-    <lastmod>2025-11-05</lastmod>
+    <lastmod>2025-11-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://raiset.top/tags/STARNUMA/</loc>
-    <lastmod>2025-11-05</lastmod>
+    <lastmod>2025-11-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://raiset.top/tags/Tandem/</loc>
-    <lastmod>2025-11-05</lastmod>
+    <lastmod>2025-11-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://raiset.top/tags/PetaLinux/</loc>
-    <lastmod>2025-11-05</lastmod>
+    <lastmod>2025-11-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://raiset.top/tags/Linux%E9%A9%B1%E5%8A%A8/</loc>
-    <lastmod>2025-11-05</lastmod>
+    <lastmod>2025-11-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://raiset.top/tags/NEAL/</loc>
-    <lastmod>2025-11-05</lastmod>
+    <lastmod>2025-11-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://raiset.top/tags/Coflow/</loc>
-    <lastmod>2025-11-05</lastmod>
+    <lastmod>2025-11-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://raiset.top/tags/QSPI-Flash/</loc>
-    <lastmod>2025-11-05</lastmod>
+    <lastmod>2025-11-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
@@ -176,28 +176,28 @@
   
   <url>
     <loc>https://raiset.top/categories/PYNQ%E6%95%99%E7%A8%8B/</loc>
-    <lastmod>2025-11-05</lastmod>
+    <lastmod>2025-11-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://raiset.top/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/</loc>
-    <lastmod>2025-11-05</lastmod>
+    <lastmod>2025-11-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://raiset.top/categories/%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/</loc>
-    <lastmod>2025-11-05</lastmod>
+    <lastmod>2025-11-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://raiset.top/categories/PetaLinux/</loc>
-    <lastmod>2025-11-05</lastmod>
+    <lastmod>2025-11-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
