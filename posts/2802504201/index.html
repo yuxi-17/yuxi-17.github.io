@@ -1,0 +1,1106 @@
+
+<!DOCTYPE html><html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1" theme-name="Stellar" theme-version="1.33.1">
+  
+  
+  <meta name="generator" content="Hexo 7.2.0">
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
+  <meta name="theme-color" content="#f9fafb">
+  <title>从零开始的Zynq软硬件协同开发 - Raiset</title>
+
+  
+  <meta name="description" content="概述
+
+本文将介绍Zynq软硬件协同开发所需要的核心概念、典型架构以及基本开发流程。文章从嵌入式系统出发，引入TinyML，再过渡到Zynq架构与PS‑PL协同计算。">
+  
+  <meta name="keywords" content="PYNQ,Zynq,软硬件协同">
+
+  <!-- feed -->
+  
+
+  <link rel="stylesheet" href="/css/main.css?v=1.33.1">
+
+
+  
+    <link rel="shortcut icon" href="https://webp.raiset.top/basic/favicon.ico">
+  
+
+  
+
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"雨夕","sameAs":[],"image":"https://webp.raiset.top/basic/avatar.jpg"},"dateCreated":"2026-03-24T23:13:49+08:00","dateModified":"2026-04-02T18:07:17+08:00","datePublished":"2026-03-24T23:13:49+08:00","description":"概述\n\n本文将介绍Zynq软硬件协同开发所需要的核心概念、典型架构以及基本开发流程。文章从嵌入式系统出发，引入TinyML，再过渡到Zynq架构与PS‑PL协同计算。","headline":"从零开始的Zynq软硬件协同开发","mainEntityOfPage":{"@type":"WebPage","@id":"https://raiset.top/posts/2802504201/"},"publisher":{"@type":"Organization","name":"雨夕","sameAs":[],"image":"https://webp.raiset.top/basic/avatar.jpg","logo":{"@type":"ImageObject","url":"https://webp.raiset.top/basic/avatar.jpg"}},"url":"https://raiset.top/posts/2802504201/","keywords":"PYNQ, Zynq, 软硬件协同","image":[]}</script>
+  <link rel="stylesheet" href="https://cdn.staticfile.net/lxgw-wenkai-screen-webfont/1.6.0/lxgwwenkaiscreen.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="/css/mouse.css"><meta name="baidu-site-verification" content="codeva-mJBYqPRgrt" />
+</head>
+<body><div class="sitebg"><div class="siteblur"></div></div>
+
+<div class="l_body content" id="start" layout="post" type="tech" ><aside class="l_left"><div class="sidebg"></div><div class="leftbar-container">
+
+
+<header class="header"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="https://webp.raiset.top/basic/avatar.jpg" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main">Raiset</div><div class="sub normal cap">但行前路，无问西东</div><div class="sub hover cap" style="opacity:0"> yuxi17@hnu.edu.cn</div></a></div></header>
+
+<div class="nav-area">
+
+<nav class="menu dis-select"></nav>
+</div>
+<div class="widgets">
+<div class="search-wrapper" id="search-wrapper"><form class="search-form"><a class="search-button" onclick="document.getElementById(&quot;search-input&quot;).focus();"><svg t="1705074644177" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1560" width="200" height="200"><path d="M1008.839137 935.96571L792.364903 719.491476a56.783488 56.783488 0 0 0-80.152866 0 358.53545 358.53545 0 1 1 100.857314-335.166073 362.840335 362.840335 0 0 1-3.689902 170.145468 51.248635 51.248635 0 1 0 99.217358 26.444296 462.057693 462.057693 0 1 0-158.255785 242.303546l185.930047 185.725053a51.248635 51.248635 0 0 0 72.568068 0 51.248635 51.248635 0 0 0 0-72.978056z" p-id="1561"></path><path d="M616.479587 615.969233a50.428657 50.428657 0 0 0-61.498362-5.534852 174.655348 174.655348 0 0 1-177.525271 3.484907 49.403684 49.403684 0 0 0-58.833433 6.76482l-3.074918 2.869923a49.403684 49.403684 0 0 0 8.609771 78.10292 277.767601 277.767601 0 0 0 286.992355-5.739847 49.403684 49.403684 0 0 0 8.404776-76.667958z" p-id="1562"></path></svg></a><input type="text" class="search-input" id="search-input" placeholder="站内搜索"></form><div id="search-result"></div><div class="search-no-result">没有找到内容！</div></div>
+
+
+
+<widget class="widget-wrapper recent post-list"><div class="widget-header dis-select"><span class="name">最近更新</span></div><div class="widget-body fs14"><a class="item title" href="/posts/2802504201/"><span class="title">从零开始的Zynq软硬件协同开发</span></a><a class="item title" href="/posts/3912509188/"><span class="title">Verdi字体大小永久更改</span></a><a class="item title" href="/posts/652128759/"><span class="title">PetaLinux-QSPI Flash启动</span></a><a class="item title" href="/posts/1684246453/"><span class="title">PetaLinux驱动学习-Pinctrl和GPIO子系统</span></a><a class="item title" href="/posts/1812881063/"><span class="title">PetaLinux安装与使用-SD卡制作-离线编译</span></a><a class="item title" href="/posts/1128674413/"><span class="title">NEAL(Network-Aware Locality Scheduling)论文简要解读</span></a><a class="item title" href="/posts/2690508721/"><span class="title">Tandem Processor论文解读</span></a><a class="item title" href="/posts/618860/"><span class="title">STARNUMA论文解读</span></a><a class="item title" href="/posts/855715585/"><span class="title">PYNQ教程二:使用AXI总线实现PS与PL交互</span></a><a class="item title" href="/posts/1649035944/"><span class="title">PYNQ教程一:GPIO的使用</span></a><a class="item title" href="/posts/1552645455/"><span class="title">LSTM反向传播推导及C++代码实现</span></a></div></widget>
+</div>
+
+</div></aside><div class="l_main" id="main">
+
+
+
+
+
+<div class="article banner top">
+  <div class="content">
+    <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a>
+<span class="sep"></span><a class="cap breadcrumb" href="/">文章</a><span class="sep"></span><a class="cap breadcrumb-link" href="/categories/PYNQ%E6%95%99%E7%A8%8B/">PYNQ教程</a></div>
+<div class="flex-row" id="post-meta"><span class="text created">发布于：<time datetime="2026-03-24T15:13:49.820Z">2026-03-24</time></span><span class="sep updated"></span><span class="text updated">更新于：<time datetime="2026-04-02T10:07:17.740Z">2026-04-02</time></span></div></div></div>
+    
+    <div class="bottom only-title">
+      
+      <div class="text-area">
+        <h1 class="text title"><span>从零开始的Zynq软硬件协同开发</span></h1>
+        
+      </div>
+    </div>
+    
+  </div>
+  </div><article class="md-text content"><div class="tag-plugin quot p"><p class="content"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --><path fill="currentColor" d="m14.092 10.75l-.75 2.5H9.908l.75-2.5z"/><path fill="currentColor" fill-rule="evenodd" d="M3.464 3.464C2 4.93 2 7.286 2 12s0 7.071 1.464 8.535C4.93 22 7.286 22 12 22s7.071 0 8.535-1.465C22 19.072 22 16.714 22 12s0-7.071-1.465-8.536C19.072 2 16.714 2 12 2S4.929 2 3.464 3.464m7.752 2.818a.75.75 0 0 1 .502.934l-.61 2.034h3.434l.74-2.465a.75.75 0 0 1 1.436.43l-.61 2.035H18a.75.75 0 0 1 0 1.5h-2.342l-.75 2.5H17a.75.75 0 0 1 0 1.5h-2.542l-.74 2.465a.75.75 0 0 1-1.436-.43l.61-2.035H9.458l-.74 2.465a.75.75 0 1 1-1.436-.43l.61-2.035H6a.75.75 0 0 1 0-1.5h2.342l.75-2.5H7a.75.75 0 0 1 0-1.5h2.542l.74-2.465a.75.75 0 0 1 .934-.503" clip-rule="evenodd"/></svg><span class="text">概述</span><span class="empty"></span></p></div>
+
+<div class="tag-plugin colorful note" color="blue"><div class="body"><p>本文将介绍Zynq软硬件协同开发所需要的核心概念、典型架构以及基本开发流程。文章从嵌入式系统出发，引入TinyML，再过渡到Zynq架构与PS‑PL协同计算。</p></div></div>
+
+<span id="more"></span>
+
+<h2 id="1-从嵌入式系统开始"><a href="#1-从嵌入式系统开始" class="headerlink" title="1. 从嵌入式系统开始"></a>1. 从嵌入式系统开始</h2><p>当我们把一个应用部署到硬件设备上时，系统通常包含三个基本环节：</p>
+<div class="tag-plugin grid" bg="card" style="grid-template-columns: repeat(3, 1fr);"><div class="cell" style="">
+    <p><strong>感知</strong></p><p>获取温度、湿度、图像等环境数据。</p>
+    </div>
+    <div class="cell" style="">
+    <p><strong>计算</strong></p><p>对输入数据进行处理，得到控制决策或识别结果。</p>
+    </div>
+    <div class="cell" style="">
+    <p><strong>作动 &#x2F; 通信</strong></p><p>执行动作，或者把结果发送给外部系统。</p>
+    </div>
+    </div>
+
+<p>几乎所有嵌入式系统都包含<strong>感知与计算</strong>两个部分，而作动或通信则取决于具体应用场景。比如以下案例：</p>
+<div class="tag-plugin poetry"><div class="content"><div class="title">案例一：自动浇水装置</div><div class="body"><ol><li>将湿度传感器插入土壤。</li><li>使用微控制器（MCU）读取湿度数据</li><li>当湿度低于阈值时启动水泵或水用电磁阀开始浇水</li><li>湿度恢复后停止浇水</li><li>可以进一步通过网络上传湿度数据</li></ol></div></div></div>
+
+<p>在该系统中：</p>
+<table>
+<thead>
+<tr>
+<th>组件</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>湿度传感器</td>
+<td>感知环境</td>
+</tr>
+<tr>
+<td>水泵&#x2F;电磁阀</td>
+<td>作动器</td>
+</tr>
+<tr>
+<td>MCU</td>
+<td>控制与计算</td>
+</tr>
+</tbody></table>
+<mark class="tag-plugin colorful mark" color="cyan">无论设备形态怎么变化，底层逻辑都可以概括为“输入 → 处理 → 输出”。</mark>
+
+<p>MCU（例如C51、STM32、ESP32）通常作为系统的控制核心，协调各部分正常运行，因此需要在MCU上编写应用逻辑。输入输出通常通过通信协议（如UART、I2C、SPI）或ADC&#x2F;DAC来实现。</p>
+<p>手上没有单片机的可以去Wokwi网站上做一些demo学习一下嵌入式软件开发，对于案例一，我在官方的MicroPython案例上做了一些修改：</p>
+<div class="tag-plugin link dis-select"><a class="link-card plain" title="案例一Wokwi工程" href="https://wokwi.com/projects/459466875139739649" target="_blank" rel="external nofollow noopener noreferrer" cardlink autofill=""><div class="left"><span class="title">案例一Wokwi工程</span><span class="cap link footnote">https://wokwi.com/projects/459466875139739649</span></div><div class="right"><div class="lazy img" data-bg="https://webp.raiset.top/icon/wokwi.jpeg"></div></div></a></div>
+
+<div class="tag-plugin tabs"id="tab_1"><div class="nav-tabs"><div class="tab active"><a href="#tab_1-1">Wokwi仿真</a></div><div class="tab"><a href="#tab_1-2">MQTT订阅</a></div></div><div class="tab-content"><div class="tab-pane active" id="tab_1-1"><p>开始仿真后点击DHT22（温湿度传感器），上方会出现状态栏，可以手动调节温湿度。当湿度小于40%时LED灯会亮，表示打开水泵开始浇水；湿度大于60%时LED灯会灭，表示停止浇水。由于每5秒检测一次，所以不是即时变化的。</p>
+<div class="tag-plugin image"><div class="image-bg" style="aspect-ratio:1063/926;"><img class="lazy" src="https://webp.raiset.top/co_design/image-20260325204803102.png" data-src="https://webp.raiset.top/co_design/image-20260325204803102.png" alt="Wokwi 仿真界面" data-fancybox="true"onerror="this.src=&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2rem' height='2rem' viewBox='0 0 24 24'%3E%3C!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --%3E%3Cpath fill='%23F44336' d='M22 12.698c-.002 1.47-.013 2.718-.096 3.743c-.097 1.19-.296 2.184-.74 3.009a4.2 4.2 0 0 1-.73.983c-.833.833-1.893 1.21-3.237 1.39C15.884 22 14.2 22 12.053 22h-.106c-2.148 0-3.83 0-5.144-.177c-1.343-.18-2.404-.557-3.236-1.39c-.738-.738-1.12-1.656-1.322-2.795c-.2-1.12-.236-2.512-.243-4.241Q1.999 12.737 2 12v-.054c0-2.148 0-3.83.177-5.144c.18-1.343.557-2.404 1.39-3.236s1.893-1.21 3.236-1.39c1.168-.157 2.67-.175 4.499-.177a.697.697 0 1 1 0 1.396c-1.855.002-3.234.018-4.313.163c-1.189.16-1.906.464-2.436.994S3.72 5.8 3.56 6.99C3.397 8.2 3.395 9.788 3.395 12v.784l.932-.814a2.14 2.14 0 0 1 2.922.097l3.99 3.99a1.86 1.86 0 0 0 2.385.207l.278-.195a2.79 2.79 0 0 1 3.471.209l2.633 2.37c.265-.557.423-1.288.507-2.32c.079-.972.09-2.152.091-3.63a.698.698 0 0 1 1.396 0' opacity='.5'/%3E%3Cpath fill='%23F44336' fill-rule='evenodd' d='M17.5 11c-2.121 0-3.182 0-3.841-.659S13 8.621 13 6.5s0-3.182.659-3.841S15.379 2 17.5 2s3.182 0 3.841.659S22 4.379 22 6.5s0 3.182-.659 3.841S19.621 11 17.5 11m-1.47-7.03a.75.75 0 1 0-1.06 1.06l1.47 1.47l-1.47 1.47a.75.75 0 0 0 1.06 1.06l1.47-1.47l1.47 1.47a.75.75 0 1 0 1.06-1.06L18.56 6.5l1.47-1.47a.75.75 0 0 0-1.06-1.06L17.5 5.44z' clip-rule='evenodd'/%3E%3C/svg%3E&quot;"/><div class="lazy-icon" style="background-image:url(https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd);"></div></div><div class="image-meta"><span class="image-caption center">Wokwi 仿真界面</span></div></div></div><div class="tab-pane" id="tab_1-2"><p>数据会通过MQTT协议发送到服务器 <code>broker.mqttdashboard.com</code>，主题为 <code>wokwi-auto-water</code>。</p>
+<p>在PC上可以下载一个MQTTBox，点击“Create MQTT Client”，修改 <code>Host</code> 为该服务器，选择 <code>Protocol</code> 为 <code>mqtt/tcp</code>，然后保存。</p>
+<div class="tag-plugin image"><div class="image-bg" style="aspect-ratio:1241/259;"><img class="lazy" src="https://webp.raiset.top/co_design/image-20260325205718572.png" data-src="https://webp.raiset.top/co_design/image-20260325205718572.png" alt="MQTTBox 连接配置" data-fancybox="true"onerror="this.src=&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2rem' height='2rem' viewBox='0 0 24 24'%3E%3C!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --%3E%3Cpath fill='%23F44336' d='M22 12.698c-.002 1.47-.013 2.718-.096 3.743c-.097 1.19-.296 2.184-.74 3.009a4.2 4.2 0 0 1-.73.983c-.833.833-1.893 1.21-3.237 1.39C15.884 22 14.2 22 12.053 22h-.106c-2.148 0-3.83 0-5.144-.177c-1.343-.18-2.404-.557-3.236-1.39c-.738-.738-1.12-1.656-1.322-2.795c-.2-1.12-.236-2.512-.243-4.241Q1.999 12.737 2 12v-.054c0-2.148 0-3.83.177-5.144c.18-1.343.557-2.404 1.39-3.236s1.893-1.21 3.236-1.39c1.168-.157 2.67-.175 4.499-.177a.697.697 0 1 1 0 1.396c-1.855.002-3.234.018-4.313.163c-1.189.16-1.906.464-2.436.994S3.72 5.8 3.56 6.99C3.397 8.2 3.395 9.788 3.395 12v.784l.932-.814a2.14 2.14 0 0 1 2.922.097l3.99 3.99a1.86 1.86 0 0 0 2.385.207l.278-.195a2.79 2.79 0 0 1 3.471.209l2.633 2.37c.265-.557.423-1.288.507-2.32c.079-.972.09-2.152.091-3.63a.698.698 0 0 1 1.396 0' opacity='.5'/%3E%3Cpath fill='%23F44336' fill-rule='evenodd' d='M17.5 11c-2.121 0-3.182 0-3.841-.659S13 8.621 13 6.5s0-3.182.659-3.841S15.379 2 17.5 2s3.182 0 3.841.659S22 4.379 22 6.5s0 3.182-.659 3.841S19.621 11 17.5 11m-1.47-7.03a.75.75 0 1 0-1.06 1.06l1.47 1.47l-1.47 1.47a.75.75 0 0 0 1.06 1.06l1.47-1.47l1.47 1.47a.75.75 0 1 0 1.06-1.06L18.56 6.5l1.47-1.47a.75.75 0 0 0-1.06-1.06L17.5 5.44z' clip-rule='evenodd'/%3E%3C/svg%3E&quot;"/><div class="lazy-icon" style="background-image:url(https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd);"></div></div><div class="image-meta"><span class="image-caption center">MQTTBox 连接配置</span></div></div>
+
+<p><code>connected</code> 表示连接服务器成功。此时订阅 <code>wokwi-auto-water</code> 主题，即可远程收到来自ESP32发送的数据。</p>
+<div class="tag-plugin image"><div class="image-bg" style="aspect-ratio:1600/947;"><img class="lazy" src="https://webp.raiset.top/co_design/image-20260325210523962.png" data-src="https://webp.raiset.top/co_design/image-20260325210523962.png" alt="MQTTBox 订阅结果" data-fancybox="true"onerror="this.src=&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2rem' height='2rem' viewBox='0 0 24 24'%3E%3C!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --%3E%3Cpath fill='%23F44336' d='M22 12.698c-.002 1.47-.013 2.718-.096 3.743c-.097 1.19-.296 2.184-.74 3.009a4.2 4.2 0 0 1-.73.983c-.833.833-1.893 1.21-3.237 1.39C15.884 22 14.2 22 12.053 22h-.106c-2.148 0-3.83 0-5.144-.177c-1.343-.18-2.404-.557-3.236-1.39c-.738-.738-1.12-1.656-1.322-2.795c-.2-1.12-.236-2.512-.243-4.241Q1.999 12.737 2 12v-.054c0-2.148 0-3.83.177-5.144c.18-1.343.557-2.404 1.39-3.236s1.893-1.21 3.236-1.39c1.168-.157 2.67-.175 4.499-.177a.697.697 0 1 1 0 1.396c-1.855.002-3.234.018-4.313.163c-1.189.16-1.906.464-2.436.994S3.72 5.8 3.56 6.99C3.397 8.2 3.395 9.788 3.395 12v.784l.932-.814a2.14 2.14 0 0 1 2.922.097l3.99 3.99a1.86 1.86 0 0 0 2.385.207l.278-.195a2.79 2.79 0 0 1 3.471.209l2.633 2.37c.265-.557.423-1.288.507-2.32c.079-.972.09-2.152.091-3.63a.698.698 0 0 1 1.396 0' opacity='.5'/%3E%3Cpath fill='%23F44336' fill-rule='evenodd' d='M17.5 11c-2.121 0-3.182 0-3.841-.659S13 8.621 13 6.5s0-3.182.659-3.841S15.379 2 17.5 2s3.182 0 3.841.659S22 4.379 22 6.5s0 3.182-.659 3.841S19.621 11 17.5 11m-1.47-7.03a.75.75 0 1 0-1.06 1.06l1.47 1.47l-1.47 1.47a.75.75 0 0 0 1.06 1.06l1.47-1.47l1.47 1.47a.75.75 0 1 0 1.06-1.06L18.56 6.5l1.47-1.47a.75.75 0 0 0-1.06-1.06L17.5 5.44z' clip-rule='evenodd'/%3E%3C/svg%3E&quot;"/><div class="lazy-icon" style="background-image:url(https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd);"></div></div><div class="image-meta"><span class="image-caption center">MQTTBox 订阅结果</span></div></div></div></div></div>
+
+<h2 id="2-TinyML"><a href="#2-TinyML" class="headerlink" title="2. TinyML"></a>2. TinyML</h2><p>如果希望在嵌入式设备上部署神经网络推理，系统结构仍然遵循相同流程：<strong>数据输入 → 模型计算 → 输出结果</strong>。考虑以下案例：</p>
+<div class="tag-plugin poetry"><div class="content"><div class="title">案例二：手写数字识别</div><div class="body"><ol><li>摄像头采集图像</li><li>MCU执行神经网络推理</li><li>输出识别结果</li></ol></div></div></div>
+
+<p>为了在资源受限设备上运行机器学习模型，可以使用TinyML技术。</p>
+<div class="tag-plugin blockquote" indent="undefined"><p>TinyML（Tiny Machine Learning）是将轻量化机器学习模型部署到资源受限的嵌入式设备（如微控制器、传感器节点）上的技术，通常运行在mW级功耗、KB级内存的硬件上，实现本地化智能推理。它融合了边缘计算、模型压缩、嵌入式系统优化等多领域技术，适用于无网络、低延迟、隐私保护等场景。</p></div>
+
+<p>以TFLite（TinyML的其中一种）为例，可以把整个落地过程拆成两个阶段：</p>
+<div class="tag-plugin tabs"id="tab_2"><div class="nav-tabs"><div class="tab active"><a href="#tab_2-1">训练与部署</a></div><div class="tab"><a href="#tab_2-2">MCU推理</a></div></div><div class="tab-content"><div class="tab-pane active" id="tab_2-1"><ol>
+<li>在PC&#x2F;GPU上搭建模型并完成训练</li>
+<li>导出TensorFlow Lite模型为 <code>tflite</code> 文件</li>
+<li>解析 <code>tflite</code> 文件并转换为C数组</li>
+<li>将模型和输入数据嵌入MCU程序</li>
+</ol></div><div class="tab-pane" id="tab_2-2"><ol>
+<li>使用TFLite Micro加载模型</li>
+<li>分配运行时内存（Tensor Arena）</li>
+<li>在MCU上执行推理并输出结果</li>
+</ol></div></div></div>
+
+<p>可以参考以下实现，由于Wokwi没法模拟摄像头，所以这里直接把数字图片转换成数组作为输入，MCU读取该输入数据做推理：</p>
+<div class="tag-plugin link dis-select"><a class="link-card plain" title="案例二Wokwi工程" href="https://github.com/yuxi-17/mnist_tflite_with-wokwi" target="_blank" rel="external nofollow noopener noreferrer" cardlink autofill=""><div class="left"><span class="title">案例二Wokwi工程</span><span class="cap link footnote">https://github.com/yuxi-17/mnist_tflite_with-wokwi</span></div><div class="right"><div class="lazy img" data-bg="https://webp.raiset.top/icon/github.png"></div></div></a></div>
+
+<h2 id="3-从-MCU-到-Zynq"><a href="#3-从-MCU-到-Zynq" class="headerlink" title="3. 从 MCU 到 Zynq"></a>3. 从 MCU 到 Zynq</h2><div class="tag-plugin grid" bg="card" style="grid-template-columns: repeat(2, 1fr);"><div class="cell" style="">
+    <p><strong>存储瓶颈</strong></p><p>虽然TinyML已经实现了从训练到部署一体化，但单片机的SRAM通常只有几百KB，Flash只有几MB。模型权重往往存放在Flash中，因此模型规模会受限；中间结果保存在SRAM中，因此特征图大小也会受限。</p>
+    </div>
+    <div class="cell" style="">
+    <p><strong>计算瓶颈</strong></p><p>MCU的CPU通常主频较低，也缺乏大规模并行计算能力，因此难以支撑高吞吐、低时延的计算任务。</p>
+    </div>
+    </div>
+
+<mark class="tag-plugin colorful mark" color="orange">当模型更大、数据更多、吞吐要求更高时，就需要把复杂计算卸载给更擅长并行处理的硬件。</mark>
+
+<p>这也是从MCU进一步走向Zynq的核心动机。就像PC训练模型时会把计算交给GPU一样，Zynq也是“CPU + 专用并行硬件”这一思路在嵌入式场景下的体现。</p>
+<h2 id="4-Zynq-架构"><a href="#4-Zynq-架构" class="headerlink" title="4. Zynq 架构"></a>4. Zynq 架构</h2><p>Zynq是一种<strong>CPU+FPGA</strong>的异构SoC。系统由两部分组成：</p>
+<div class="tag-plugin grid" bg="card" style="grid-template-columns: repeat(2, 1fr);"><div class="cell" style="">
+    <p><strong>PS（Processing System）</strong></p><p>ARM处理器系统，主频较高，可访问大容量DDR，适合执行数据预处理、外设控制、逻辑决策等串行任务。</p>
+    </div>
+    <div class="cell" style="">
+    <p><strong>PL（Programmable Logic）</strong></p><p>FPGA可编程逻辑，适合把卷积、矩阵乘法等高并行度计算做成硬件流水线。</p>
+    </div>
+    </div>
+
+<div class="tag-plugin colorful note" color="cyan"><div class="title">一个简单记忆方式</div><div class="body"><p>PS偏控制与调度，PL偏并行计算与加速。</p></div></div>
+
+<h2 id="5-PL端开发"><a href="#5-PL端开发" class="headerlink" title="5. PL端开发"></a>5. PL端开发</h2><p>PL端本质上是FPGA开发，可以使用Verilog&#x2F;VHDL语言，但对于算法开发者来说，使用HLS（High Level Synthesis）更容易。</p>
+<div class="tag-plugin colorful note" color="blue"><div class="title"><strong><p>HLS能帮我们做什么</p>
+</strong></div><div class="body"><ul><li>将高层语言（C、C++、SystemC）转换成RTL语言（Verilog、VHDL），并生成IP核。</li><li>提供 <code>pipeline</code>、<code>unroll</code> 等优化手段，可以进一步提升运行效率，但过度优化可能导致FPGA资源不足。</li><li>为输入输出生成AXI接口，便于后续与PS侧系统集成。</li></ul></div></div>
+
+<p>相关教程如下：</p>
+<div class="tag-plugin link dis-select"><a class="link-card plain" title="HLS教程" href="https://www.bilibili.com/video/BV1bt41187RW" target="_blank" rel="external nofollow noopener noreferrer" cardlink autofill=""><div class="left"><span class="title">HLS教程</span><span class="cap link footnote">https://www.bilibili.com/video/BV1bt41187RW</span></div><div class="right"><div class="lazy img" data-bg="https://webp.raiset.top/icon/bilibili.png"></div></div></a></div>
+
+<p>Vivado用于Xilinx系列FPGA的开发，也就是PL端的开发，基本的使用教程如下：</p>
+<div class="tag-plugin link dis-select"><a class="link-card plain" title="Vivado基本教程" href="https://www.bilibili.com/read/cv15422358" target="_blank" rel="external nofollow noopener noreferrer" cardlink autofill=""><div class="left"><span class="title">Vivado基本教程</span><span class="cap link footnote">https://www.bilibili.com/read/cv15422358</span></div><div class="right"><div class="lazy img" data-bg="https://webp.raiset.top/icon/bilibili.png"></div></div></a></div>
+
+<h2 id="6-PS端开发"><a href="#6-PS端开发" class="headerlink" title="6. PS端开发"></a>6. PS端开发</h2><p>PS端本质上属于嵌入式软件开发，开发环境为Vitis（旧版叫Vivado SDK），不过与普通的嵌入式开发有所不同，这里需要在Vivado中配置Zynq IP核，然后才能在此基础上编程，可以参考以下教程：</p>
+<div class="tag-plugin link dis-select"><a class="link-card plain" title="Zynq IP核配置与Vitis使用" href="https://www.bilibili.com/video/BV1e3411d7YX/?p=2" target="_blank" rel="external nofollow noopener noreferrer" cardlink autofill=""><div class="left"><span class="title">Zynq IP核配置与Vitis使用</span><span class="cap link footnote">https://www.bilibili.com/video/BV1e3411d7YX/?p=2</span></div><div class="right"><div class="lazy img" data-bg="https://webp.raiset.top/icon/bilibili.png"></div></div></a></div>
+
+<p>如果使用的是Pynq（Python on Zynq）开发板，顾名思义其也是Zynq架构，只是在PS端编程时可以用Python开发，类似于案例一用MicroPython开发ESP32一样。基本使用教程如下：</p>
+<div class="tag-plugin link dis-select"><a class="link-card plain" title="Pynq基本教程" href="https://www.bilibili.com/video/BV1KY4y1x7Mk" target="_blank" rel="external nofollow noopener noreferrer" cardlink autofill=""><div class="left"><span class="title">Pynq基本教程</span><span class="cap link footnote">https://www.bilibili.com/video/BV1KY4y1x7Mk</span></div><div class="right"><div class="lazy img" data-bg="https://webp.raiset.top/icon/bilibili.png"></div></div></a></div>
+
+<p>上面只简单打印了一个helloworld，下面这个视频更加详细介绍Pynq上Jupyter Notebook的使用：</p>
+<div class="tag-plugin link dis-select"><a class="link-card plain" title="Pynq点灯和拨码开关实验" href="https://www.bilibili.com/video/BV1SE411F7VL" target="_blank" rel="external nofollow noopener noreferrer" cardlink autofill=""><div class="left"><span class="title">Pynq点灯和拨码开关实验</span><span class="cap link footnote">https://www.bilibili.com/video/BV1SE411F7VL</span></div><div class="right"><div class="lazy img" data-bg="https://webp.raiset.top/icon/bilibili.png"></div></div></a></div>
+
+<p>有关Pynq相关的API可以在以下网站中找到：</p>
+<div class="tag-plugin link dis-select"><a class="link-card plain" title="Pynq相关API" href="https://pynq.readthedocs.io/en/latest/pynq_libraries.html" target="_blank" rel="external nofollow noopener noreferrer" cardlink autofill="icon"><div class="left"><span class="title">Pynq相关API</span><span class="cap link footnote">https://pynq.readthedocs.io/en/latest/pynq_libraries.html</span></div><div class="right"><div class="lazy img" data-bg="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/link/8f277b4ee0ecd.svg"></div></div></a></div>
+
+<h2 id="7-PS与PL通信"><a href="#7-PS与PL通信" class="headerlink" title="7. PS与PL通信"></a>7. PS与PL通信</h2><p>PS需要将任务卸载到PL端去运算，那么PS和PL之间就需要进行数据的传输。</p>
+<div class="tag-plugin image"><div class="image-bg" style="aspect-ratio:1271/821;"><img class="lazy" src="https://webp.raiset.top/co_design/image-20260402144102217.png" data-src="https://webp.raiset.top/co_design/image-20260402144102217.png" alt="PS 与 PL 之间的主要接口" data-fancybox="true"onerror="this.src=&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2rem' height='2rem' viewBox='0 0 24 24'%3E%3C!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --%3E%3Cpath fill='%23F44336' d='M22 12.698c-.002 1.47-.013 2.718-.096 3.743c-.097 1.19-.296 2.184-.74 3.009a4.2 4.2 0 0 1-.73.983c-.833.833-1.893 1.21-3.237 1.39C15.884 22 14.2 22 12.053 22h-.106c-2.148 0-3.83 0-5.144-.177c-1.343-.18-2.404-.557-3.236-1.39c-.738-.738-1.12-1.656-1.322-2.795c-.2-1.12-.236-2.512-.243-4.241Q1.999 12.737 2 12v-.054c0-2.148 0-3.83.177-5.144c.18-1.343.557-2.404 1.39-3.236s1.893-1.21 3.236-1.39c1.168-.157 2.67-.175 4.499-.177a.697.697 0 1 1 0 1.396c-1.855.002-3.234.018-4.313.163c-1.189.16-1.906.464-2.436.994S3.72 5.8 3.56 6.99C3.397 8.2 3.395 9.788 3.395 12v.784l.932-.814a2.14 2.14 0 0 1 2.922.097l3.99 3.99a1.86 1.86 0 0 0 2.385.207l.278-.195a2.79 2.79 0 0 1 3.471.209l2.633 2.37c.265-.557.423-1.288.507-2.32c.079-.972.09-2.152.091-3.63a.698.698 0 0 1 1.396 0' opacity='.5'/%3E%3Cpath fill='%23F44336' fill-rule='evenodd' d='M17.5 11c-2.121 0-3.182 0-3.841-.659S13 8.621 13 6.5s0-3.182.659-3.841S15.379 2 17.5 2s3.182 0 3.841.659S22 4.379 22 6.5s0 3.182-.659 3.841S19.621 11 17.5 11m-1.47-7.03a.75.75 0 1 0-1.06 1.06l1.47 1.47l-1.47 1.47a.75.75 0 0 0 1.06 1.06l1.47-1.47l1.47 1.47a.75.75 0 1 0 1.06-1.06L18.56 6.5l1.47-1.47a.75.75 0 0 0-1.06-1.06L17.5 5.44z' clip-rule='evenodd'/%3E%3C/svg%3E&quot;"/><div class="lazy-icon" style="background-image:url(https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd);"></div></div><div class="image-meta"><span class="image-caption center">PS 与 PL 之间的主要接口</span></div></div>
+
+<p>上图里面是PS，外面灰色是PL。PS和PL之间的接口有很多，但去除时钟复位中断等能用来传输数据的就是图中框出来的部分。</p>
+<h3 id="7-1-EMIO方式"><a href="#7-1-EMIO方式" class="headerlink" title="7.1 EMIO方式"></a>7.1 EMIO方式</h3><p>PS中很多外设（GPIO&#x2F;SPI&#x2F;UART&#x2F;I2C等）原本只能通过MIO引脚连接到板子外部，但如果MIO不够或需要在PL内部使用，就可以走EMIO → PL。这种方式通常用作少量、低速的数据运输。使用方式可以参考我先前的博客：</p>
+<div class="tag-plugin link dis-select"><a class="link-card plain" title="Pynq GPIO的使用" href="https://www.raiset.top/posts/1649035944/" target="_blank" rel="external nofollow noopener noreferrer" cardlink autofill=""><div class="left"><span class="title">Pynq GPIO的使用</span><span class="cap link footnote">https://www.raiset.top/posts/1649035944/</span></div><div class="right"><div class="lazy img" data-bg="https://webp.raiset.top/basic/favicon.ico"></div></div></a></div>
+
+<h3 id="7-2-AXI总线方式"><a href="#7-2-AXI总线方式" class="headerlink" title="7.2 AXI总线方式"></a>7.2 AXI总线方式</h3><h4 id="7-2-1-AXI协议"><a href="#7-2-1-AXI协议" class="headerlink" title="7.2.1 AXI协议"></a>7.2.1 AXI协议</h4><p>AXI有三种协议，AXI Lite、AXI Full、AXI Stream。简单来说：</p>
+<div class="tag-plugin grid" bg="card" style="grid-template-columns: repeat(3, 1fr);"><div class="cell" style="">
+    <p><strong>AXI Lite</strong></p><p>轻量级地址映射协议，每次传输都携带地址和数据，协议开销小，通常用于寄存器读写。</p>
+    </div>
+    <div class="cell" style="">
+    <p><strong>AXI Full</strong></p><p>支持突发传输。发送一次地址后可以连续传多个数据，适合批量且地址连续的数据搬运。</p>
+    </div>
+    <div class="cell" style="">
+    <p><strong>AXI Stream</strong></p><p>无地址的数据流协议，适合模块之间连续传输数据，常见于视频流和DSP流水线。</p>
+    </div>
+    </div>
+
+<p>有关AXI协议的更加详细的说明可以看以下视频：</p>
+<div class="tag-plugin link dis-select"><a class="link-card plain" title="AXI Lite、Full、Stream协议介绍" href="https://www.bilibili.com/video/BV1EV4y1J7jU" target="_blank" rel="external nofollow noopener noreferrer" cardlink autofill=""><div class="left"><span class="title">AXI Lite、Full、Stream协议介绍</span><span class="cap link footnote">https://www.bilibili.com/video/BV1EV4y1J7jU</span></div><div class="right"><div class="lazy img" data-bg="https://webp.raiset.top/icon/bilibili.png"></div></div></a></div>
+
+<h4 id="7-2-2-PS提供的AXI接口"><a href="#7-2-2-PS提供的AXI接口" class="headerlink" title="7.2.2 PS提供的AXI接口"></a>7.2.2 PS提供的AXI接口</h4><p>PS端有三种AXI接口，分别是AXI GP、AXI HP和AXI ACP。</p>
+<div class="tag-plugin tabs"id="tab_3"><div class="nav-tabs"><div class="tab active"><a href="#tab_3-1">AXI GP</a></div><div class="tab"><a href="#tab_3-2">AXI HP</a></div><div class="tab"><a href="#tab_3-3">AXI ACP</a></div></div><div class="tab-content"><div class="tab-pane active" id="tab_3-1"><p>AXI GP既可以主动发起读写请求（Master），也可以被动接收读写请求（Slave）。它的带宽较低，最常见的用途是由PS侧通过Master接口去配置寄存器。协议上可以使用AXI Lite或AXI Full，但通常使用AXI Lite。</p></div><div class="tab-pane" id="tab_3-2"><p>AXI HP（High Performance）接口对PL侧只提供Slave模式，也就是PL作为Master发起访问。它的带宽远高于AXI GP，适合大批量数据传输，通常配合AXI Full协议使用。常见做法是PS先把数据写到DDR，再由PL通过AXI HP访问PS DDR，实现高速交换。</p></div><div class="tab-pane" id="tab_3-3"><p>AXI ACP同样只有Slave接口，但它连到了CPU Cache，可以自动维护一致性，适合需要CPU Cache协同访问的场景。不过从带宽角度看，它通常不如AXI HP。</p></div></div></div>
+
+<p>关于这几种接口的具体说明可以看下面这个视频：</p>
+<div class="tag-plugin link dis-select"><a class="link-card plain" title="AXI GP、HP、ACP接口介绍" href="https://www.bilibili.com/video/BV1FD4y1E79q" target="_blank" rel="external nofollow noopener noreferrer" cardlink autofill=""><div class="left"><span class="title">AXI GP、HP、ACP接口介绍</span><span class="cap link footnote">https://www.bilibili.com/video/BV1FD4y1E79q</span></div><div class="right"><div class="lazy img" data-bg="https://webp.raiset.top/icon/bilibili.png"></div></div></a></div>
+
+<h3 id="7-3-DMA方式"><a href="#7-3-DMA方式" class="headerlink" title="7.3 DMA方式"></a>7.3 DMA方式</h3><p>在高性能系统中通常使用DMA进行数据搬运，本质上也是使用了AXI总线。</p>
+<p>AXI DMA是一个IP核，主要包含两个方向：</p>
+<table>
+<thead>
+<tr>
+<th>通道</th>
+<th>方向</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>MM2S</td>
+<td>Memory → Stream</td>
+</tr>
+<tr>
+<td>S2MM</td>
+<td>Stream → Memory</td>
+</tr>
+</tbody></table>
+<div class="tag-plugin image"><div class="image-bg" style="aspect-ratio:425/278;"><img class="lazy" src="https://webp.raiset.top/co_design/image-20260401013633033.png" data-src="https://webp.raiset.top/co_design/image-20260401013633033.png" alt="AXI DMA 的双向数据通道" data-fancybox="true"onerror="this.src=&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2rem' height='2rem' viewBox='0 0 24 24'%3E%3C!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --%3E%3Cpath fill='%23F44336' d='M22 12.698c-.002 1.47-.013 2.718-.096 3.743c-.097 1.19-.296 2.184-.74 3.009a4.2 4.2 0 0 1-.73.983c-.833.833-1.893 1.21-3.237 1.39C15.884 22 14.2 22 12.053 22h-.106c-2.148 0-3.83 0-5.144-.177c-1.343-.18-2.404-.557-3.236-1.39c-.738-.738-1.12-1.656-1.322-2.795c-.2-1.12-.236-2.512-.243-4.241Q1.999 12.737 2 12v-.054c0-2.148 0-3.83.177-5.144c.18-1.343.557-2.404 1.39-3.236s1.893-1.21 3.236-1.39c1.168-.157 2.67-.175 4.499-.177a.697.697 0 1 1 0 1.396c-1.855.002-3.234.018-4.313.163c-1.189.16-1.906.464-2.436.994S3.72 5.8 3.56 6.99C3.397 8.2 3.395 9.788 3.395 12v.784l.932-.814a2.14 2.14 0 0 1 2.922.097l3.99 3.99a1.86 1.86 0 0 0 2.385.207l.278-.195a2.79 2.79 0 0 1 3.471.209l2.633 2.37c.265-.557.423-1.288.507-2.32c.079-.972.09-2.152.091-3.63a.698.698 0 0 1 1.396 0' opacity='.5'/%3E%3Cpath fill='%23F44336' fill-rule='evenodd' d='M17.5 11c-2.121 0-3.182 0-3.841-.659S13 8.621 13 6.5s0-3.182.659-3.841S15.379 2 17.5 2s3.182 0 3.841.659S22 4.379 22 6.5s0 3.182-.659 3.841S19.621 11 17.5 11m-1.47-7.03a.75.75 0 1 0-1.06 1.06l1.47 1.47l-1.47 1.47a.75.75 0 0 0 1.06 1.06l1.47-1.47l1.47 1.47a.75.75 0 1 0 1.06-1.06L18.56 6.5l1.47-1.47a.75.75 0 0 0-1.06-1.06L17.5 5.44z' clip-rule='evenodd'/%3E%3C/svg%3E&quot;"/><div class="lazy-icon" style="background-image:url(https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd);"></div></div><div class="image-meta"><span class="image-caption center">AXI DMA 的双向数据通道</span></div></div>
+
+<p><strong>PS → PL(MM2S)</strong></p>
+<ol>
+<li>CPU先通过 <code>S_AXI_LITE</code> 配置AXI DMA的控制寄存器，例如DDR起始地址、数据长度和传输模式。</li>
+<li>AXI DMA随后通过 <code>M_AXI_MM2S</code> 从PS DDR读取数据，这一路通常需要连到PS的AXI HP接口。</li>
+<li>读取到的数据再通过 <code>M_AXIS_MM2S</code> 送给PL模块，例如自定义的AXI Stream IP核。</li>
+</ol>
+<p><strong>PL → PS(S2MM)</strong></p>
+<ol>
+<li>如果数据方向相反，AXI DMA会通过 <code>S_AXIS_S2MM</code> 接收来自PL模块的数据。</li>
+<li>然后使用 <code>M_AXI_S2MM</code> 把结果写回PS DDR，因此这一路通常也连接PS的AXI HP接口。</li>
+<li>CPU再从DDR中读取运算结果，继续执行后续软件逻辑。</li>
+</ol>
+<p>相关视频如下：</p>
+<div class="tag-plugin link dis-select"><a class="link-card plain" title="AXI DMA使用-Vitis" href="https://www.bilibili.com/video/BV1e3411d7YX/?p=4" target="_blank" rel="external nofollow noopener noreferrer" cardlink autofill=""><div class="left"><span class="title">AXI DMA使用-Vitis</span><span class="cap link footnote">https://www.bilibili.com/video/BV1e3411d7YX/?p=4</span></div><div class="right"><div class="lazy img" data-bg="https://webp.raiset.top/icon/bilibili.png"></div></div></a></div>
+
+<p>Pynq可以参考：</p>
+<div class="tag-plugin link dis-select"><a class="link-card plain" title="AXI DMA使用-Pynq" href="https://www.bilibili.com/video/BV1DT411V7MX" target="_blank" rel="external nofollow noopener noreferrer" cardlink autofill=""><div class="left"><span class="title">AXI DMA使用-Pynq</span><span class="cap link footnote">https://www.bilibili.com/video/BV1DT411V7MX</span></div><div class="right"><div class="lazy img" data-bg="https://webp.raiset.top/icon/bilibili.png"></div></div></a></div>
+
+<h2 id="8-示例工程"><a href="#8-示例工程" class="headerlink" title="8. 示例工程"></a>8. 示例工程</h2><div class="tag-plugin timeline"><div class="timenode" index="0"><div class="header"><span>入门：加法器案例</span></div><div class="body fs14"><p>这是一个简单但完整的案例，介绍了从HLS、Vivado到Pynq的完整过程。</p><div class="tag-plugin link dis-select"><a class="link-card plain" title="加法器案例" href="https://www.bilibili.com/video/BV1tS4y1d7RQ/?p=2" target="_blank" rel="external nofollow noopener noreferrer" cardlink autofill=""><div class="left"><span class="title">加法器案例</span><span class="cap link footnote">https://www.bilibili.com/video/BV1tS4y1d7RQ/?p=2</span></div><div class="right"><div class="lazy img" data-bg="https://webp.raiset.top/icon/bilibili.png"></div></div></a></div></div></div><div class="timenode" index="1"><div class="header"><span>进阶：数组运算案例</span></div><div class="body fs14"><p>加法器案例主要演示单个数值的传输与运算，而实际工程里更常见的是矩阵、数组等批量数据处理，因此下一步可以看这个案例。</p><div class="tag-plugin link dis-select"><a class="link-card plain" title="数组运算案例" href="https://www.raiset.top/posts/855715585/" target="_blank" rel="external nofollow noopener noreferrer" cardlink autofill=""><div class="left"><span class="title">数组运算案例</span><span class="cap link footnote">https://www.raiset.top/posts/855715585/</span></div><div class="right"><div class="lazy img" data-bg="https://webp.raiset.top/basic/favicon.ico"></div></div></a></div></div></div><div class="timenode" index="2"><div class="header"><span>综合：向量加法 + DMA</span></div><div class="body fs14"><p>下面这个工程比较复杂：HLS实现向量加法，PS与PL通过AXI DMA交互，PS端使用Vivado SDK（Vitis）开发。</p><div class="tag-plugin link dis-select"><a class="link-card plain" title="向量加法案例" href="https://github.com/aminiok1/vivado-tutorial/tree/master" target="_blank" rel="external nofollow noopener noreferrer" cardlink autofill=""><div class="left"><span class="title">向量加法案例</span><span class="cap link footnote">https://github.com/aminiok1/vivado-tutorial/tree/master</span></div><div class="right"><div class="lazy img" data-bg="https://webp.raiset.top/icon/github.png"></div></div></a></div></div></div></div>
+
+<h2 id="9-尾言"><a href="#9-尾言" class="headerlink" title="9. 尾言"></a>9. 尾言</h2><div class="tag-plugin quot p"><p class="content"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --><path fill="currentColor" d="m14.092 10.75l-.75 2.5H9.908l.75-2.5z"/><path fill="currentColor" fill-rule="evenodd" d="M3.464 3.464C2 4.93 2 7.286 2 12s0 7.071 1.464 8.535C4.93 22 7.286 22 12 22s7.071 0 8.535-1.465C22 19.072 22 16.714 22 12s0-7.071-1.465-8.536C19.072 2 16.714 2 12 2S4.929 2 3.464 3.464m7.752 2.818a.75.75 0 0 1 .502.934l-.61 2.034h3.434l.74-2.465a.75.75 0 0 1 1.436.43l-.61 2.035H18a.75.75 0 0 1 0 1.5h-2.342l-.75 2.5H17a.75.75 0 0 1 0 1.5h-2.542l-.74 2.465a.75.75 0 0 1-1.436-.43l.61-2.035H9.458l-.74 2.465a.75.75 0 1 1-1.436-.43l.61-2.035H6a.75.75 0 0 1 0-1.5h2.342l.75-2.5H7a.75.75 0 0 1 0-1.5h2.542l.74-2.465a.75.75 0 0 1 .934-.503" clip-rule="evenodd"/></svg><span class="text">写在最后</span><span class="empty"></span></p></div>
+
+<p>（1）将复杂算法从CPU迁移到FPGA后，资源限制并未消失，而是转移到了FPGA端——FPGA同样会受运算资源（LUT &#x2F; DSP &#x2F; FF数量）和存储资源（BRAM容量）的限制。</p>
+<p>（2）前面说的主要是深度学习推理。其实用Zynq做训练并不是不行，但需要自己实现反向传播，工程复杂度会明显上升。可以参考我之前写的LSTM反向传播剖析与C++实现：</p>
+<div class="tag-plugin link dis-select"><a class="link-card plain" title="LSTM反向传播推导及C++代码实现" href="https://www.raiset.top/posts/1552645455/" target="_blank" rel="external nofollow noopener noreferrer" cardlink autofill=""><div class="left"><span class="title">LSTM反向传播推导及C++代码实现</span><span class="cap link footnote">https://www.raiset.top/posts/1552645455/</span></div><div class="right"><div class="lazy img" data-bg="https://webp.raiset.top/basic/favicon.ico"></div></div></a></div>
+
+<p>（3）本文里提到的PS端开发主要偏裸机路线，但在Vitis创建platform时也可以选择FreeRTOS，还可以进一步走向PetaLinux嵌入式Linux开发：</p>
+<div class="tag-plugin link dis-select"><a class="link-card plain" title="PetaLinux安装与使用-SD卡制作-离线编译" href="https://www.raiset.top/posts/1812881063/" target="_blank" rel="external nofollow noopener noreferrer" cardlink autofill=""><div class="left"><span class="title">PetaLinux安装与使用-SD卡制作-离线编译</span><span class="cap link footnote">https://www.raiset.top/posts/1812881063/</span></div><div class="right"><div class="lazy img" data-bg="https://webp.raiset.top/basic/favicon.ico"></div></div></a></div>
+
+<div class="tag-plugin link dis-select"><a class="link-card plain" title="PetaLinux驱动学习-Pinctrl和GPIO子系统" href="https://www.raiset.top/posts/1684246453/" target="_blank" rel="external nofollow noopener noreferrer" cardlink autofill=""><div class="left"><span class="title">PetaLinux驱动学习-Pinctrl和GPIO子系统</span><span class="cap link footnote">https://www.raiset.top/posts/1684246453/</span></div><div class="right"><div class="lazy img" data-bg="https://webp.raiset.top/basic/favicon.ico"></div></div></a></div>
+
+<p>（4）<code>hls4ml</code> 可以把深度学习框架中的模型转换成可被HLS综合的C++代码，除了转换外还会做一些量化优化。但它主要支持常见算子（如 <code>Conv2D</code>、<code>Dense</code>、<code>Relu</code>），如果是更复杂的算子（如attention）或自定义算子，仍然需要自己补代码：</p>
+<div class="tag-plugin link dis-select"><a class="link-card plain" title="hls4ml" href="https://fastmachinelearning.org/hls4ml/" target="_blank" rel="external nofollow noopener noreferrer" cardlink autofill="icon"><div class="left"><span class="title">hls4ml</span><span class="cap link footnote">https://fastmachinelearning.org/hls4ml/</span></div><div class="right"><div class="lazy img" data-bg="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/link/8f277b4ee0ecd.svg"></div></div></a></div>
+
+<p>（5）除了Zynq这种 <code>CPU + FPGA</code> 架构，现在 <code>CPU + NPU</code> 也很热门，例如RK3588。借助RKNN Toolkit这类工具链，开发者通常不需要手写硬件层代码，更多是做模型转换和Python&#x2F;C++上层调用。</p>
+<div class="tag-plugin grid" bg="card" style="grid-template-columns: repeat(3, 1fr);"><div class="cell" style="">
+    <p><strong>MCU</strong></p><p>适合低算力（GOPS级以下）、超低功耗场景。</p>
+    </div>
+    <div class="cell" style="">
+    <p><strong>FPGA</strong></p><p>适合中等算力、对数据通路和算子形式有较高定制化要求的场景。</p>
+    </div>
+    <div class="cell" style="">
+    <p><strong>NPU</strong></p><p>适合中高算力场景，开发效率更高，但灵活性不如FPGA。</p>
+    </div>
+    </div>
+
+
+</article>
+<div class="article-footer">
+    <section id="license">
+      <div class="header"><span>许可协议</span></div>
+      <div class="body"><p><a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a>欢迎评论探讨</p>
+</div>
+    </section>
+    
+
+
+    <section id="share">
+      <div class="header"><span>分享文章</span></div>
+      <div class="body">
+        <div class="link"><input class="copy-area" readonly="true" id="copy-link" value="https://raiset.top/posts/2802504201/" /></div>
+        <div class="social-wrap dis-select"><a class="social share-item wechat" onclick="util.toggle(&quot;qrcode-wechat&quot;)"><img  src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/social/b32ef3da1162a.svg" /></a><a class="social share-item link" onclick="util.copy(&quot;copy-link&quot;, &quot;复制成功&quot;)"><img  src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/social/8411ed322ced6.svg" /></a></div>
+        
+        <div class="qrcode" id="qrcode-wechat" style="opacity:0;height:0">
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=https://raiset.top/posts/2802504201/"/>
+        </div>
+        
+      </div>
+    </section>
+    </div>
+
+<div class="related-wrap" id="read-next"><section class="body"><div class="item" id="prev"></div><div class="item" id="next"><div class="note">较早文章</div><a href="/posts/3912509188/">Verdi字体大小永久更改</a></div></section></div>
+
+
+
+
+  <div class="related-wrap md-text" id="comments">
+    <section class='header cmt-title cap theme'>
+      <p>快来参与讨论吧~</p>
+
+    </section>
+    <section class='body cmt-body twikoo'>
+      
+
+<div id="twikoo_container"><svg class="loading" style="vertical-align:middle;fill:currentColor;overflow:hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2709"><path d="M832 512c0-176-144-320-320-320V128c211.2 0 384 172.8 384 384h-64zM192 512c0 176 144 320 320 320v64C300.8 896 128 723.2 128 512h64z" p-id="2710"></path></svg></div>
+    </section>
+  </div>
+
+
+
+<footer class="page-footer footnote"><hr><div class="text"><center>
+<script defer src="https://events.vercount.one/js"></script>    
+Site Total Visits: <span id="vercount_value_site_pv">Loading</span><br>
+Site Total Visitors: <span id="vercount_value_site_uv">Loading</span>
+</center>
+</div></footer>
+<div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
+<div class="widgets">
+
+
+
+<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">本文目录</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%BB%8E%E5%B5%8C%E5%85%A5%E5%BC%8F%E7%B3%BB%E7%BB%9F%E5%BC%80%E5%A7%8B"><span class="toc-text">1. 从嵌入式系统开始</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-TinyML"><span class="toc-text">2. TinyML</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E4%BB%8E-MCU-%E5%88%B0-Zynq"><span class="toc-text">3. 从 MCU 到 Zynq</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-Zynq-%E6%9E%B6%E6%9E%84"><span class="toc-text">4. Zynq 架构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-PL%E7%AB%AF%E5%BC%80%E5%8F%91"><span class="toc-text">5. PL端开发</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-PS%E7%AB%AF%E5%BC%80%E5%8F%91"><span class="toc-text">6. PS端开发</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-PS%E4%B8%8EPL%E9%80%9A%E4%BF%A1"><span class="toc-text">7. PS与PL通信</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#7-1-EMIO%E6%96%B9%E5%BC%8F"><span class="toc-text">7.1 EMIO方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-2-AXI%E6%80%BB%E7%BA%BF%E6%96%B9%E5%BC%8F"><span class="toc-text">7.2 AXI总线方式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#7-2-1-AXI%E5%8D%8F%E8%AE%AE"><span class="toc-text">7.2.1 AXI协议</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#7-2-2-PS%E6%8F%90%E4%BE%9B%E7%9A%84AXI%E6%8E%A5%E5%8F%A3"><span class="toc-text">7.2.2 PS提供的AXI接口</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-3-DMA%E6%96%B9%E5%BC%8F"><span class="toc-text">7.3 DMA方式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-%E7%A4%BA%E4%BE%8B%E5%B7%A5%E7%A8%8B"><span class="toc-text">8. 示例工程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-%E5%B0%BE%E8%A8%80"><span class="toc-text">9. 尾言</span></a></li></ol></div><div class="widget-footer"><a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/><path d="M7 3.338A9.95 9.95 0 0 1 12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12c0-1.821.487-3.53 1.338-5"/></g></svg><span>回到顶部</span></a><a class="buttom" onclick="util.scrollComment()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5" d="M8 10.5h8M8 14h5.5M17 3.338A9.95 9.95 0 0 0 12 2C6.477 2 2 6.477 2 12c0 1.6.376 3.112 1.043 4.453c.178.356.237.763.134 1.148l-.595 2.226a1.3 1.3 0 0 0 1.591 1.592l2.226-.596a1.63 1.63 0 0 1 1.149.133A9.96 9.96 0 0 0 12 22c5.523 0 10-4.477 10-10c0-1.821-.487-3.53-1.338-5"/></svg><span>参与讨论</span></a></div></widget>
+</div></aside><div class='float-panel'>
+  <button type='button' style='display:none' class='laptop-only rightbar-toggle mobile' onclick='sidebar.rightbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
+  </button>
+  <button type='button' style='display:none' class='mobile-only leftbar-toggle mobile' onclick='sidebar.leftbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 11c0-3.771 0-5.657 1.172-6.828C4.343 3 6.229 3 10 3h4c3.771 0 5.657 0 6.828 1.172C22 5.343 22 7.229 22 11v2c0 3.771 0 5.657-1.172 6.828C19.657 21 17.771 21 14 21h-4c-3.771 0-5.657 0-6.828-1.172C2 18.657 2 16.771 2 13z"/><path id="sep" stroke-linecap="round" d="M5.5 10h6m-5 4h4m4.5 7V3"/></g></svg>
+  </button>
+</div>
+</div><div class="scripts">
+
+
+<script type="text/javascript">
+  window.canonical = {"originalHost":null,"officialHosts":["localhost"],"encoded":""};
+  const ctx = {
+    date_suffix: {
+      just: `刚刚`,
+      min: `分钟前`,
+      hour: `小时前`,
+      day: `天前`,
+    },
+    root : `/`,
+    tag_plugins: {
+      chat: Object.assign({"api":"https://siteinfo.listentothewind.cn/api/v1"}),
+    }
+  };
+
+  // required plugins (only load if needs)
+  if (`local_search`) {
+    ctx.search = {};
+    ctx.search.service = `local_search`;
+    if (ctx.search.service == 'local_search') {
+      let service_obj = Object.assign({}, `{"field":"all","path":"/search.json","content":true,"skip_search":null,"sort":"-date"}`);
+      ctx.search[ctx.search.service] = service_obj;
+    }
+  }
+  const def = {
+    avatar: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/3442075.svg`,
+    cover: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/cover/76b86c0226ffd.svg`,
+    loading: `https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd`,
+  };
+  const deps = {
+    jquery: `https://gcore.jsdelivr.net/npm/jquery@3.7/dist/jquery.min.js`,
+    marked: `https://gcore.jsdelivr.net/npm/marked@13.0/lib/marked.umd.min.js`,
+    lazyload: `/%5Bobject%20Object%5D`
+  }
+  
+
+</script>
+
+<script type="text/javascript">
+  
+  function RunItem() {
+    this.list = []; // 存放回调函数
+    this.start = () => {
+      for (var i = 0; i < this.list.length; i++) {
+        this.list[i].run();
+      }
+    };
+    this.push = (fn, name, setRequestAnimationFrame = true) => {
+      let myfn = fn
+      if (setRequestAnimationFrame) {
+        myfn = () => {
+          utils.requestAnimationFrame(fn)
+        }
+      }
+      var f = new Item(myfn, name);
+      this.list.push(f);
+    };
+    this.remove = (name) => {
+      for (let index = 0; index < this.list.length; index++) {
+        const e = this.list[index];
+        if (e.name == name) {
+          this.list.splice(index, 1);
+        }
+      }
+    }
+    // 构造一个可以run的对象
+    function Item(fn, name) {
+      // 函数名称
+      this.name = name || fn.name;
+      // run方法
+      this.run = () => {
+        try {
+          fn()
+        } catch (error) {
+          console.log(error);
+        }
+      };
+    }
+  }
+
+  const utils = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    css: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    js: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      if (src.startsWith('/')) {
+        src = ctx.root + src.substring(1);
+      }
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function () {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    jq: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        utils.js(deps.jquery).then(fn)
+      } else {
+        fn()
+      }
+    },
+
+    onLoading: (el) => {
+      if (el) {
+        $(el).append('<div class="loading-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" stroke-opacity=".3" d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="1.3s" values="60;0"/></path><path stroke-dasharray="15" stroke-dashoffset="15" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0"/><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/></path></g></svg></div>');
+      }
+    },
+    onLoadSuccess: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap').remove();
+      }
+    },
+    onLoadFailure: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap svg').remove();
+        $(el).find('.loading-wrap').append('<svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" d="M12 3L21 20H3L12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0"/></path><path stroke-dasharray="6" stroke-dashoffset="6" d="M12 10V14"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="6;0"/></path></g><circle cx="12" cy="17" r="1" fill="currentColor" fill-opacity="0"><animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.4s" values="0;1"/></circle></svg>');
+        $(el).find('.loading-wrap').addClass('error');
+      }
+    },
+    request: (el, url, callback, onFailure) => {
+      const maxRetry = 3;
+      let retryCount = 0;
+
+      return new Promise((resolve, reject) => {
+        const load = () => {
+          utils.onLoading?.(el);
+
+          let timedOut = false;
+          const timeout = setTimeout(() => {
+            timedOut = true;
+            console.warn('[request] 超时:', url);
+
+            if (++retryCount >= maxRetry) {
+              utils.onLoadFailure?.(el);
+              onFailure?.();
+              reject('请求超时');
+            } else {
+              setTimeout(load, 1000);
+            }
+          }, 5000);
+
+          fetch(url).then(resp => {
+            if (timedOut) return;
+            clearTimeout(timeout);
+
+            if (!resp.ok) throw new Error('响应失败');
+            return resp;
+          }).then(data => {
+            if (timedOut) return;
+            utils.onLoadSuccess?.(el);
+            callback(data);
+            resolve(data);
+          }).catch(err => {
+            clearTimeout(timeout);
+            console.warn('[request] 错误:', err);
+
+            if (++retryCount >= maxRetry) {
+              utils.onLoadFailure?.(el);
+              onFailure?.();
+              reject(err);
+            } else {
+              setTimeout(load, 1000);
+            }
+          });
+        };
+
+        load();
+      });
+    },
+    requestWithoutLoading: (url, options = {}, maxRetry = 2, timeout = 5000) => {
+      return new Promise((resolve, reject) => {
+        let retryCount = 0;
+
+        const tryRequest = () => {
+          let timedOut = false;
+          const timer = setTimeout(() => {
+            timedOut = true;
+            if (++retryCount > maxRetry) reject('timeout');
+            else tryRequest();
+          }, timeout);
+
+          fetch(url, options)
+            .then(resp => {
+              clearTimeout(timer);
+              if (!resp.ok) throw new Error('bad response');
+              resolve(resp);
+            })
+            .catch(err => {
+              clearTimeout(timer);
+              if (++retryCount > maxRetry) reject(err);
+              else setTimeout(tryRequest, 500);
+            });
+        };
+
+        tryRequest();
+      });
+    },
+    /********************** requestAnimationFrame ********************************/
+    // 1、requestAnimationFrame 会把每一帧中的所有 DOM 操作集中起来，在一次重绘或回流中就完成，并且重绘或回流的时间间隔紧紧跟随浏览器的刷新频率，一般来说，这个频率为每秒60帧。
+    // 2、在隐藏或不可见的元素中，requestAnimationFrame 将不会进行重绘或回流，这当然就意味着更少的的 cpu，gpu 和内存使用量。
+    requestAnimationFrame: (fn) => {
+      if (!window.requestAnimationFrame) {
+        window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame;
+      }
+      window.requestAnimationFrame(fn)
+    },
+    dark: {},
+  };
+
+  // utils.dark.mode 当前模式 dark or light
+  // utils.dark.toggle() 暗黑模式触发器
+  // utils.dark.push(callBack[,"callBackName"]) 传入触发器回调函数
+  utils.dark.method = {
+    toggle: new RunItem(),
+  };
+  utils.dark = Object.assign(utils.dark, {
+    push: utils.dark.method.toggle.push,
+  });
+</script>
+<script>
+  const sidebar = {
+    leftbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    rightbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('rightbar');
+        l_body.removeAttribute('leftbar');
+      }
+    },
+    dismiss: () => {
+      if (l_body) {
+        l_body.removeAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    toggleTOC: () => {
+      document.querySelector('#data-toc').classList.toggle('collapse');
+    }
+  }
+</script>
+<script type="text/javascript">
+  (() => {
+    const tagSwitchers = document.querySelectorAll('.tag-subtree.parent-tag > a > .tag-switcher-wrapper')
+    for (const tagSwitcher of tagSwitchers) {
+      tagSwitcher.addEventListener('click', (e) => {
+        const parent = e.target.closest('.tag-subtree.parent-tag')
+        parent.classList.toggle('expanded')
+        e.preventDefault()
+      })
+    }
+
+    // Get active tag from query string, then activate it.
+    const urlParams = new URLSearchParams(window.location.search)
+    const activeTag = urlParams.get('tag')
+    if (activeTag) {
+      let tag = document.querySelector(`.tag-subtree[data-tag="${activeTag}"]`)
+      if (tag) {
+        tag.querySelector('a').classList.add('active')
+        
+        while (tag) {
+          tag.classList.add('expanded')
+          tag = tag.parentElement.closest('.tag-subtree.parent-tag')
+        }
+      }
+    }
+  })()
+</script>
+
+<script async src="https://gcore.jsdelivr.net/npm/vanilla-lazyload@19.1/dist/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazy",
+    callback_loaded: (el) => {
+      el.classList.add('loaded');
+      const wrapper = el.closest('.lazy-box');
+      const icon = wrapper?.querySelector('.lazy-icon');
+      if (icon) icon.remove();
+    }
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    window.lazyLoadInstance?.update();
+  });
+
+  window.wrapLazyloadImages = (container) => {
+    if (typeof container === 'string') {
+      container = document.querySelector(container);
+    }
+    if (!container) return;
+    
+    const images = container.querySelectorAll('img');
+    images.forEach((img) => {
+      if (img.classList.contains('lazy')) return;
+
+      const src = img.getAttribute('src');
+      if (!src) return;
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'lazy-box';
+
+      const newImg = img.cloneNode();
+      newImg.removeAttribute('src');
+      newImg.setAttribute('data-src', src);
+      newImg.classList.add('lazy');
+
+      const icon = document.createElement('div');
+      icon.className = 'lazy-icon';
+      if (def.loading) {
+        icon.style.backgroundImage = `url("${def.loading}")`;
+      }
+
+      wrapper.appendChild(newImg);
+      wrapper.appendChild(icon);
+
+      img.replaceWith(wrapper);
+    });
+
+    // 通知 LazyLoad 更新
+    if (window.lazyLoadInstance?.update) {
+      window.lazyLoadInstance.update();
+    }
+  }
+  
+</script>
+
+<!-- required -->
+<script src="/js/main.js?v=1.33.1" defer></script>
+
+<script type="text/javascript">
+  const applyTheme = (theme) => {
+    if (theme === 'auto') {
+      document.documentElement.removeAttribute('data-theme')
+    } else {
+      document.documentElement.setAttribute('data-theme', theme)
+    }
+
+    // applyThemeToGiscus(theme)
+  }
+
+  // FIXME: 这会导致无法使用 preferred_color_scheme 以外的主题
+  const applyThemeToGiscus = (theme) => {
+    // theme = theme === 'auto' ? 'preferred_color_scheme' : theme
+    const cmt = document.getElementById('giscus')
+    if (cmt) {
+      // This works before giscus load.
+      cmt.setAttribute('data-theme', theme)
+    }
+
+    const iframe = document.querySelector('#comments > section.giscus > iframe')
+    if (iframe) {
+      // This works after giscus loaded.
+      const src = iframe.src
+      const newSrc = src.replace(/theme=[\w]+/, `theme=${theme}`)
+      iframe.src = newSrc
+    }
+  }
+
+  const switchTheme = () => {
+    // light -> dark -> auto -> light -> ...
+    const currentTheme = document.documentElement.getAttribute('data-theme')
+    let newTheme;
+    switch (currentTheme) {
+      case 'light':
+        newTheme = 'dark'
+        break
+      case 'dark':
+        newTheme = 'auto'
+        break
+      default:
+        newTheme = 'light'
+    }
+    applyTheme(newTheme)
+    window.localStorage.setItem('Stellar.theme', newTheme)
+    utils.dark.mode = newTheme === 'auto' ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light") : newTheme;
+    utils.dark.method.toggle.start();
+
+    const messages = {
+      light: `切换到浅色模式`,
+      dark: `切换到深色模式`,
+      auto: `切换到跟随系统配色`,
+    }
+    hud?.toast?.(messages[newTheme])
+  }
+
+  (() => {
+    // Apply user's preferred theme, if any.
+    const theme = window.localStorage.getItem('Stellar.theme')
+    if (theme !== null) {
+      applyTheme(theme)
+    } else {
+      utils.dark.mode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+    utils.dark.method.toggle.start();
+  })()
+</script>
+
+
+<!-- optional -->
+
+  <script type="module">
+  const el = document.getElementById('twikoo_container');
+  util.viewportLazyload(el, load_twikoo, false);
+
+  function load_twikoo() {
+    if (!el) return;
+    utils.js('https://gcore.jsdelivr.net/npm/twikoo@1.6/dist/twikoo.all.min.js', {defer: true}).then(function () {
+      const path = el.getAttribute('comment_id') ?? decodeURI(window.location.pathname);
+      twikoo.init(Object.assign({"js":"https://gcore.jsdelivr.net/npm/twikoo@1.6/dist/twikoo.all.min.js","envId":"https://yuxi17.netlify.app/.netlify/functions/twikoo"}, {
+        el: '#twikoo_container',
+        path: path,
+      }));
+    });
+  }
+</script>
+
+
+
+<script defer>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.services = Object.assign({}, JSON.parse(`{"mdrender":{"js":"/js/services/mdrender.js"},"siteinfo":{"js":"/js/services/siteinfo.js","api":null},"ghinfo":{"js":"/js/services/ghinfo.js"},"rating":{"js":"/js/services/rating.js","api":"https://star-vote.xaox.cc/api/rating"},"vote":{"js":"/js/services/vote.js","api":"https://star-vote.xaox.cc/api/vote"},"sites":{"js":"/js/services/sites.js"},"friends":{"js":"/js/services/friends.js"},"friends_and_posts":{"js":"/js/services/friends_and_posts.js"},"timeline":{"js":"/js/services/timeline.js"},"fcircle":{"js":"/js/services/fcircle.js"},"weibo":{"js":"/js/services/weibo.js"},"memos":{"js":"/js/services/memos.js"},"voice":{"js":"/js/plugins/voice.js"},"video":{"js":"/js/plugins/video.js"},"download-file":{"js":"/js/plugins/download-file.js"},"twikoo":{"js":"/js/services/twikoo_latest_comment.js"},"waline":{"js":"/js/services/waline_latest_comment.js"},"artalk":{"js":"/js/services/artalk_latest_comment.js"},"giscus":{"js":"/js/services/giscus_latest_comment.js"},"contributors":{"edit_this_page":{"_posts/":null,"wiki/stellar/":"https://github.com/xaoxuu/hexo-theme-stellar-docs/blob/main/"},"js":"/js/services/contributors.js"}}`));
+    for (let id of Object.keys(ctx.services)) {
+      const js = ctx.services[id].js;
+      if (id == 'siteinfo') {
+        ctx.cardlinks = document.querySelectorAll('a.link-card[cardlink]');
+        if (ctx.cardlinks?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            setCardLink(ctx.cardlinks);
+          });
+        }
+      } else if (id == 'voice') {
+        ctx.voiceAudios = document.querySelectorAll('.voice>audio');
+        if (ctx.voiceAudios?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            createVoiceDom(ctx.voiceAudios);
+          });
+        }
+      } else if (id == 'video') {
+        ctx.videos = document.querySelectorAll('.video>video');
+        if (ctx.videos?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            videoEvents(ctx.videos);
+          });
+        }
+      } else if (id == 'download-file') {
+        ctx.files = document.querySelectorAll('.file');
+        if (ctx.files?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            downloadFileEvent(ctx.files);
+          });
+        }
+      } else {
+        const els = document.getElementsByClassName(`ds-${id}`);
+        if (els?.length > 0) {
+          utils.jq(() => {
+            if (id == 'timeline' || 'memos' || 'marked') {
+              utils.js(deps.marked).then(function () {
+                utils.js(js, { defer: true });
+              });
+            } else {
+              utils.js(js, { defer: true });
+            }
+          });
+        }
+      }
+    }
+
+    // chat iphone time
+    let phoneTimes = document.querySelectorAll('.chat .status-bar .time');
+
+    if (phoneTimes.length > 0) {
+      NowTime();
+      var date = new Date();
+      var sec = date.getSeconds();
+      var firstAdjustInterval = setInterval(firstAdjustTime, 1000 * (60 - sec));
+    }
+
+    function firstAdjustTime() {
+      NowTime();
+      clearInterval(firstAdjustInterval);
+      setInterval(NowTime, 1000 * 60);
+    }
+
+    function NowTime() {
+      for (let i = 0; i < phoneTimes.length; ++i) {
+        var timeSpan = phoneTimes[i];
+        var date = new Date();
+        var hour = date.getHours();
+        var min = date.getMinutes();
+        timeSpan.innerHTML = check(hour) + ":" + check(min);
+      }
+    };
+
+    function check(val) {
+      if (val < 10) {
+        return ("0" + val);
+      }
+      return (val);
+    }
+
+    // chat quote
+    const chat_quote_obverser = new IntersectionObserver((entries, observer) => {
+      entries.filter((entry) => { return entry.isIntersecting }).sort((a, b) => a.intersectionRect.y !== b.intersectionRect.y ? a.intersectionRect.y - b.intersectionRect.y : a.intersectionRect.x - b.intersectionRect.x).forEach((entry, index) => {
+          observer.unobserve(entry.target);
+          setTimeout(() => {
+            entry.target.classList.add('quote-blink');
+            setTimeout(() => {
+              entry.target.classList.remove('quote-blink');
+            }, 1000);
+          }, Math.max(100, 16) * (index + 1));
+        });
+    });
+
+    var chatQuotes = document.querySelectorAll(".chat .talk .quote");
+    chatQuotes.forEach((quote) => {
+      quote.addEventListener('click', function () {
+        var chatCellDom = document.getElementById("quote-" + quote.getAttribute("quotedCellTag"));
+        if (chatCellDom) {
+          var chatDiv = chatCellDom.parentElement;
+          var mid = chatDiv.clientHeight / 2;
+          var offsetTop = chatCellDom.offsetTop;
+          if (offsetTop > mid - chatCellDom.clientHeight / 2) {
+            chatDiv.scrollTo({
+              top: chatCellDom.offsetTop - mid + chatCellDom.clientHeight / 2,
+              behavior: "smooth"
+            });
+          } else {
+            chatDiv.scrollTo({
+              top: 0,
+              behavior: "smooth"
+            });
+          }
+          chat_quote_obverser.observe(chatCellDom);
+        }
+      });
+    });
+  });
+</script>
+
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.search = {
+      path: `/search.json`,
+    }
+    utils.js('/js/search/local-search.js', { defer: true });
+  });
+</script><script>
+  window.FPConfig = {
+    delay: 0,
+    ignoreKeywords: [],
+    maxRPS: 5,
+    hoverDelay: 25
+  };
+</script>
+<script defer src="https://gcore.jsdelivr.net/npm/flying-pages@2/flying-pages.min.js"></script><script>
+  ctx.fancybox = {
+    selector: `.timenode p>img`,
+    css: `https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css`,
+    js: `https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js`
+  };
+  var selector = '[data-fancybox]:not(.error), .with-fancybox .atk-content img:not([atk-emoticon])';
+  if (ctx.fancybox.selector) {
+    selector += `, ${ctx.fancybox.selector}`
+  }
+  var needFancybox = document.querySelectorAll(selector).length !== 0;
+  if (!needFancybox) {
+    const memos = document.getElementsByClassName('ds-memos');
+    if (memos != undefined && memos.length > 0) {
+      needFancybox = true;
+    }
+    const fancybox = document.getElementsByClassName('with-fancybox');
+    if (fancybox != undefined && fancybox.length > 0) {
+      needFancybox = true;
+    }
+  }
+  if (needFancybox) {
+    utils.css(ctx.fancybox.css);
+    utils.js(ctx.fancybox.js, { defer: true }).then(function () {
+      Fancybox.bind(selector, {
+        hideScrollbar: false,
+        Thumbs: {
+          autoStart: false,
+        },
+        caption: (fancybox, slide) => {
+          return slide.triggerEl.alt || slide.triggerEl.dataset.caption || null
+        }
+      });
+    })
+  }
+</script>
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const swiper_api = document.getElementById('swiper-api');
+    if (swiper_api != undefined) {
+      utils.css(`https://unpkg.com/swiper@10.3/swiper-bundle.min.css`);
+      utils.js(`https://unpkg.com/swiper@10.3/swiper-bundle.min.js`, { defer: true }).then(function () {
+        const effect = swiper_api.getAttribute('effect') || '';
+        var swiper = new Swiper('.swiper#swiper-api', {
+          slidesPerView: 'auto',
+          spaceBetween: 8,
+          centeredSlides: true,
+          effect: effect,
+          rewind: true,
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+          },
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          },
+        });
+      })
+    }
+  });
+</script>
+
+<script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async></script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+  MathJax.Hub.Config({
+    tex2jax: {
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+  });
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    window.codeElements = document.querySelectorAll('.code');
+    if (window.codeElements.length > 0) {
+      ctx.copycode = {
+        default_text: `Copy`,
+        success_text: `Copied`,
+        toast: `复制成功`,
+      };
+      utils.js('/js/plugins/copycode.js');
+    }
+  });
+</script>
+
+
+<!-- inject -->
+
+</div></body></html>

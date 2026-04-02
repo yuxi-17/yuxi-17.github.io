@@ -1,3 +1,4 @@
+https://raiset.top/posts/2802504201/
 https://raiset.top/posts/3912509188/
 https://raiset.top/about
 https://raiset.top/posts/652128759/
@@ -12,15 +13,17 @@ https://raiset.top/posts/1649035944/
 https://raiset.top/posts/1552645455/
 https://raiset.top/
 https://raiset.top/tags/PYNQ/
-https://raiset.top/tags/NEAL/
-https://raiset.top/tags/Coflow/
 https://raiset.top/tags/LSTM%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD/
+https://raiset.top/tags/STARNUMA/
+https://raiset.top/tags/Tandem/
 https://raiset.top/tags/PetaLinux/
 https://raiset.top/tags/Linux%E9%A9%B1%E5%8A%A8/
+https://raiset.top/tags/NEAL/
+https://raiset.top/tags/Coflow/
 https://raiset.top/tags/QSPI-Flash/
-https://raiset.top/tags/Tandem/
-https://raiset.top/tags/STARNUMA/
+https://raiset.top/tags/Zynq/
+https://raiset.top/tags/%E8%BD%AF%E7%A1%AC%E4%BB%B6%E5%8D%8F%E5%90%8C/
 https://raiset.top/categories/PYNQ%E6%95%99%E7%A8%8B/
-https://raiset.top/categories/%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/
 https://raiset.top/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/
+https://raiset.top/categories/%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/
 https://raiset.top/categories/PetaLinux/
