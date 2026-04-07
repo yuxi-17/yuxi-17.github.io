@@ -38,7 +38,7 @@
 
   
 
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"雨夕","sameAs":[],"image":"https://webp.raiset.top/basic/avatar.jpg"},"dateCreated":"2026-03-24T23:13:49+08:00","dateModified":"2026-04-02T18:07:17+08:00","datePublished":"2026-03-24T23:13:49+08:00","description":"概述\n\n本文将介绍Zynq软硬件协同开发所需要的核心概念、典型架构以及基本开发流程。文章从嵌入式系统出发，引入TinyML，再过渡到Zynq架构与PS‑PL协同计算。","headline":"从零开始的Zynq软硬件协同开发","mainEntityOfPage":{"@type":"WebPage","@id":"https://raiset.top/posts/2802504201/"},"publisher":{"@type":"Organization","name":"雨夕","sameAs":[],"image":"https://webp.raiset.top/basic/avatar.jpg","logo":{"@type":"ImageObject","url":"https://webp.raiset.top/basic/avatar.jpg"}},"url":"https://raiset.top/posts/2802504201/","keywords":"PYNQ, Zynq, 软硬件协同","image":[]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"雨夕","sameAs":[],"image":"https://webp.raiset.top/basic/avatar.jpg"},"dateCreated":"2026-03-24T23:13:49+08:00","dateModified":"2026-04-07T23:05:43+08:00","datePublished":"2026-03-24T23:13:49+08:00","description":"概述\n\n本文将介绍Zynq软硬件协同开发所需要的核心概念、典型架构以及基本开发流程。文章从嵌入式系统出发，引入TinyML，再过渡到Zynq架构与PS‑PL协同计算。","headline":"从零开始的Zynq软硬件协同开发","mainEntityOfPage":{"@type":"WebPage","@id":"https://raiset.top/posts/2802504201/"},"publisher":{"@type":"Organization","name":"雨夕","sameAs":[],"image":"https://webp.raiset.top/basic/avatar.jpg","logo":{"@type":"ImageObject","url":"https://webp.raiset.top/basic/avatar.jpg"}},"url":"https://raiset.top/posts/2802504201/","keywords":"PYNQ, Zynq, 软硬件协同","image":[]}</script>
   <link rel="stylesheet" href="https://cdn.staticfile.net/lxgw-wenkai-screen-webfont/1.6.0/lxgwwenkaiscreen.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="/css/mouse.css"><meta name="baidu-site-verification" content="codeva-mJBYqPRgrt" />
 </head>
 <body><div class="sitebg"><div class="siteblur"></div></div>
@@ -70,7 +70,7 @@
   <div class="content">
     <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a>
 <span class="sep"></span><a class="cap breadcrumb" href="/">文章</a><span class="sep"></span><a class="cap breadcrumb-link" href="/categories/PYNQ%E6%95%99%E7%A8%8B/">PYNQ教程</a></div>
-<div class="flex-row" id="post-meta"><span class="text created">发布于：<time datetime="2026-03-24T15:13:49.820Z">2026-03-24</time></span><span class="sep updated"></span><span class="text updated">更新于：<time datetime="2026-04-02T10:07:17.740Z">2026-04-02</time></span></div></div></div>
+<div class="flex-row" id="post-meta"><span class="text created">发布于：<time datetime="2026-03-24T15:13:49.820Z">2026-03-24</time></span><span class="sep updated"></span><span class="text updated">更新于：<time datetime="2026-04-07T15:05:43.160Z">2026-04-07</time></span></div></div></div>
     
     <div class="bottom only-title">
       
@@ -144,16 +144,13 @@
 <div class="tag-plugin blockquote" indent="undefined"><p>TinyML（Tiny Machine Learning）是将轻量化机器学习模型部署到资源受限的嵌入式设备（如微控制器、传感器节点）上的技术，通常运行在mW级功耗、KB级内存的硬件上，实现本地化智能推理。它融合了边缘计算、模型压缩、嵌入式系统优化等多领域技术，适用于无网络、低延迟、隐私保护等场景。</p></div>
 
 <p>以TFLite（TinyML的其中一种）为例，可以把整个落地过程拆成两个阶段：</p>
-<div class="tag-plugin tabs"id="tab_2"><div class="nav-tabs"><div class="tab active"><a href="#tab_2-1">训练与部署</a></div><div class="tab"><a href="#tab_2-2">MCU推理</a></div></div><div class="tab-content"><div class="tab-pane active" id="tab_2-1"><ol>
-<li>在PC&#x2F;GPU上搭建模型并完成训练</li>
-<li>导出TensorFlow Lite模型为 <code>tflite</code> 文件</li>
-<li>解析 <code>tflite</code> 文件并转换为C数组</li>
-<li>将模型和输入数据嵌入MCU程序</li>
-</ol></div><div class="tab-pane" id="tab_2-2"><ol>
-<li>使用TFLite Micro加载模型</li>
-<li>分配运行时内存（Tensor Arena）</li>
-<li>在MCU上执行推理并输出结果</li>
-</ol></div></div></div>
+<div class="tag-plugin grid" bg="card" style="grid-template-columns: repeat(2, 1fr);"><div class="cell" style="">
+    <p><strong>训练与部署</strong></p><ol><li>在PC&#x2F;GPU上搭建模型并完成训练</li><li>导出TensorFlow Lite模型为 <code>tflite</code> 文件</li><li>解析 <code>tflite</code> 文件并转换为C数组</li><li>将模型和输入数据嵌入MCU程序</li></ol>
+    </div>
+    <div class="cell" style="">
+    <p><strong>MCU推理</strong></p><ol><li>使用TFLite Micro加载模型</li><li>分配运行时内存（Tensor Arena）</li><li>在MCU上执行推理并输出结果</li></ol>
+    </div>
+    </div>
 
 <p>可以参考以下实现，由于Wokwi没法模拟摄像头，所以这里直接把数字图片转换成数组作为输入，MCU读取该输入数据做推理：</p>
 <div class="tag-plugin link dis-select"><a class="link-card plain" title="案例二Wokwi工程" href="https://github.com/yuxi-17/mnist_tflite_with-wokwi" target="_blank" rel="external nofollow noopener noreferrer" cardlink autofill=""><div class="left"><span class="title">案例二Wokwi工程</span><span class="cap link footnote">https://github.com/yuxi-17/mnist_tflite_with-wokwi</span></div><div class="right"><div class="lazy img" data-bg="https://webp.raiset.top/icon/github.png"></div></div></a></div>
@@ -225,7 +222,7 @@
 <div class="tag-plugin link dis-select"><a class="link-card plain" title="AXI Lite、Full、Stream协议介绍" href="https://www.bilibili.com/video/BV1EV4y1J7jU" target="_blank" rel="external nofollow noopener noreferrer" cardlink autofill=""><div class="left"><span class="title">AXI Lite、Full、Stream协议介绍</span><span class="cap link footnote">https://www.bilibili.com/video/BV1EV4y1J7jU</span></div><div class="right"><div class="lazy img" data-bg="https://webp.raiset.top/icon/bilibili.png"></div></div></a></div>
 
 <h4 id="7-2-2-PS提供的AXI接口"><a href="#7-2-2-PS提供的AXI接口" class="headerlink" title="7.2.2 PS提供的AXI接口"></a>7.2.2 PS提供的AXI接口</h4><p>PS端有三种AXI接口，分别是AXI GP、AXI HP和AXI ACP。</p>
-<div class="tag-plugin tabs"id="tab_3"><div class="nav-tabs"><div class="tab active"><a href="#tab_3-1">AXI GP</a></div><div class="tab"><a href="#tab_3-2">AXI HP</a></div><div class="tab"><a href="#tab_3-3">AXI ACP</a></div></div><div class="tab-content"><div class="tab-pane active" id="tab_3-1"><p>AXI GP既可以主动发起读写请求（Master），也可以被动接收读写请求（Slave）。它的带宽较低，最常见的用途是由PS侧通过Master接口去配置寄存器。协议上可以使用AXI Lite或AXI Full，但通常使用AXI Lite。</p></div><div class="tab-pane" id="tab_3-2"><p>AXI HP（High Performance）接口对PL侧只提供Slave模式，也就是PL作为Master发起访问。它的带宽远高于AXI GP，适合大批量数据传输，通常配合AXI Full协议使用。常见做法是PS先把数据写到DDR，再由PL通过AXI HP访问PS DDR，实现高速交换。</p></div><div class="tab-pane" id="tab_3-3"><p>AXI ACP同样只有Slave接口，但它连到了CPU Cache，可以自动维护一致性，适合需要CPU Cache协同访问的场景。不过从带宽角度看，它通常不如AXI HP。</p></div></div></div>
+<div class="tag-plugin tabs"id="tab_2"><div class="nav-tabs"><div class="tab active"><a href="#tab_2-1">AXI GP</a></div><div class="tab"><a href="#tab_2-2">AXI HP</a></div><div class="tab"><a href="#tab_2-3">AXI ACP</a></div></div><div class="tab-content"><div class="tab-pane active" id="tab_2-1"><p>AXI GP既可以主动发起读写请求（Master），也可以被动接收读写请求（Slave）。它的带宽较低，最常见的用途是由PS侧通过Master接口去配置寄存器。协议上可以使用AXI Lite或AXI Full，但通常使用AXI Lite。</p></div><div class="tab-pane" id="tab_2-2"><p>AXI HP（High Performance）接口对PL侧只提供Slave模式，也就是PL作为Master发起访问。它的带宽远高于AXI GP，适合大批量数据传输，通常配合AXI Full协议使用。常见做法是PS先把数据写到DDR，再由PL通过AXI HP访问PS DDR，实现高速交换。</p></div><div class="tab-pane" id="tab_2-3"><p>AXI ACP同样只有Slave接口，但它连到了CPU Cache，可以自动维护一致性，适合需要CPU Cache协同访问的场景。不过从带宽角度看，它通常不如AXI HP。</p></div></div></div>
 
 <p>关于这几种接口的具体说明可以看下面这个视频：</p>
 <div class="tag-plugin link dis-select"><a class="link-card plain" title="AXI GP、HP、ACP接口介绍" href="https://www.bilibili.com/video/BV1FD4y1E79q" target="_blank" rel="external nofollow noopener noreferrer" cardlink autofill=""><div class="left"><span class="title">AXI GP、HP、ACP接口介绍</span><span class="cap link footnote">https://www.bilibili.com/video/BV1FD4y1E79q</span></div><div class="right"><div class="lazy img" data-bg="https://webp.raiset.top/icon/bilibili.png"></div></div></a></div>
@@ -281,8 +278,8 @@
 
 <div class="tag-plugin link dis-select"><a class="link-card plain" title="PetaLinux驱动学习-Pinctrl和GPIO子系统" href="https://www.raiset.top/posts/1684246453/" target="_blank" rel="external nofollow noopener noreferrer" cardlink autofill=""><div class="left"><span class="title">PetaLinux驱动学习-Pinctrl和GPIO子系统</span><span class="cap link footnote">https://www.raiset.top/posts/1684246453/</span></div><div class="right"><div class="lazy img" data-bg="https://webp.raiset.top/basic/favicon.ico"></div></div></a></div>
 
-<p>（4）<code>hls4ml</code> 可以把深度学习框架中的模型转换成可被HLS综合的C++代码，除了转换外还会做一些量化优化。但它主要支持常见算子（如 <code>Conv2D</code>、<code>Dense</code>、<code>Relu</code>），如果是更复杂的算子（如attention）或自定义算子，仍然需要自己补代码：</p>
-<div class="tag-plugin link dis-select"><a class="link-card plain" title="hls4ml" href="https://fastmachinelearning.org/hls4ml/" target="_blank" rel="external nofollow noopener noreferrer" cardlink autofill="icon"><div class="left"><span class="title">hls4ml</span><span class="cap link footnote">https://fastmachinelearning.org/hls4ml/</span></div><div class="right"><div class="lazy img" data-bg="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/link/8f277b4ee0ecd.svg"></div></div></a></div>
+<p>（4）<code>hls4ml</code> 可以把深度学习框架中的模型转换成可被HLS综合的C++代码，除了转换外还会做一些量化优化。但它主要支持常见算子（如 <code>Conv2D</code>、<code>Dense</code>、<code>Relu</code>），如果是更复杂的算子（如attention）或自定义算子，仍然需要自己补代码，具体介绍如下：</p>
+<div class="tag-plugin link dis-select"><a class="link-card plain" title="hls4ml介绍" href="https://mp.weixin.qq.com/s/wKBJ5zzWl3-caxElByiZtw" target="_blank" rel="external nofollow noopener noreferrer" cardlink autofill=""><div class="left"><span class="title">hls4ml介绍</span><span class="cap link footnote">https://mp.weixin.qq.com/s/wKBJ5zzWl3-caxElByiZtw</span></div><div class="right"><div class="lazy img" data-bg="https://webp.raiset.top/icon/wechat.jpg"></div></div></a></div>
 
 <p>（5）除了Zynq这种 <code>CPU + FPGA</code> 架构，现在 <code>CPU + NPU</code> 也很热门，例如RK3588。借助RKNN Toolkit这类工具链，开发者通常不需要手写硬件层代码，更多是做模型转换和Python&#x2F;C++上层调用。</p>
 <div class="tag-plugin grid" bg="card" style="grid-template-columns: repeat(3, 1fr);"><div class="cell" style="">
@@ -295,7 +292,6 @@
     <p><strong>NPU</strong></p><p>适合中高算力场景，开发效率更高，但灵活性不如FPGA。</p>
     </div>
     </div>
-
 
 </article>
 <div class="article-footer">
